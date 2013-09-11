@@ -1,0 +1,10 @@
+target/
+nb-configuration.xml
+
+# intellij idea
+.idea/
+*.iml
+*.iws
+
+/smartparam-repository-transfer/nbproject/private/
+/nbactions.xml
