@@ -15,7 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
  *
@@ -23,21 +23,38 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public class InsertQuery {
 
-    private Dialect dialect;
+    private static final int VALUES_LENGTH = 50;
 
-    InsertQuery(Dialect dialect) {
-        this.dialect = dialect;
+    private Query query;
+
+    private StringBuilder valueNames = new StringBuilder(VALUES_LENGTH);
+
+    private StringBuilder values = new StringBuilder(VALUES_LENGTH);
+
+    InsertQuery() {
+        this.query = new Query();
+    }
+
+    public Query build() {
+        StringBuilderUtil.deleteLastCharacters(valueNames, 2);
+        StringBuilderUtil.deleteLastCharacters(values, 2);
+
+        query.append("(").append(valueNames.toString()).append(")")
+                .append(" VALUES(").append(values.toString()).append(")");
+        query.compile();
+
+        return query;
     }
 
     public InsertQuery into(String tableName) {
-        return this;
-    }
-
-    public InsertQuery sequence(String fieldName, String sequenceName) {
+        query.append("INSERT INTO ").append(tableName);
         return this;
     }
 
     public InsertQuery value(String fieldName, Object value) {
+        valueNames.append(fieldName).append(", ");
+        valueNames.append(":").append(fieldName).append(", ");
+        query.setArgument(fieldName, value);
         return this;
     }
 }

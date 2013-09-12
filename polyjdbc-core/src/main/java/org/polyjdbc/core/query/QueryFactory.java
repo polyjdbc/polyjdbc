@@ -30,6 +30,6 @@ public class QueryFactory {
     }
 
     public InsertQuery insert() {
-        return new InsertQuery(dialect);
+        return new InsertQuery();
     }
 }

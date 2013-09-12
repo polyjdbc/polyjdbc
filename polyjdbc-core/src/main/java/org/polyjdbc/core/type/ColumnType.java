@@ -16,6 +16,7 @@
 package org.polyjdbc.core.type;
 
 import java.sql.Types;
+import org.polyjdbc.core.exception.UnknownColumnTypeException;
 
 /**
  *
@@ -23,19 +24,36 @@ import java.sql.Types;
  */
 public enum ColumnType {
 
-    STRING(Types.VARCHAR),
-    INT(Types.INTEGER),
-    LONG(Types.BIGINT),
-    CHAR(Types.CHAR),
-    BOOLEAN(Types.BOOLEAN);
+    STRING(String.class, Types.VARCHAR),
+    INT(Integer.class, Types.INTEGER),
+    LONG(Long.class, Types.BIGINT),
+    CHAR(Character.class, Types.CHAR),
+    BOOLEAN(Boolean.class, Types.BOOLEAN);
 
     private int sqlType;
 
-    private ColumnType(int sqlType) {
+    private Class<?> matchingClass;
+
+    private ColumnType(Class<?> matchingClass, int sqlType) {
+        this.matchingClass = matchingClass;
         this.sqlType = sqlType;
     }
 
     public int getSqlType() {
         return sqlType;
+    }
+
+    public static ColumnType forClass(Class<?> objectClass) {
+        for(ColumnType type : ColumnType.values()) {
+            if(type.matchingClass.isAssignableFrom(objectClass)) {
+                return type;
+            }
+        }
+        throw new UnknownColumnTypeException("Could not find column type matching class " + objectClass.getCanonicalName() + ". "
+                + "Make sure class is assignable from any of supported classes." );
+    }
+
+    public static ColumnType forObject(Object object) {
+        return ColumnType.forClass(object.getClass());
     }
 }

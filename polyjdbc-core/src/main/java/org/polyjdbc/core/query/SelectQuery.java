@@ -15,26 +15,30 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
  */
 public class SelectQuery {
 
-    private Dialect dialect;
+    private Query query;
 
-    SelectQuery(Dialect dialect) {
-        this.dialect = dialect;
+    SelectQuery() {
+        this.query = new Query();
+    }
+
+    public Query build() {
+        query.compile();
+        return query;
     }
 
     public SelectQuery query(String queryText) {
+        query.append(queryText);
         return this;
     }
 
     public SelectQuery withArgument(String argumentName, Object object) {
+        query.setArgument(argumentName, object);
         return this;
     }
-
 }
