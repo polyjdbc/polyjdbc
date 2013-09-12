@@ -19,24 +19,18 @@ package org.polyjdbc.core.query;
  *
  * @author Adam Dubiel
  */
-public final class QueryFactory {
+public class DDLQuery {
 
-    private QueryFactory() {
+    private Query query;
+
+    DDLQuery(String query) {
+        this.query = new Query();
+        this.query.append(query);
     }
 
-    public static InsertQuery insert() {
-        return new InsertQuery();
+    Query build() {
+        query.compile();
+        return query;
     }
 
-    public static SelectQuery select() {
-        return new SelectQuery();
-    }
-
-    public static DeleteQuery delete() {
-        return new DeleteQuery();
-    }
-
-    public static DDLQuery ddl(String query) {
-        return new DDLQuery(query);
-    }
 }

@@ -13,30 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
+package org.polyjdbc.core.query.loader;
+
+import org.polyjdbc.core.query.DDLQuery;
 
 /**
  *
  * @author Adam Dubiel
  */
-public final class QueryFactory {
+public interface QueryLoader {
 
-    private QueryFactory() {
-    }
-
-    public static InsertQuery insert() {
-        return new InsertQuery();
-    }
-
-    public static SelectQuery select() {
-        return new SelectQuery();
-    }
-
-    public static DeleteQuery delete() {
-        return new DeleteQuery();
-    }
-
-    public static DDLQuery ddl(String query) {
-        return new DDLQuery(query);
-    }
+    DDLQuery getQuery(String resourceName);
 }

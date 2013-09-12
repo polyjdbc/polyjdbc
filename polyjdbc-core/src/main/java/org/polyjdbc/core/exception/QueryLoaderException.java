@@ -13,30 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
+package org.polyjdbc.core.exception;
 
 /**
  *
  * @author Adam Dubiel
  */
-public final class QueryFactory {
+@SuppressWarnings("serial")
+public class QueryLoaderException extends PolyJDBCException {
 
-    private QueryFactory() {
+    public QueryLoaderException(String code, String message, Throwable cause) {
+        super(code, message, cause);
     }
 
-    public static InsertQuery insert() {
-        return new InsertQuery();
-    }
-
-    public static SelectQuery select() {
-        return new SelectQuery();
-    }
-
-    public static DeleteQuery delete() {
-        return new DeleteQuery();
-    }
-
-    public static DDLQuery ddl(String query) {
-        return new DDLQuery(query);
-    }
 }

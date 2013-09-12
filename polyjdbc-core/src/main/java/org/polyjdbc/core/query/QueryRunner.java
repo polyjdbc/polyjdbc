@@ -36,6 +36,8 @@ public interface QueryRunner {
 
     int delete(DeleteQuery deleteQuery);
 
+    void ddl(DDLQuery ddlQuery);
+
     void commitAndClose();
 
     void rollback();

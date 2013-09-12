@@ -35,6 +35,8 @@ public class DatabaseTest {
 
     private TransactionManager transactionManager;
 
+    private SchemaManager schemaManager;
+
     private TheCleaner cleaner;
 
     protected Transaction transaction() {
@@ -48,8 +50,9 @@ public class DatabaseTest {
         DataSource dataSource = DataSourceFactory.create(dialect, url, user, password);
 
         this.transactionManager = new DataSourceTransactionManager(dialect, dataSource);
+        this.schemaManager = new SchemaManager(dialect);
 
-        createTestSchema();
+        schemaManager.createSchema(transactionManager);
     }
 
     private void createTestSchema() throws Exception {
@@ -62,9 +65,6 @@ public class DatabaseTest {
 
     @AfterClass(alwaysRun = true)
     public void tearDownDatabase() throws Exception {
-        dropTestSchema();
-    }
-
-    private void dropTestSchema() {
+        schemaManager.createSchema(transactionManager);
     }
 }
