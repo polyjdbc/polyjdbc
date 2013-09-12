@@ -59,11 +59,12 @@ public class Query {
     }
 
     public Query setArgument(String name, Object value) {
-        arguments.put(query, value);
+        arguments.put(name, value);
         return this;
     }
 
     public void clearArguments() {
+        query = originalQuery;
         arguments.clear();
         orderedArguments.clear();
         compiled = false;

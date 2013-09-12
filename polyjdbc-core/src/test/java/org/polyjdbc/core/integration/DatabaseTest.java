@@ -18,6 +18,8 @@ package org.polyjdbc.core.integration;
 import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
+import org.polyjdbc.core.query.QueryRunner;
+import org.polyjdbc.core.query.TransactionalQueryRunner;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.transaction.TransactionManager;
@@ -43,6 +45,10 @@ public class DatabaseTest {
         return transactionManager.openTransaction();
     }
 
+    protected QueryRunner queryRunner() {
+        return new TransactionalQueryRunner(transaction());
+    }
+
     @Parameters({"dialect", "url", "user", "password"})
     @BeforeClass(alwaysRun = true)
     public void setUpDatabase(@Optional("H2") String dialectCode, @Optional("jdbc:h2:mem:test") String url, @Optional("polly") String user, @Optional("polly") String password) throws Exception {
@@ -51,11 +57,9 @@ public class DatabaseTest {
 
         this.transactionManager = new DataSourceTransactionManager(dialect, dataSource);
         this.schemaManager = new SchemaManager(dialect);
+        this.cleaner = new TheCleaner(transactionManager);
 
         schemaManager.createSchema(transactionManager);
-    }
-
-    private void createTestSchema() throws Exception {
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -65,6 +69,6 @@ public class DatabaseTest {
 
     @AfterClass(alwaysRun = true)
     public void tearDownDatabase() throws Exception {
-        schemaManager.createSchema(transactionManager);
+        schemaManager.dropSchema(transactionManager);
     }
 }

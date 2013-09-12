@@ -93,22 +93,24 @@ public class TransactionalQueryRunner implements QueryRunner {
 
     @Override
     public long insert(InsertQuery insertQuery) {
-        Query rawQuery = insertQuery.build();
         try {
             KeyGenerator keyGenerator = transaction.dialectKeyGenerator();
             long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
-            rawQuery.setArgument(insertQuery.getSequenceName(), key);
+            insertQuery.sequenceValue(key);
 
+            Query rawQuery = insertQuery.build();
             PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
             transaction.executeUpdate(statement);
 
             return keyGenerator.getKeyFromLastInsert(transaction);
         } catch (SQLException exception) {
             transaction.rollback();
-            throw new QueryExecutionException("INSERT_ERROR", String.format("Failed to run insert query:%n%s", rawQuery.getQuery()), exception);
+            Query rawQuery = insertQuery.build();
+            throw new QueryExecutionException("INSERT_ERROR", String.format("Failed to run insert query:%n%s", rawQuery), exception);
         }
     }
 
+    @Override
     public int delete(DeleteQuery deleteQuery) {
         Query rawQuery = deleteQuery.build();
         try {
@@ -120,6 +122,7 @@ public class TransactionalQueryRunner implements QueryRunner {
         }
     }
 
+    @Override
     public void ddl(DDLQuery ddlQuery) {
         Query rawQuery = ddlQuery.build();
         try {

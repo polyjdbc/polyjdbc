@@ -41,7 +41,7 @@ public class SchemaManager {
         executeDDL(transactionManager, "/ddl/" + dialect.getCode().toLowerCase() + "_ddl.sql");
     }
 
-    public void drop(TransactionManager transactionManager) {
+    public void dropSchema(TransactionManager transactionManager) {
         executeDDL(transactionManager, "/ddl/" + dialect.getCode().toLowerCase() + "_ddl_drop.sql");
     }
 

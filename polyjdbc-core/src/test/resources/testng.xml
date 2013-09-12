@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="unit">
+    <test name="all">
+        <groups>
+            <run>
+                <exclude name="integration"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
+</suite>

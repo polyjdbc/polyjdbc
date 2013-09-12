@@ -31,6 +31,8 @@ public class InsertQuery {
 
     private StringBuilder values = new StringBuilder(VALUES_LENGTH);
 
+    private String sequenceField;
+
     private String sequenceName;
 
     InsertQuery() {
@@ -53,19 +55,29 @@ public class InsertQuery {
         return this;
     }
 
-    public InsertQuery sequence(String sequenceName) {
+    public InsertQuery sequence(String sequenceField, String sequenceName) {
+        this.sequenceField = sequenceField;
         this.sequenceName = sequenceName;
-        return this;
+        return value(sequenceField, sequenceField);
     }
 
     String getSequenceName() {
         return sequenceName;
     }
 
+    String getSequenceField() {
+        return sequenceField;
+    }
+
     public InsertQuery value(String fieldName, Object value) {
         valueNames.append(fieldName).append(", ");
-        valueNames.append(":").append(fieldName).append(", ");
+        values.append(":").append(fieldName).append(", ");
         query.setArgument(fieldName, value);
+        return this;
+    }
+
+    public InsertQuery sequenceValue(long value) {
+        query.setArgument(sequenceField, value);
         return this;
     }
 }
