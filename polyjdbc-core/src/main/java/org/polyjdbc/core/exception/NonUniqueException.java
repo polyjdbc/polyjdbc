@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
-
-import org.polyjdbc.core.key.KeyGenerator;
+package org.polyjdbc.core.exception;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface Dialect {
+@SuppressWarnings("serial")
+public class NonUniqueException extends PolyJDBCException {
 
-    String getCode();
-
-    boolean supportsSequences();
-
-    KeyGenerator keyGenerator();
+    public NonUniqueException(String code, String message) {
+        super(code, message);
+    }
 }

@@ -18,6 +18,7 @@ package org.polyjdbc.core.transaction;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.exception.PolyJDBCException;
 
 /**
@@ -26,9 +27,12 @@ import org.polyjdbc.core.exception.PolyJDBCException;
  */
 public class DataSourceTransactionManager implements TransactionManager {
 
+    private Dialect dialect;
+
     private DataSource dataSource;
 
-    public DataSourceTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager(Dialect dialect, DataSource dataSource) {
+        this.dialect = dialect;
         this.dataSource = dataSource;
     }
 
@@ -43,7 +47,7 @@ public class DataSourceTransactionManager implements TransactionManager {
         try {
             connection = dataSource.getConnection();
             connection.setAutoCommit(autoCommit);
-            return new Transaction(connection);
+            return new Transaction(dialect, connection);
         } catch (SQLException e) {
             throw new PolyJDBCException("OPEN_CONNECTION_ERROR", "Failed to obtain connection from datasource.", e);
         }

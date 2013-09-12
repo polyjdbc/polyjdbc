@@ -31,11 +31,13 @@ public class InsertQuery {
 
     private StringBuilder values = new StringBuilder(VALUES_LENGTH);
 
+    private String sequenceName;
+
     InsertQuery() {
         this.query = new Query();
     }
 
-    public Query build() {
+    Query build() {
         StringBuilderUtil.deleteLastCharacters(valueNames, 2);
         StringBuilderUtil.deleteLastCharacters(values, 2);
 
@@ -49,6 +51,15 @@ public class InsertQuery {
     public InsertQuery into(String tableName) {
         query.append("INSERT INTO ").append(tableName);
         return this;
+    }
+
+    public InsertQuery sequence(String sequenceName) {
+        this.sequenceName = sequenceName;
+        return this;
+    }
+
+    String getSequenceName() {
+        return sequenceName;
     }
 
     public InsertQuery value(String fieldName, Object value) {

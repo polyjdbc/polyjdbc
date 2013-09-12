@@ -15,21 +15,24 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
  */
-public class QueryFactory {
+public final class QueryFactory {
 
-    private Dialect dialect;
-
-    public QueryFactory(Dialect dialect) {
-        this.dialect = dialect;
+    private QueryFactory() {
     }
 
-    public InsertQuery insert() {
+    public static InsertQuery insert() {
         return new InsertQuery();
+    }
+
+    public static SelectQuery select() {
+        return new SelectQuery();
+    }
+
+    public static DeleteQuery delete() {
+        return new DeleteQuery();
     }
 }

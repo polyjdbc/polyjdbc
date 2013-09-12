@@ -15,17 +15,33 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.KeyGenerator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface Dialect {
+public class DialectRegistry {
 
-    String getCode();
+    private static final Map<String, Dialect> dialects = new HashMap<String, Dialect>();
 
-    boolean supportsSequences();
+    static {
+        addDialect(new H2Dialect());
+    }
 
-    KeyGenerator keyGenerator();
+    private DialectRegistry() {
+    }
+
+    private static void addDialect(Dialect dialect) {
+        dialects.put(dialect.getCode(), dialect);
+    }
+
+    public static boolean hasDialect(String code) {
+        return dialects.containsKey(code);
+    }
+
+    public static Dialect dialect(String code) {
+        return dialects.get(code);
+    }
 }

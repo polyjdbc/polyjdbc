@@ -13,19 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
-
-import org.polyjdbc.core.key.KeyGenerator;
+package org.polyjdbc.core.query;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface Dialect {
+public class DeleteQuery {
 
-    String getCode();
+    private Query query;
 
-    boolean supportsSequences();
+    DeleteQuery() {
+        this.query = new Query();
+    }
 
-    KeyGenerator keyGenerator();
+    Query build() {
+        query.compile();
+        return query;
+    }
+
+    public DeleteQuery from(String tableName) {
+        query.append("delete from ").append(tableName);
+        return this;
+    }
+
+    public DeleteQuery where(String conditions) {
+        query.append("where ").append(conditions);
+        return this;
+    }
+
+    public DeleteQuery withArgument(String argumentName, Object object) {
+        query.setArgument(argumentName, object);
+        return this;
+    }
 }

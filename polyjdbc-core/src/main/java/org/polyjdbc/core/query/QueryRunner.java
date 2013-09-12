@@ -15,12 +15,30 @@
  */
 package org.polyjdbc.core.query;
 
+import java.util.List;
+import org.polyjdbc.core.mapper.ObjectMapper;
+
 /**
  *
  * @author Adam Dubiel
  */
-public class QueryRunner {
+public interface QueryRunner {
 
-    
+    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper);
 
+    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound);
+
+    <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper);
+
+    boolean queryExistence(SelectQuery query);
+
+    long insert(InsertQuery insertQuery);
+
+    int delete(DeleteQuery deleteQuery);
+
+    void commitAndClose();
+
+    void rollback();
+
+    void close();
 }

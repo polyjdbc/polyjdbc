@@ -27,7 +27,7 @@ public class SelectQuery {
         this.query = new Query();
     }
 
-    public Query build() {
+    Query build() {
         query.compile();
         return query;
     }

@@ -21,7 +21,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.exception.PolyJDBCException;
+import org.polyjdbc.core.key.KeyGenerator;
 
 /**
  *
@@ -29,14 +31,21 @@ import org.polyjdbc.core.exception.PolyJDBCException;
  */
 public class Transaction {
 
+    private Dialect dialect;
+
     private Connection connection;
 
     private List<PreparedStatement> preparedStatements = new ArrayList<PreparedStatement>();
 
     private List<ResultSet> resultSets = new ArrayList<ResultSet>();
 
-    public Transaction(Connection connection) {
+    public Transaction(Dialect dialect, Connection connection) {
+        this.dialect = dialect;
         this.connection = connection;
+    }
+
+    public Dialect getDialect() {
+        return dialect;
     }
 
     public Connection getConnection() {
@@ -63,6 +72,10 @@ public class Transaction {
             rollback();
             throw exception;
         }
+    }
+
+    public KeyGenerator dialectKeyGenerator() {
+        return dialect.keyGenerator();
     }
 
     public void registerPrepareStatement(PreparedStatement preparedStatement) {
@@ -105,7 +118,7 @@ public class Transaction {
                 connection.close();
             }
         } catch (SQLException exception) {
-            throw new PolyJDBCException("TRANSACTION_CLOSE_ERROR",  "Failed to close transaction.", exception);
+            throw new PolyJDBCException("TRANSACTION_CLOSE_ERROR", "Failed to close transaction.", exception);
         }
     }
 }

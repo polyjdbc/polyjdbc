@@ -9,7 +9,7 @@
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>polyjdbc-core</artifactId>
+    <artifactId>polyjdbc</artifactId>
 
     <name>polyjdbc-core</name>
     <description>PolyJDBC core.</description>
@@ -27,17 +27,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>3.2.4.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>3.2.4.RELEASE</version>
         </dependency>
 
         <!-- TEST -->
