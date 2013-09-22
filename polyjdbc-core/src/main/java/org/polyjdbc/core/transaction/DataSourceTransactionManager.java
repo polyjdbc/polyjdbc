@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.exception.PolyJDBCException;
+import org.polyjdbc.core.exception.PolyJdbcException;
 
 /**
  *
@@ -49,7 +49,7 @@ public class DataSourceTransactionManager implements TransactionManager {
             connection.setAutoCommit(autoCommit);
             return new Transaction(dialect, connection);
         } catch (SQLException e) {
-            throw new PolyJDBCException("OPEN_CONNECTION_ERROR", "Failed to obtain connection from datasource.", e);
+            throw new PolyJdbcException("OPEN_CONNECTION_ERROR", "Failed to obtain connection from datasource.", e);
         }
     }
 }

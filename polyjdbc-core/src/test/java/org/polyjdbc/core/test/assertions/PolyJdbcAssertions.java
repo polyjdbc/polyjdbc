@@ -13,35 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.exception;
+package org.polyjdbc.core.test.assertions;
+
+import org.fest.assertions.api.Assertions;
+import org.polyjdbc.core.exception.PolyJdbcException;
 
 /**
  *
  * @author Adam Dubiel
  */
-@SuppressWarnings("serial")
-public class PolyJDBCException extends RuntimeException {
+public final class PolyJdbcAssertions extends Assertions {
 
-    private String code;
-
-    public PolyJDBCException(String code, String message) {
-        super(message);
-        this.code = code;
+    private PolyJdbcAssertions() {
     }
 
-    public PolyJDBCException(String code, String message, Throwable cause) {
-        super(message, cause);
-        this.code = code;
+    public static PolyJdbcExceptionAssert assertThat(PolyJdbcException actual) {
+        return PolyJdbcExceptionAssert.assertThat(actual);
     }
-
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public String getMessage() {
-        return "[" + code + "] " + super.getMessage();
-    }
-
 
 }

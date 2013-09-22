@@ -13,33 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
+
+package org.polyjdbc.core.key;
 
 import org.polyjdbc.core.integration.DatabaseTest;
 import org.testng.annotations.Test;
-import static org.fest.assertions.api.Assertions.*;
 
 /**
  *
  * @author Adam Dubiel
  */
 @Test(groups = "integration")
-public class QueryRunnerTest extends DatabaseTest {
+public class SequenceAllocationTest extends DatabaseTest {
 
-    @Test
-    public void shouldInsertRecordAndReturnId() {
-        // given
-        InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
-                .value("name", "testName").value("count", 42).value("countable", true)
-                .value("separator", '|');
-        QueryRunner queryRunner = queryRunner();
+    private SequenceAllocation sequenceAllocation;
 
-        // when
-        long insertedId = queryRunner.insert(insertQuery);
-        queryRunner.commitAndClose();
-
-        // then
-        assertThat(insertedId).isEqualTo(100);
-    }
+    
 
 }

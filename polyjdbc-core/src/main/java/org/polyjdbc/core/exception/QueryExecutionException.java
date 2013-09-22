@@ -20,7 +20,7 @@ package org.polyjdbc.core.exception;
  * @author Adam Dubiel
  */
 @SuppressWarnings("serial")
-public class QueryExecutionException extends PolyJDBCException {
+public class QueryExecutionException extends PolyJdbcException {
 
     public QueryExecutionException(String code, String message, Throwable cause) {
         super(code, message, cause);

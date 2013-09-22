@@ -20,7 +20,7 @@ package org.polyjdbc.core.exception;
  * @author Adam Dubiel
  */
 @SuppressWarnings("serial")
-public class NonUniqueException extends PolyJDBCException {
+public class NonUniqueException extends PolyJdbcException {
 
     public NonUniqueException(String code, String message) {
         super(code, message);

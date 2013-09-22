@@ -22,7 +22,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.exception.PolyJDBCException;
+import org.polyjdbc.core.exception.PolyJdbcException;
 import org.polyjdbc.core.key.KeyGenerator;
 
 /**
@@ -92,7 +92,7 @@ public class Transaction {
                 connection.commit();
             }
         } catch (SQLException exception) {
-            throw new PolyJDBCException("TRANSACTION_COMMIT_ERROR", "Failed to commit transaction transaction.", exception);
+            throw new PolyJdbcException("TRANSACTION_COMMIT_ERROR", "Failed to commit transaction transaction.", exception);
         }
     }
 
@@ -102,7 +102,7 @@ public class Transaction {
                 connection.rollback();
             }
         } catch (SQLException exception) {
-            throw new PolyJDBCException("TRANSACTION_ROLLBACK_ERROR", "Failed to rollback transaction.", exception);
+            throw new PolyJdbcException("TRANSACTION_ROLLBACK_ERROR", "Failed to rollback transaction.", exception);
         }
     }
 
@@ -118,7 +118,7 @@ public class Transaction {
                 connection.close();
             }
         } catch (SQLException exception) {
-            throw new PolyJDBCException("TRANSACTION_CLOSE_ERROR", "Failed to close transaction.", exception);
+            throw new PolyJdbcException("TRANSACTION_CLOSE_ERROR", "Failed to close transaction.", exception);
         }
     }
 }

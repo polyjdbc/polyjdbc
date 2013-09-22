@@ -27,7 +27,7 @@ public class Sequence {
 
     private long currentValue;
 
-    private long currentLimit;
+    private long currentLimit = -1;
 
     private long allocationSize;
 

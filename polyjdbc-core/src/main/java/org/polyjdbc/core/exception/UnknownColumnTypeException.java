@@ -20,7 +20,7 @@ package org.polyjdbc.core.exception;
  * @author Adam Dubiel
  */
 @SuppressWarnings("serial")
-public class UnknownColumnTypeException extends PolyJDBCException {
+public class UnknownColumnTypeException extends PolyJdbcException {
 
     public UnknownColumnTypeException(String message) {
         super("UNKNOWN_COLUMN_TYPE", message);

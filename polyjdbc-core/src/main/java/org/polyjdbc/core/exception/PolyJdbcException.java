@@ -19,10 +19,29 @@ package org.polyjdbc.core.exception;
  *
  * @author Adam Dubiel
  */
-public class SequenceLimitReachedException extends PolyJdbcException {
+@SuppressWarnings("serial")
+public class PolyJdbcException extends RuntimeException {
 
-    public SequenceLimitReachedException(String message) {
-        super("SEQUENCE_LIMIT_REACHED", message);
+    private String code;
+
+    public PolyJdbcException(String code, String message) {
+        super(message);
+        this.code = code;
     }
+
+    public PolyJdbcException(String code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return "[" + code + "] " + super.getMessage();
+    }
+
 
 }
