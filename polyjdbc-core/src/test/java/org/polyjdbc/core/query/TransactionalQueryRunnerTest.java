@@ -35,7 +35,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldInsertRecordAndReturnId() {
         // given
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
-                .value("name", "testName").value("count", 42).value("countable", true)
+                .value("name", "test").value("count", 42).value("countable", true)
                 .value("separator", '|');
         QueryRunner queryRunner = queryRunner();
 
@@ -45,16 +45,51 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // then
         assertThat(insertedId).isGreaterThanOrEqualTo(100);
+        assertThat(queryRunner()).contains("test").close();
+    }
+
+    @Test
+    public void shouldRollbackInsertsMadeInTransaction() {
+        // given
+        InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
+                .value("name", "test").value("count", 42).value("countable", true)
+                .value("separator", '|');
+        QueryRunner queryRunner = queryRunner();
+
+        // when
+        queryRunner.insert(insertQuery);
+        queryRunner.rollback();
+
+        // then
+        assertThat(queryRunner()).hasNoItems().close();
+    }
+
+    @Test
+    public void shouldRollbackChangesMadeInTransactionWhenClosingWithoutCommit() {
+        // given
+        InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
+                .value("name", "test").value("count", 42).value("countable", true)
+                .value("separator", '|');
+        QueryRunner queryRunner = queryRunner();
+
+        // when
+        queryRunner.insert(insertQuery);
+        queryRunner.close();
+
+        // then
+        assertThat(queryRunner()).hasNoItems().close();
     }
 
     @Test
     public void shouldListAllItemsInTable() {
         // given
-        database(queryRunner()).withItems(10).build();
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
         SelectQuery selectQuery = QueryFactory.select().query("select * from test");
+        QueryRunner runner = queryRunner();
 
         // when
-        List<Object> items = queryRunner().queryList(selectQuery, new EmptyMapper());
+        List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
+        runner.commitAndClose();
 
         // then
         assertThat(items).hasSize(10);
@@ -63,11 +98,13 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     @Test
     public void shouldFindUniqueItem() {
         // given
-        database(queryRunner()).withItems(10).withItem("unique").build();
+        database(queryRunner()).withItems(10).withItem("unique").buildAndCloseTransaction();
         SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unique");
+        QueryRunner runner = queryRunner();
 
         // when
-        Object item = queryRunner().queryUnique(selectQuery, new EmptyMapper());
+        Object item = runner.queryUnique(selectQuery, new EmptyMapper());
+        runner.commitAndClose();
 
         // then
         assertThat(item).isNotNull();
@@ -76,7 +113,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     @Test
     public void shouldThrowExceptionWithDistinctCodeWhenMoreThanOneItemFoundWhileLookingForUnique() {
         // given
-        database(queryRunner()).withItems(10).withItem("unique", 10).withItem("unique2", 10).build();
+        database(queryRunner()).withItems(10).withItem("unique", 10).withItem("unique2", 10).buildAndCloseTransaction();
         SelectQuery selectQuery = QueryFactory.select().query("select * from test where count = :count").withArgument("count", 10);
 
         // when
@@ -89,7 +126,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     @Test
     public void shouldThrowExceptionWithDistinctCodeWhenNoItemFoundWhileLookingForUnique() {
         // given
-        database(queryRunner()).withItems(10).build();
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
         SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unknown");
 
         // when
@@ -102,13 +139,43 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     @Test
     public void shouldReturnNullWhenNotFindingUniqueWithExceptionsSuppressed() {
         // given
-        database(queryRunner()).withItems(10).build();
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
         SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unknown");
+        QueryRunner runner = queryRunner();
 
         // when
-        Object item  = queryRunner().queryUnique(selectQuery, new EmptyMapper(), false);
+        Object item = runner.queryUnique(selectQuery, new EmptyMapper(), false);
+        runner.commitAndClose();
 
         // then
         assertThat(item).isNull();
+    }
+
+    @Test
+    public void shouldDeleteItemsFromDatabase() {
+        // given
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.delete(QueryFactory.delete().from("test"));
+        runner.commitAndClose();
+
+        // then
+        assertThat(queryRunner()).hasNoItems().close();
+    }
+
+    @Test
+    public void shouldRollbackDeletesMadeInTransaction() {
+        // given
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+        runner.delete(QueryFactory.delete().from("test"));
+
+        // when
+        runner.rollback();
+
+        // then
+        assertThat(queryRunner()).hasItems(10).close();
     }
 }

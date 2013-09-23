@@ -37,7 +37,7 @@ public class DatabaseBuilder {
         return new DatabaseBuilder(queryRunner);
     }
 
-    public void build() {
+    public void buildAndCloseTransaction() {
         queryRunner.commitAndClose();
     }
 

@@ -17,6 +17,7 @@ package org.polyjdbc.core.test.assertions;
 
 import org.fest.assertions.api.Assertions;
 import org.polyjdbc.core.exception.PolyJdbcException;
+import org.polyjdbc.core.query.QueryRunner;
 
 /**
  *
@@ -31,4 +32,7 @@ public final class PolyJdbcAssertions extends Assertions {
         return PolyJdbcExceptionAssert.assertThat(actual);
     }
 
+    public static DatabaseAssert assertThat(QueryRunner actual) {
+        return DatabaseAssert.assertThat(actual);
+    }
 }
