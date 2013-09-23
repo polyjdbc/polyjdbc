@@ -62,6 +62,16 @@ public class Transaction {
         }
     }
 
+    public boolean execute(PreparedStatement preparedStatement) throws SQLException {
+        try {
+            registerPrepareStatement(preparedStatement);
+            return preparedStatement.execute();
+        } catch (SQLException exception) {
+            rollback();
+            throw exception;
+        }
+    }
+
     public ResultSet executeQuery(PreparedStatement preparedStatement) throws SQLException {
         try {
             registerPrepareStatement(preparedStatement);

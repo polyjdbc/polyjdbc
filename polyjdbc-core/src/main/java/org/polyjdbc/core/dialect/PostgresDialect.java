@@ -15,34 +15,30 @@
  */
 package org.polyjdbc.core.dialect;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.polyjdbc.core.key.KeyGenerator;
+import org.polyjdbc.core.key.SequenceAllocation;
+import org.polyjdbc.core.key.SequenceNextValGenerator;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class DialectRegistry {
+public class PostgresDialect implements Dialect {
 
-    private static final Map<String, Dialect> dialects = new HashMap<String, Dialect>();
-
-    static {
-        addDialect(new H2Dialect());
-        addDialect(new PostgresDialect());
+    public String getCode() {
+        return "POSTGRES";
     }
 
-    private DialectRegistry() {
+    public boolean supportsSequences() {
+        return true;
     }
 
-    private static void addDialect(Dialect dialect) {
-        dialects.put(dialect.getCode(), dialect);
+    public KeyGenerator keyGenerator() {
+        return new SequenceAllocation(new SequenceNextValGenerator() {
+            public String nextval(String sequenceName) {
+                return "SELECT nextval('" + sequenceName + "')";
+            }
+        });
     }
 
-    public static boolean hasDialect(String code) {
-        return dialects.containsKey(code);
-    }
-
-    public static Dialect dialect(String code) {
-        return dialects.get(code);
-    }
 }
