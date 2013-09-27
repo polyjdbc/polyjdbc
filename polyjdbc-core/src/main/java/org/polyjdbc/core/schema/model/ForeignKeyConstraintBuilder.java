@@ -23,18 +23,22 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public class ForeignKeyConstraintBuilder {
 
+    private RelationBuilder parent;
+
     private ForeignKeyConstraint constraint;
 
-    private ForeignKeyConstraintBuilder(Dialect dialect, String name) {
+    private ForeignKeyConstraintBuilder(Dialect dialect, String name, RelationBuilder parent) {
         this.constraint = new ForeignKeyConstraint(dialect, name);
+        this.parent = parent;
     }
 
-    public static ForeignKeyConstraintBuilder foreignKey(Dialect dialect, String name) {
-        return new ForeignKeyConstraintBuilder(dialect, name);
+    public static ForeignKeyConstraintBuilder foreignKey(Dialect dialect, String name, RelationBuilder parent) {
+        return new ForeignKeyConstraintBuilder(dialect, name, parent);
     }
 
-    public ForeignKeyConstraint build() {
-        return constraint;
+    public RelationBuilder and() {
+        parent.with(constraint);
+        return parent;
     }
 
     public ForeignKeyConstraintBuilder on(String attribute) {

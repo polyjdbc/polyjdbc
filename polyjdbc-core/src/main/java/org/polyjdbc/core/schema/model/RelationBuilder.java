@@ -44,20 +44,37 @@ public class RelationBuilder {
         return relation;
     }
 
-    public RelationBuilder with(Attribute attribute) {
+    RelationBuilder with(Attribute attribute) {
         heading.addAttribute(attribute);
         return this;
     }
 
-    public RelationBuilder constrainedBy(Constraint... constraints) {
-        for(Constraint constraint : constraints) {
-            relation.addConstraint(constraint);
-        }
+    RelationBuilder with(Constraint constraint) {
+        relation.addConstraint(constraint);
         return this;
     }
 
-    public static LongAttributeBuilder longAttribute(Dialect dialect, String name) {
-        return LongAttributeBuilder.longAttribute(dialect, name);
+    public RelationBuilder withAttribute() {
+        return this;
     }
 
+    public LongAttributeBuilder longAttr(String name) {
+        return LongAttributeBuilder.longAttribute(dialect, name, this);
+    }
+
+    public StringAttributeBuilder string(String name) {
+        return StringAttributeBuilder.string(dialect, name, this);
+    }
+
+    public RelationBuilder constrainedBy() {
+        return this;
+    }
+
+    public PrimaryKeyConstraintBuilder primaryKey(String name) {
+        return PrimaryKeyConstraintBuilder.primaryKey(dialect, name, this);
+    }
+
+    public ForeignKeyConstraintBuilder foreignKey(String name) {
+        return ForeignKeyConstraintBuilder.foreignKey(dialect, name, this);
+    }
 }

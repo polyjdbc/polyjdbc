@@ -23,12 +23,12 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public class LongAttributeBuilder extends AttributeBuilder<LongAttributeBuilder, LongAttribute> {
 
-    private LongAttributeBuilder(Dialect dialect, String name) {
-        super(new LongAttribute(dialect, name));
+    private LongAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        super(new LongAttribute(dialect, name), parent);
     }
 
-    public static LongAttributeBuilder longAttribute(Dialect dialect, String name) {
-        return new LongAttributeBuilder(dialect, name);
+    public static LongAttributeBuilder longAttribute(Dialect dialect, String name, RelationBuilder parent) {
+        return new LongAttributeBuilder(dialect, name, parent);
     }
 
     @Override

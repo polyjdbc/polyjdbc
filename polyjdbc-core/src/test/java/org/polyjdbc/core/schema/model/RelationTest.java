@@ -20,8 +20,6 @@ import org.junit.Test;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.H2Dialect;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.polyjdbc.core.schema.model.Attributes.*;
-import static org.polyjdbc.core.schema.model.Constraints.*;
 
 /**
  *
@@ -34,9 +32,9 @@ public class RelationTest {
         // given
         Dialect dialect = new H2Dialect();
         Relation relation = RelationBuilder.relation(dialect, "test")
-                .with(longAttribute(dialect, "id").build())
-                .with(stringAttribute(dialect, "name").unique().notNull().withMaxLength(255).build())
-                .constrainedBy(primaryKey(dialect, "pk").using("id").build())
+                .withAttribute().longAttr("id").and()
+                .withAttribute().string("name").unique().notNull().withMaxLength(255).and()
+                .constrainedBy().primaryKey("pk").using("id").and()
                 .build();
 
         // when

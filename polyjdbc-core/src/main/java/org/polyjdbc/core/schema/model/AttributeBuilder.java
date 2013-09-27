@@ -23,8 +23,15 @@ public abstract class AttributeBuilder<T, A extends Attribute> {
 
     private A attribute;
 
+    private RelationBuilder parent;
+
     protected AttributeBuilder(A attribute) {
         this.attribute = attribute;
+    }
+
+    protected AttributeBuilder(A attribute, RelationBuilder parent) {
+        this.attribute = attribute;
+        this.parent = parent;
     }
 
     protected A attribute() {
@@ -33,8 +40,9 @@ public abstract class AttributeBuilder<T, A extends Attribute> {
 
     protected abstract T self();
 
-    public A build() {
-        return attribute;
+    public RelationBuilder and() {
+        parent.with(attribute);
+        return parent;
     }
 
     public T unique() {

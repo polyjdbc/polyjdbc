@@ -23,18 +23,22 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public class PrimaryKeyConstraintBuilder {
 
+    private RelationBuilder parent;
+
     private PrimaryKeyConstraint constraint;
 
-    private PrimaryKeyConstraintBuilder(Dialect dialect, String name) {
+    private PrimaryKeyConstraintBuilder(Dialect dialect, String name, RelationBuilder parent) {
         this.constraint = new PrimaryKeyConstraint(dialect, name);
+        this.parent = parent;
     }
 
-    public static PrimaryKeyConstraintBuilder primaryKey(Dialect dialect, String name) {
-        return new PrimaryKeyConstraintBuilder(dialect, name);
+    public static PrimaryKeyConstraintBuilder primaryKey(Dialect dialect, String name, RelationBuilder parent) {
+        return new PrimaryKeyConstraintBuilder(dialect, name, parent);
     }
 
-    public PrimaryKeyConstraint build() {
-        return constraint;
+    public RelationBuilder and() {
+        parent.with(constraint);
+        return parent;
     }
 
     public PrimaryKeyConstraintBuilder using(String... attributes) {

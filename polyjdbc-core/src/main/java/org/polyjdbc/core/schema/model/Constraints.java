@@ -15,8 +15,6 @@
  */
 package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
@@ -26,8 +24,5 @@ public final class Constraints {
     private Constraints() {
     }
 
-    public static PrimaryKeyConstraintBuilder primaryKey(Dialect dialect, String name) {
-        return PrimaryKeyConstraintBuilder.primaryKey(dialect, name);
-    }
 
 }

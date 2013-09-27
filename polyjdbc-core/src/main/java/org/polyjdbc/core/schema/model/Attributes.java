@@ -15,8 +15,6 @@
  */
 package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
@@ -24,13 +22,5 @@ import org.polyjdbc.core.dialect.Dialect;
 public final class Attributes {
 
     private Attributes() {
-    }
-
-    public static LongAttributeBuilder longAttribute(Dialect dialect, String name) {
-        return LongAttributeBuilder.longAttribute(dialect, name);
-    }
-
-    public static StringAttributeBuilder stringAttribute(Dialect dialect, String name) {
-        return StringAttributeBuilder.string(dialect, name);
     }
 }
