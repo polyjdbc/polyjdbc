@@ -15,26 +15,20 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
+import org.polyjdbc.core.util.StringUtils;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
+public class DefultDialectConstraints implements DialectConstraints {
 
-    public String getCode() {
-        return "H2";
+    public String primaryKey(String name, String[] targetAttributes) {
+        return "CONSTRAINT " + name + " PRIMARY_KEY(" + StringUtils.concatenate(", ", targetAttributes) + ")";
     }
 
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
+    public String foreignKey(String name, String targetAttribute, String targetRelation, String targetRelationAttribute) {
+        return "CONSTRAINT " + name + " FOREIGN KEY(" + targetAttribute + ") REFERENCES " + targetRelation + "(" + targetRelationAttribute + ")";
     }
+
 }

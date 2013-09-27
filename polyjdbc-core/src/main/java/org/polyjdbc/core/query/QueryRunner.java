@@ -16,7 +16,7 @@
 package org.polyjdbc.core.query;
 
 import java.util.List;
-import org.polyjdbc.core.mapper.ObjectMapper;
+import org.polyjdbc.core.query.mapper.ObjectMapper;
 
 /**
  *

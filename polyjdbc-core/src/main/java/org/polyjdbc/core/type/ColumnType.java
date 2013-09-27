@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.type;
 
+import java.sql.Date;
 import java.sql.Types;
 import org.polyjdbc.core.exception.UnknownColumnTypeException;
 
@@ -28,7 +29,8 @@ public enum ColumnType {
     INT(Integer.class, Types.INTEGER),
     LONG(Long.class, Types.BIGINT),
     CHAR(Character.class, Types.CHAR),
-    BOOLEAN(Boolean.class, Types.BOOLEAN);
+    BOOLEAN(Boolean.class, Types.BOOLEAN),
+    DATE(Date.class, Types.DATE);
 
     private int sqlType;
 

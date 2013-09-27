@@ -23,8 +23,8 @@ import java.util.List;
 import org.polyjdbc.core.exception.NonUniqueException;
 import org.polyjdbc.core.exception.QueryExecutionException;
 import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.mapper.EmptyMapper;
-import org.polyjdbc.core.mapper.ObjectMapper;
+import org.polyjdbc.core.query.mapper.EmptyMapper;
+import org.polyjdbc.core.query.mapper.ObjectMapper;
 import org.polyjdbc.core.transaction.Transaction;
 
 /**

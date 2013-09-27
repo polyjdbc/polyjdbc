@@ -13,19 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.mapper;
+package org.polyjdbc.core.schema.model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.type.ColumnType;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class StringMapper implements ObjectMapper<String> {
+public class LongAttribute extends Attribute {
+
+    private int integerPrecision;
+
+    public LongAttribute(Dialect dialect, String name) {
+        super(dialect, name);
+    }
 
     @Override
-    public String createObject(ResultSet resultSet) throws SQLException {
-        return resultSet.getString(1);
+    public ColumnType getType() {
+        return ColumnType.LONG;
+    }
+
+    @Override
+    protected String getTypeDefinition() {
+        return dialect().types().bigint(integerPrecision);
+    }
+
+    void withIntegerPrecision(int integerPrecision) {
+        this.integerPrecision = integerPrecision;
     }
 }

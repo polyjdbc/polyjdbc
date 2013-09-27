@@ -13,28 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
+import org.polyjdbc.core.dialect.Dialect;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
+public class PrimaryKeyConstraint extends Constraint {
 
-    public String getCode() {
-        return "H2";
+    private String[] targetAttributes;
+
+    PrimaryKeyConstraint(Dialect dialect, String name) {
+        super(dialect, name);
     }
 
     @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
+    protected String getDefinition() {
+        return dialect().constraints().primaryKey(getName(), targetAttributes);
+    }
+
+    void withTargetAttributes(String[] targetAttributes) {
+        this.targetAttributes = targetAttributes;
     }
 }

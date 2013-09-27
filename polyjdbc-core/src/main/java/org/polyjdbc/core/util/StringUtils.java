@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
-
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
+package org.polyjdbc.core.util;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
+public final class StringUtils {
+    private static final int SINGLE_VALUE_LENGTH = 20;
 
-    public String getCode() {
-        return "H2";
+    private StringUtils() {
     }
 
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
+    public static String concatenate(String separator, Object... values) {
+        if(values.length == 0) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder(values.length * SINGLE_VALUE_LENGTH);
+        for(Object value : values) {
+            builder.append(value.toString()).append(separator);
+        }
+        StringBuilderUtil.deleteLastCharacters(builder, separator.length());
+        return builder.toString();
     }
+
 }

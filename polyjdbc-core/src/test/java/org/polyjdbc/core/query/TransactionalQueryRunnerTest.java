@@ -18,7 +18,7 @@ package org.polyjdbc.core.query;
 import java.util.List;
 import org.polyjdbc.core.exception.PolyJdbcException;
 import org.polyjdbc.core.integration.DatabaseTest;
-import org.polyjdbc.core.mapper.EmptyMapper;
+import org.polyjdbc.core.query.mapper.EmptyMapper;
 import org.testng.annotations.Test;
 import static com.googlecode.catchexception.CatchException.*;
 import static org.polyjdbc.core.test.assertions.PolyJdbcAssertions.*;

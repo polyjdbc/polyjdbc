@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
+package org.polyjdbc.core.schema.model;
+
+import org.junit.Test;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
+public class RelationTest {
 
-    public String getCode() {
-        return "H2";
+    @Test
+    public void shouldBecomeValidDDLWhenStringCalled() {
+//        // given
+//        Relation relation = RelationBuilder.relation("test")
+//                .with(longAttribute("id"))
+//                .build();
+//
+//        // when
+//
+//        // then
     }
 
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
-    }
 }

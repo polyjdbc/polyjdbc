@@ -25,7 +25,13 @@ public interface Dialect {
 
     String getCode();
 
+    DialectTypes types();
+
+    DialectConstraints constraints();
+
     boolean supportsSequences();
+
+    boolean supportsAttributeModifier(String modifier);
 
     KeyGenerator keyGenerator();
 }

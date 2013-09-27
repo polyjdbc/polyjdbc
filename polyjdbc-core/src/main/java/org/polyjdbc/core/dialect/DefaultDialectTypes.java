@@ -15,26 +15,38 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
-
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
+public class DefaultDialectTypes implements DialectTypes{
 
-    public String getCode() {
-        return "H2";
+    public String string(int characters) {
+        return "VARCHAR(" + characters + ")";
     }
 
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
+    public String text() {
+        return "TEXT";
     }
+
+    public String date() {
+        return "DATE";
+    }
+
+    public String integer(int integerPrecision) {
+        return "INTEGER";
+    }
+
+    public String bigint(int integerPrecision) {
+        return "BIGINT";
+    }
+
+    public String number(int integerPrecision, int decimalPrecision) {
+        return "NUMERIC(" + integerPrecision + "," + decimalPrecision + ")";
+    }
+
+    public String bool() {
+        return "BOOLEAN";
+    }
+
 }

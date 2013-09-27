@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.mapper;
+package org.polyjdbc.core.query.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

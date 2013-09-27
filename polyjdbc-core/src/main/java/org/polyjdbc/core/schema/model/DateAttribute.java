@@ -13,28 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.type.ColumnType;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
+public class DateAttribute extends Attribute {
 
-    public String getCode() {
-        return "H2";
+    public DateAttribute(Dialect dialect, String name) {
+        super(dialect, name);
     }
 
     @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
+    public ColumnType getType() {
+        return ColumnType.DATE;
     }
+
+    @Override
+    protected String getTypeDefinition() {
+        return dialect().types().date();
+    }
+
 }

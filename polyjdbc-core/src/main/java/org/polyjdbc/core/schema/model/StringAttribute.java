@@ -13,17 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.mapper;
+package org.polyjdbc.core.schema.model;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.type.ColumnType;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface ObjectMapper<T> {
+public class StringAttribute extends Attribute {
 
-    T createObject(ResultSet resultSet) throws SQLException;
+    private int maxLength;
 
+    public StringAttribute(Dialect dialect, String name) {
+        super(dialect, name);
+    }
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.STRING;
+    }
+
+    @Override
+    protected String getTypeDefinition() {
+        return dialect().types().string(maxLength);
+    }
+
+    void withMaxLength(int maxLength) {
+        this.maxLength = maxLength;
+    }
 }

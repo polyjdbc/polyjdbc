@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.query.mapper;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class H2Dialect extends AbstractDialect {
-
-    public String getCode() {
-        return "H2";
-    }
+public class StringMapper implements ObjectMapper<String> {
 
     @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT " + sequenceName + ".nextval";
-            }
-        });
+    public String createObject(ResultSet resultSet) throws SQLException {
+        return resultSet.getString(1);
     }
 }

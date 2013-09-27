@@ -23,16 +23,14 @@ import org.polyjdbc.core.key.SequenceNextValGenerator;
  *
  * @author Adam Dubiel
  */
-public class PostgresDialect implements Dialect {
+public class PostgresDialect extends AbstractDialect {
 
+    @Override
     public String getCode() {
         return "POSTGRES";
     }
 
-    public boolean supportsSequences() {
-        return true;
-    }
-
+    @Override
     public KeyGenerator keyGenerator() {
         return new SequenceAllocation(new SequenceNextValGenerator() {
             public String nextval(String sequenceName) {
