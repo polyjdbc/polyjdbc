@@ -48,8 +48,12 @@ public class Relation {
         String constraintsDDL = StringUtils.concatenate(",\n", constraints.toArray());
         StringBuilder builder = new StringBuilder(TO_STRING_LENGTH_BASE + headingDDL.length() + constraintsDDL.length());
 
-        builder.append("CREATE TABLE ").append(name).append("(\n")
-                .append(headingDDL).append(constraintsDDL).append("\n)");
+        builder.append("CREATE TABLE ").append(name).append(" (\n")
+                .append(headingDDL);
+        if(constraintsDDL.length() > 0) {
+            builder.append(",\n");
+        }
+        builder.append(constraintsDDL).append("\n)");
 
         return builder.toString();
     }

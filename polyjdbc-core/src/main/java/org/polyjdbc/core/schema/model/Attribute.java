@@ -72,7 +72,7 @@ public abstract class Attribute {
                 }
             }
         }
-        return builder.toString();
+        return builder.toString().trim();
     }
 
     public String getName() {

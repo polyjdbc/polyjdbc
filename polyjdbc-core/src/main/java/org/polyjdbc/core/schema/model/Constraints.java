@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.util.StringUtils;
+import org.polyjdbc.core.dialect.Dialect;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class DefultDialectConstraints implements DialectConstraints {
+public final class Constraints {
 
-    public String primaryKey(String name, String[] targetAttributes) {
-        return "CONSTRAINT " + name + " PRIMARY KEY(" + StringUtils.concatenate(", ", (Object[]) targetAttributes) + ")";
+    private Constraints() {
     }
 
-    public String foreignKey(String name, String targetAttribute, String targetRelation, String targetRelationAttribute) {
-        return "CONSTRAINT " + name + " FOREIGN KEY(" + targetAttribute + ") REFERENCES " + targetRelation + "(" + targetRelationAttribute + ")";
+    public static PrimaryKeyConstraintBuilder primaryKey(Dialect dialect, String name) {
+        return PrimaryKeyConstraintBuilder.primaryKey(dialect, name);
     }
+
 }

@@ -17,6 +17,11 @@
 package org.polyjdbc.core.schema.model;
 
 import org.junit.Test;
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.dialect.H2Dialect;
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.polyjdbc.core.schema.model.Attributes.*;
+import static org.polyjdbc.core.schema.model.Constraints.*;
 
 /**
  *
@@ -25,15 +30,24 @@ import org.junit.Test;
 public class RelationTest {
 
     @Test
-    public void shouldBecomeValidDDLWhenStringCalled() {
-//        // given
-//        Relation relation = RelationBuilder.relation("test")
-//                .with(longAttribute("id"))
-//                .build();
-//
-//        // when
-//
-//        // then
+    public void shouldBecomeValidDDLWhenToStringCalled() {
+        // given
+        Dialect dialect = new H2Dialect();
+        Relation relation = RelationBuilder.relation(dialect, "test")
+                .with(longAttribute(dialect, "id").build())
+                .with(stringAttribute(dialect, "name").unique().notNull().withMaxLength(255).build())
+                .constrainedBy(primaryKey(dialect, "pk").using("id").build())
+                .build();
+
+        // when
+        String ddl = relation.toString();
+
+        // then
+        assertThat(ddl).isEqualTo("CREATE TABLE test (\n"
+                + "id BIGINT,\n"
+                + "name VARCHAR(255) UNIQUE NOT NULL,\n"
+                + "CONSTRAINT pk PRIMARY KEY(id)\n"
+                + ")");
     }
 
 }
