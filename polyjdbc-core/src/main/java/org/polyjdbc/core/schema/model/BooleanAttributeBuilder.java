@@ -23,12 +23,12 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public class BooleanAttributeBuilder extends AttributeBuilder<BooleanAttributeBuilder, BooleanAttribute> {
 
-    private BooleanAttributeBuilder(Dialect dialect, String name) {
-        super(new BooleanAttribute(dialect, name));
+    private BooleanAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        super(new BooleanAttribute(dialect, name), parent);
     }
 
-    public static BooleanAttributeBuilder booleanAttribute(Dialect dialect, String name) {
-        return new BooleanAttributeBuilder(dialect, name);
+    public static BooleanAttributeBuilder booleanAttr(Dialect dialect, String name, RelationBuilder parent) {
+        return new BooleanAttributeBuilder(dialect, name, parent);
     }
 
     @Override

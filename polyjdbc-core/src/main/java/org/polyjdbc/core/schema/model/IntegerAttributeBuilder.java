@@ -23,12 +23,12 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public class IntegerAttributeBuilder extends AttributeBuilder<IntegerAttributeBuilder, IntegerAttribute> {
 
-    private IntegerAttributeBuilder(Dialect dialect, String name) {
-        super(new IntegerAttribute(dialect, name));
+    private IntegerAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        super(new IntegerAttribute(dialect, name), parent);
     }
 
-    public static IntegerAttributeBuilder integerAttribute(Dialect dialect, String name) {
-        return new IntegerAttributeBuilder(dialect, name);
+    public static IntegerAttributeBuilder integer(Dialect dialect, String name, RelationBuilder parent) {
+        return new IntegerAttributeBuilder(dialect, name, parent);
     }
 
     @Override

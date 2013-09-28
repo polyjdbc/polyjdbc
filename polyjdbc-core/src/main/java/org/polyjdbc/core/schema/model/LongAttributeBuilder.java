@@ -27,7 +27,7 @@ public class LongAttributeBuilder extends AttributeBuilder<LongAttributeBuilder,
         super(new LongAttribute(dialect, name), parent);
     }
 
-    public static LongAttributeBuilder longAttribute(Dialect dialect, String name, RelationBuilder parent) {
+    public static LongAttributeBuilder longAttr(Dialect dialect, String name, RelationBuilder parent) {
         return new LongAttributeBuilder(dialect, name, parent);
     }
 

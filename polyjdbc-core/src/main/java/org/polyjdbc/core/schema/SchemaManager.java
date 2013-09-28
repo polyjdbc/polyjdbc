@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema;
+
+import org.polyjdbc.core.query.QueryRunner;
+import org.polyjdbc.core.schema.model.Relation;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface DialectTypes {
+public interface SchemaManager {
 
-    String string(int characters);
+    void create(QueryRunner queryRunner, Relation relation);
 
-    String text();
-
-    String character();
-
-    String date();
-
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-
-    String bool();
 }

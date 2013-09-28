@@ -59,11 +59,23 @@ public class RelationBuilder {
     }
 
     public LongAttributeBuilder longAttr(String name) {
-        return LongAttributeBuilder.longAttribute(dialect, name, this);
+        return LongAttributeBuilder.longAttr(dialect, name, this);
+    }
+
+    public IntegerAttributeBuilder integer(String name) {
+        return IntegerAttributeBuilder.integer(dialect, name, this);
     }
 
     public StringAttributeBuilder string(String name) {
         return StringAttributeBuilder.string(dialect, name, this);
+    }
+
+    public CharAttributeBuilder character(String name) {
+        return CharAttributeBuilder.character(dialect, name, this);
+    }
+
+    public BooleanAttributeBuilder booleanAttr(String name) {
+        return BooleanAttributeBuilder.booleanAttr(dialect, name, this);
     }
 
     public RelationBuilder constrainedBy() {

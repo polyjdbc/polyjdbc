@@ -17,9 +17,9 @@
 package org.polyjdbc.core.schema.model;
 
 import org.junit.Test;
-import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.H2Dialect;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.polyjdbc.core.schema.model.RelationBuilder.relation;
 
 /**
  *
@@ -30,8 +30,7 @@ public class RelationTest {
     @Test
     public void shouldBecomeValidDDLWhenToStringCalled() {
         // given
-        Dialect dialect = new H2Dialect();
-        Relation relation = RelationBuilder.relation(dialect, "test")
+        Relation relation = relation(new H2Dialect(), "test")
                 .withAttribute().longAttr("id").and()
                 .withAttribute().string("name").unique().notNull().withMaxLength(255).and()
                 .constrainedBy().primaryKey("pk").using("id").and()

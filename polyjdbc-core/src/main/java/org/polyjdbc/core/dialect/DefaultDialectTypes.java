@@ -21,30 +21,42 @@ package org.polyjdbc.core.dialect;
  */
 public class DefaultDialectTypes implements DialectTypes{
 
+    @Override
     public String string(int characters) {
         return "VARCHAR(" + characters + ")";
     }
 
+    @Override
     public String text() {
         return "TEXT";
     }
 
+    @Override
+    public String character() {
+        return "CHAR";
+    }
+
+    @Override
     public String date() {
         return "DATE";
     }
 
+    @Override
     public String integer(int integerPrecision) {
         return "INTEGER";
     }
 
+    @Override
     public String bigint(int integerPrecision) {
         return "BIGINT";
     }
 
+    @Override
     public String number(int integerPrecision, int decimalPrecision) {
         return "NUMERIC(" + integerPrecision + "," + decimalPrecision + ")";
     }
 
+    @Override
     public String bool() {
         return "BOOLEAN";
     }
