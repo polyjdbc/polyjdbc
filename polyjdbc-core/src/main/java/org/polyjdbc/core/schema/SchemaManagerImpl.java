@@ -17,10 +17,11 @@ package org.polyjdbc.core.schema;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import org.polyjdbc.core.exception.SchemaManagerException;
-import org.polyjdbc.core.schema.model.Relation;
 import org.polyjdbc.core.schema.model.Schema;
-import org.polyjdbc.core.schema.model.SchemaPart;
+import org.polyjdbc.core.schema.model.SchemaEntity;
 import org.polyjdbc.core.transaction.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +42,13 @@ public class SchemaManagerImpl implements SchemaManager {
 
     @Override
     public void create(Schema schema) {
+        List<SchemaEntity> entitiesToCreate = new ArrayList<SchemaEntity>(schema.getEntities());
+        if (schema.getDialect().supportsSequences()) {
+            entitiesToCreate.addAll(schema.getSequences());
+        }
+
         String ddlText;
-        for(SchemaPart entity : schema.getEntities()) {
+        for (SchemaEntity entity : entitiesToCreate) {
             ddlText = entity.ddl();
             logger.info("creating entity with name {} using ddl:\n{}", entity.getName(), ddlText);
             ddl(DDLQuery.ddl(ddlText));
@@ -50,8 +56,26 @@ public class SchemaManagerImpl implements SchemaManager {
     }
 
     @Override
-    public void create(Relation relation) {
-        ddl(DDLQuery.ddl(relation.toString()));
+    public void create(SchemaEntity entity) {
+        ddl(DDLQuery.ddl(entity.ddl()));
+    }
+
+    public void drop(Schema schema) {
+        List<SchemaEntity> entitiesToDrop = new ArrayList<SchemaEntity>(schema.getEntities());
+        if (schema.getDialect().supportsSequences()) {
+            entitiesToDrop.addAll(schema.getSequences());
+        }
+
+        String ddlText;
+        for (SchemaEntity entity : entitiesToDrop) {
+            ddlText = entity.dropDDL();
+            logger.info("dropping entity with name {} using ddl:\n{}", entity.getName(), ddlText);
+            ddl(DDLQuery.ddl(ddlText));
+        }
+    }
+
+    public void drop(SchemaEntity entity) {
+        ddl(DDLQuery.ddl(entity.dropDDL()));
     }
 
     @Override

@@ -28,7 +28,9 @@ public final class Schema {
 
     private Dialect dialect;
 
-    private List<SchemaPart> entities = new ArrayList<SchemaPart>();
+    private List<SchemaEntity> entities = new ArrayList<SchemaEntity>();
+
+    private List<Sequence> sequences = new ArrayList<Sequence>();
 
     public Schema(Dialect dialect) {
         this.dialect = dialect;
@@ -38,12 +40,20 @@ public final class Schema {
         return dialect;
     }
 
-    public List<SchemaPart> getEntities() {
+    public List<SchemaEntity> getEntities() {
         return Collections.unmodifiableList(entities);
     }
 
-    void add(SchemaPart entity) {
+    public List<Sequence> getSequences() {
+        return Collections.unmodifiableList(sequences);
+    }
+
+    void add(SchemaEntity entity) {
         entities.add(entity);
+    }
+
+    void add(Sequence sequence) {
+        sequences.add(sequence);
     }
 
     public RelationBuilder addRelation(String name) {

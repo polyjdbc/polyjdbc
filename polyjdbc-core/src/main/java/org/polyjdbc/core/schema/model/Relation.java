@@ -25,7 +25,7 @@ import org.polyjdbc.core.util.StringUtils;
  *
  * @author Adam Dubiel
  */
-public class Relation implements SchemaPart {
+public class Relation implements SchemaEntity {
 
     private static final int TO_STRING_LENGTH_BASE = 30;
 
@@ -61,6 +61,11 @@ public class Relation implements SchemaPart {
         builder.append(constraintsDDL).append("\n)");
 
         return builder.toString();
+    }
+
+    @Override
+    public String dropDDL() {
+        return "DROP TABLE " + name;
     }
 
     public Dialect getDialect() {

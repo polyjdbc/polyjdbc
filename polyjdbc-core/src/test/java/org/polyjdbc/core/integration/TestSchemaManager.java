@@ -34,12 +34,14 @@ public class TestSchemaManager {
 
     private QueryLoader queryLoader = new ClasspathQueryLoader();
 
+    private Schema schema;
+
     public TestSchemaManager(Dialect dialect) {
         this.dialect = dialect;
     }
 
     public void createSchema(TransactionManager transactionManager) {
-        Schema schema = new Schema(dialect);
+        schema = new Schema(dialect);
 
         schema.addRelation("test")
                 .withAttribute().longAttr("id").and()
@@ -58,7 +60,9 @@ public class TestSchemaManager {
     }
 
     public void dropSchema(TransactionManager transactionManager) {
-        executeDDL(transactionManager, "/ddl/" + dialect.getCode().toLowerCase() + "_ddl_drop.sql");
+        SchemaManager manager = new SchemaManagerImpl(transactionManager.openTransaction());
+        manager.drop(schema);
+        manager.close();
     }
 
     private void executeDDL(TransactionManager transactionManager, String resourceName) {

@@ -23,7 +23,7 @@ import org.polyjdbc.core.util.StringUtils;
  *
  * @author Adam Dubiel
  */
-public class Index implements SchemaPart {
+public class Index implements SchemaEntity {
 
     private String name;
 
@@ -49,6 +49,10 @@ public class Index implements SchemaPart {
         builder.append("CREATE INDEX ").append(name).append(" ON ").append(targetRelation).append("(")
                 .append(StringUtils.concatenate(",", (Object[]) targetAttributes)).append(")");
         return builder.toString();
+    }
+
+    public String dropDDL() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getTargetRelation() {

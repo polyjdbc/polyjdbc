@@ -15,8 +15,8 @@
  */
 package org.polyjdbc.core.schema;
 
-import org.polyjdbc.core.schema.model.Relation;
 import org.polyjdbc.core.schema.model.Schema;
+import org.polyjdbc.core.schema.model.SchemaEntity;
 
 /**
  *
@@ -26,7 +26,11 @@ public interface SchemaManager {
 
     void create(Schema schema);
 
-    void create(Relation relation);
+    void create(SchemaEntity entity);
+
+    void drop(Schema schema);
+
+    void drop(SchemaEntity entity);
 
     void ddl(DDLQuery ddlQuery);
 

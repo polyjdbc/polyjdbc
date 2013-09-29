@@ -15,37 +15,12 @@
  */
 package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
  */
-public class Sequence implements SchemaEntity {
+public interface SchemaEntity extends SchemaPart {
 
-    private String name;
+    String dropDDL();
 
-    Sequence(Dialect dialect, String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return ddl();
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String ddl() {
-        return "CREATE SEQUENCE " + name;
-    }
-
-    @Override
-    public String dropDDL() {
-        return "DROP SEQUENCE " + name;
-    }
 }
