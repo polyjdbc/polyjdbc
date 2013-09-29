@@ -19,10 +19,13 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 import org.polyjdbc.core.exception.SchemaInspectionException;
 import org.polyjdbc.core.transaction.Transaction;
 
 public class SchemaInspectorImpl implements SchemaInspector {
+
+    private Locale locale;
 
     private Transaction transaction;
 
@@ -33,18 +36,20 @@ public class SchemaInspectorImpl implements SchemaInspector {
     private String schema;
 
     public SchemaInspectorImpl(Transaction transaction) {
-        this.transaction = transaction;
+        this(transaction, Locale.ENGLISH);
         extractMetadata(transaction);
     }
 
-    private ConnectionMetadata extractMetadata(Transaction transaction) {
+    public SchemaInspectorImpl(Transaction transaction, Locale locale) {
+        this.transaction = transaction;
+        this.locale = locale;
+    }
+
+    private void extractMetadata(Transaction transaction) {
         try {
             Connection connection = transaction.getConnection();
             metadata = connection.getMetaData();
             catalog = connection.getCatalog();
-            schema = connection.getSchema();
-
-            return new ConnectionMetadata(metadata, catalog, schema);
         } catch (SQLException exception) {
             throw new SchemaInspectionException("METADATA_EXTRACTION_ERROR", "Failed to obtain metadata from connection.", exception);
         }
@@ -53,7 +58,7 @@ public class SchemaInspectorImpl implements SchemaInspector {
     @Override
     public boolean relationExists(String name) {
         try {
-            ResultSet resultSet = metadata.getTables(catalog, schema, name, new String[]{"TABLE"});
+            ResultSet resultSet = metadata.getTables(catalog, schema, name.toUpperCase(locale), new String[]{"TABLE"});
             transaction.registerCursor(resultSet);
 
             return resultSet.first();
