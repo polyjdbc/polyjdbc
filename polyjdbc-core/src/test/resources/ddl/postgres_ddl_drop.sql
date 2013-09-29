@@ -1,2 +1,0 @@
-DROP TABLE test;
-DROP SEQUENCE seq_test;
