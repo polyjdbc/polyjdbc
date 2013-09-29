@@ -13,32 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
-
-import java.util.List;
-import org.polyjdbc.core.query.mapper.ObjectMapper;
+package org.polyjdbc.core.schema;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface QueryRunner {
+public class DDLQuery {
 
-    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper);
+    private String query;
 
-    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound);
+    DDLQuery(String query) {
+        this.query = query;
+    }
 
-    <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper);
+    public static DDLQuery ddl(String query) {
+        return new DDLQuery(query);
+    }
 
-    boolean queryExistence(SelectQuery query);
-
-    long insert(InsertQuery insertQuery);
-
-    int delete(DeleteQuery deleteQuery);
-
-    void commitAndClose();
-
-    void rollback();
-
-    void close();
+    String build() {
+        return query;
+    }
 }

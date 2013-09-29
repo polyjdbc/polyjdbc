@@ -13,24 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
+package org.polyjdbc.core.schema.model;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class DDLQuery {
+public interface SchemaPart {
 
-    private Query query;
+    String getName();
 
-    DDLQuery(String query) {
-        this.query = new Query();
-        this.query.append(query);
-    }
-
-    Query build() {
-        query.compile();
-        return query;
-    }
-
+    String ddl();
 }

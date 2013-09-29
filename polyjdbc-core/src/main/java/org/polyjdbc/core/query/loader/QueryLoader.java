@@ -15,13 +15,11 @@
  */
 package org.polyjdbc.core.query.loader;
 
-import org.polyjdbc.core.query.DDLQuery;
-
 /**
  *
  * @author Adam Dubiel
  */
 public interface QueryLoader {
 
-    DDLQuery getQuery(String resourceName);
+    String getQuery(String resourceName);
 }

@@ -105,7 +105,7 @@ public class Query {
         return preparedStatement;
     }
 
-    String getQuery() {
+    public String getQuery() {
         return query;
     }
 }

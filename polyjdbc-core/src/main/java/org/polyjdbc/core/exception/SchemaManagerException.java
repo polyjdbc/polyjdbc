@@ -13,32 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
-
-import java.util.List;
-import org.polyjdbc.core.query.mapper.ObjectMapper;
+package org.polyjdbc.core.exception;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface QueryRunner {
+@SuppressWarnings("serial")
+public class SchemaManagerException extends PolyJdbcException {
 
-    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper);
-
-    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound);
-
-    <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper);
-
-    boolean queryExistence(SelectQuery query);
-
-    long insert(InsertQuery insertQuery);
-
-    int delete(DeleteQuery deleteQuery);
-
-    void commitAndClose();
-
-    void rollback();
-
-    void close();
+    public SchemaManagerException(String code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
 }

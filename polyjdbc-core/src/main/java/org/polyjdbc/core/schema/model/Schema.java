@@ -15,41 +15,46 @@
  */
 package org.polyjdbc.core.schema.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.polyjdbc.core.dialect.Dialect;
 
 /**
  *
  * @author Adam Dubiel
  */
-public abstract class Constraint implements SchemaPart {
+public final class Schema {
 
     private Dialect dialect;
 
-    private String name;
+    private List<SchemaPart> entities = new ArrayList<SchemaPart>();
 
-    Constraint(Dialect dialect, String name) {
+    public Schema(Dialect dialect) {
         this.dialect = dialect;
-        this.name = name;
     }
 
-    protected abstract String getDefinition();
-
-    protected Dialect dialect() {
+    public Dialect getDialect() {
         return dialect;
     }
 
-    @Override
-    public String toString() {
-        return ddl();
+    public List<SchemaPart> getEntities() {
+        return Collections.unmodifiableList(entities);
     }
 
-    @Override
-    public String getName() {
-        return name;
+    void add(SchemaPart entity) {
+        entities.add(entity);
     }
 
-    public String ddl() {
-        return getDefinition();
+    public RelationBuilder addRelation(String name) {
+        return RelationBuilder.relation(this, name);
     }
 
+    public IndexBuilder addIndex(String name) {
+        return IndexBuilder.index(this, name);
+    }
+
+    public SequenceBuilder addSequence(String name) {
+        return SequenceBuilder.sequence(this, name);
+    }
 }

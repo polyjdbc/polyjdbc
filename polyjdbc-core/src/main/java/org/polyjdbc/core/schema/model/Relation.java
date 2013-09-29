@@ -25,7 +25,7 @@ import org.polyjdbc.core.util.StringUtils;
  *
  * @author Adam Dubiel
  */
-public class Relation {
+public class Relation implements SchemaPart {
 
     private static final int TO_STRING_LENGTH_BASE = 30;
 
@@ -44,13 +44,18 @@ public class Relation {
 
     @Override
     public String toString() {
+        return ddl();
+    }
+
+    @Override
+    public String ddl() {
         String headingDDL = heading.toString();
         String constraintsDDL = StringUtils.concatenate(",\n", constraints.toArray());
         StringBuilder builder = new StringBuilder(TO_STRING_LENGTH_BASE + headingDDL.length() + constraintsDDL.length());
 
         builder.append("CREATE TABLE ").append(name).append(" (\n")
                 .append(headingDDL);
-        if(constraintsDDL.length() > 0) {
+        if (constraintsDDL.length() > 0) {
             builder.append(",\n");
         }
         builder.append(constraintsDDL).append("\n)");
@@ -62,6 +67,7 @@ public class Relation {
         return dialect;
     }
 
+    @Override
     public String getName() {
         return name;
     }

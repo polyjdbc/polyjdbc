@@ -23,7 +23,7 @@ import org.polyjdbc.core.type.ColumnType;
  *
  * @author Adam Dubiel
  */
-public abstract class Attribute {
+public abstract class Attribute implements SchemaPart {
 
     static final int TO_STRING_LENGTH = 100;
 
@@ -54,6 +54,11 @@ public abstract class Attribute {
 
     @Override
     public String toString() {
+        return ddl();
+    }
+
+    @Override
+    public String ddl() {
         StringBuilder builder = new StringBuilder(TO_STRING_LENGTH);
         builder.append(name).append(" ").append(getTypeDefinition()).append(" ");
         if (unique) {
@@ -63,11 +68,11 @@ public abstract class Attribute {
             builder.append("NOT NULL ");
         }
         if (defaultValue != null) {
-            builder.append("DEFAULT ").append(defaultValue).append(" ");
+            builder.append("DEFAULT '").append(defaultValue).append("' ");
         }
         if (additionalModifiers != null) {
-            for(String additionalModifier : additionalModifiers) {
-                if(dialect.supportsAttributeModifier(additionalModifier)) {
+            for (String additionalModifier : additionalModifiers) {
+                if (dialect.supportsAttributeModifier(additionalModifier)) {
                     builder.append(additionalModifier).append(" ");
                 }
             }
@@ -75,6 +80,7 @@ public abstract class Attribute {
         return builder.toString().trim();
     }
 
+    @Override
     public String getName() {
         return name;
     }

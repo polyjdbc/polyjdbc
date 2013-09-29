@@ -35,8 +35,4 @@ public final class QueryFactory {
     public static DeleteQuery delete() {
         return new DeleteQuery();
     }
-
-    public static DDLQuery ddl(String query) {
-        return new DDLQuery(query);
-    }
 }

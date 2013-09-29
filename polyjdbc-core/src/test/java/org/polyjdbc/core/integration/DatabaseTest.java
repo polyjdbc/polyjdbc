@@ -37,7 +37,7 @@ public class DatabaseTest {
 
     private TransactionManager transactionManager;
 
-    private SchemaManager schemaManager;
+    private TestSchemaManager schemaManager;
 
     private TheCleaner cleaner;
 
@@ -56,7 +56,7 @@ public class DatabaseTest {
         DataSource dataSource = DataSourceFactory.create(dialect, url, user, password);
 
         this.transactionManager = new DataSourceTransactionManager(dialect, dataSource);
-        this.schemaManager = new SchemaManager(dialect);
+        this.schemaManager = new TestSchemaManager(dialect);
         this.cleaner = new TheCleaner(transactionManager);
 
         schemaManager.createSchema(transactionManager);

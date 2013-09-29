@@ -21,35 +21,34 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public abstract class Constraint implements SchemaPart {
+public class SequenceBuilder {
 
-    private Dialect dialect;
+    private Sequence sequence;
 
-    private String name;
+    private Schema schema;
 
-    Constraint(Dialect dialect, String name) {
-        this.dialect = dialect;
-        this.name = name;
+    private SequenceBuilder(Dialect dialect, String name) {
+        this.sequence = new Sequence(dialect, name);
     }
 
-    protected abstract String getDefinition();
-
-    protected Dialect dialect() {
-        return dialect;
+    private SequenceBuilder(Schema schema, String name) {
+        this(schema.getDialect(), name);
+        this.schema = schema;
     }
 
-    @Override
-    public String toString() {
-        return ddl();
+    public static SequenceBuilder sequence(Dialect dialect, String name) {
+        return new SequenceBuilder(dialect, name);
     }
 
-    @Override
-    public String getName() {
-        return name;
+    public static SequenceBuilder sequence(Schema schema, String name) {
+        return new SequenceBuilder(schema, name);
     }
 
-    public String ddl() {
-        return getDefinition();
+    public Sequence build() {
+        if(schema != null ) {
+            schema.add(sequence);
+        }
+        return sequence;
     }
 
 }

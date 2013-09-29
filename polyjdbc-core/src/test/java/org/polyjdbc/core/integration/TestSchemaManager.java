@@ -16,29 +16,45 @@
 package org.polyjdbc.core.integration;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.query.DDLQuery;
-import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.TransactionalQueryRunner;
+import org.polyjdbc.core.schema.DDLQuery;
 import org.polyjdbc.core.query.loader.ClasspathQueryLoader;
 import org.polyjdbc.core.query.loader.QueryLoader;
+import org.polyjdbc.core.schema.SchemaManager;
+import org.polyjdbc.core.schema.SchemaManagerImpl;
+import org.polyjdbc.core.schema.model.Schema;
 import org.polyjdbc.core.transaction.TransactionManager;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class SchemaManager {
+public class TestSchemaManager {
 
     private Dialect dialect;
 
     private QueryLoader queryLoader = new ClasspathQueryLoader();
 
-    public SchemaManager(Dialect dialect) {
+    public TestSchemaManager(Dialect dialect) {
         this.dialect = dialect;
     }
 
     public void createSchema(TransactionManager transactionManager) {
-        executeDDL(transactionManager, "/ddl/" + dialect.getCode().toLowerCase() + "_ddl.sql");
+        Schema schema = new Schema(dialect);
+
+        schema.addRelation("test")
+                .withAttribute().longAttr("id").and()
+                .withAttribute().string("name").unique().notNull().withMaxLength(200).and()
+                .withAttribute().integer("count").and()
+                .withAttribute().booleanAttr("countable").withDefaultValue(true).notNull().and()
+                .withAttribute().character("separator").withDefaultValue(';').notNull().and()
+                .constrainedBy().primaryKey("pk").using("id").and()
+                .build();
+        schema.addIndex("idx_test_name").on("test").indexing("name").build();
+        schema.addSequence("seq_test").build();
+
+        SchemaManager manager = new SchemaManagerImpl(transactionManager.openTransaction());
+        manager.create(schema);
+        manager.close();
     }
 
     public void dropSchema(TransactionManager transactionManager) {
@@ -46,10 +62,11 @@ public class SchemaManager {
     }
 
     private void executeDDL(TransactionManager transactionManager, String resourceName) {
-        DDLQuery query = queryLoader.getQuery(resourceName);
-        QueryRunner runner = new TransactionalQueryRunner(transactionManager.openTransaction());
-        runner.ddl(query);
-        runner.commitAndClose();
+        DDLQuery query = DDLQuery.ddl(queryLoader.getQuery(resourceName));
+
+        SchemaManager manager = new SchemaManagerImpl(transactionManager.openTransaction());
+        manager.ddl(query);
+        manager.close();
     }
 
 }

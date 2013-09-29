@@ -25,6 +25,8 @@ public class RelationBuilder {
 
     private Relation relation;
 
+    private Schema schema;
+
     private Heading heading;
 
     private Dialect dialect;
@@ -35,12 +37,24 @@ public class RelationBuilder {
         heading = new Heading(dialect);
     }
 
+    private RelationBuilder(Schema schema, String name) {
+        this(schema.getDialect(), name);
+        this.schema = schema;
+    }
+
     public static RelationBuilder relation(Dialect dialect, String name) {
         return new RelationBuilder(dialect, name);
     }
 
+    public static RelationBuilder relation(Schema schema, String name) {
+        return new RelationBuilder(schema, name);
+    }
+
     public Relation build() {
         relation.withHeading(heading);
+        if (schema != null) {
+            schema.add(relation);
+        }
         return relation;
     }
 

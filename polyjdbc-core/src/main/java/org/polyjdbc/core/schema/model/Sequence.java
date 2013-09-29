@@ -13,32 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
+package org.polyjdbc.core.schema.model;
 
-import java.util.List;
-import org.polyjdbc.core.query.mapper.ObjectMapper;
+import org.polyjdbc.core.dialect.Dialect;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface QueryRunner {
+public class Sequence implements SchemaPart {
 
-    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper);
+    private String name;
 
-    <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound);
+    Sequence(Dialect dialect, String name) {
+        this.name = name;
+    }
 
-    <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper);
+    @Override
+    public String toString() {
+        return ddl();
+    }
 
-    boolean queryExistence(SelectQuery query);
+    @Override
+    public String getName() {
+        return name;
+    }
 
-    long insert(InsertQuery insertQuery);
+    public String ddl() {
+        return "CREATE SEQUENCE " + name;
+    }
 
-    int delete(DeleteQuery deleteQuery);
-
-    void commitAndClose();
-
-    void rollback();
-
-    void close();
 }

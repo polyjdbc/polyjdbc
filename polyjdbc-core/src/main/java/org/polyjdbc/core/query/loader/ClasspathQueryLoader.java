@@ -21,8 +21,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import org.polyjdbc.core.exception.QueryLoaderException;
-import org.polyjdbc.core.query.DDLQuery;
-import org.polyjdbc.core.query.QueryFactory;
 
 /**
  *
@@ -31,7 +29,7 @@ import org.polyjdbc.core.query.QueryFactory;
 public class ClasspathQueryLoader implements QueryLoader {
 
     @Override
-    public DDLQuery getQuery(String resourceName) {
+    public String getQuery(String resourceName) {
         InputStream stream;
         BufferedReader fileStream = null;
         try {
@@ -41,7 +39,7 @@ public class ClasspathQueryLoader implements QueryLoader {
             }
             fileStream = new BufferedReader(new InputStreamReader(stream));
 
-            return QueryFactory.ddl(readAsString(fileStream));
+            return readAsString(fileStream);
         } catch (IOException exception) {
             throw new QueryLoaderException("CLASSPATH_LOADING_ERROR", "Exception wile reading query from file " + resourceName, exception);
         } finally {

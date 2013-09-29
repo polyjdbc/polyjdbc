@@ -122,18 +122,6 @@ public class TransactionalQueryRunner implements QueryRunner {
         }
     }
 
-    @Override
-    public void ddl(DDLQuery ddlQuery) {
-        Query rawQuery = ddlQuery.build();
-        try {
-            PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
-            transaction.execute(statement);
-        } catch (SQLException exception) {
-            transaction.rollback();
-            throw new QueryExecutionException("DDL_ERROR", String.format("Failed to run delete query:%n%s", rawQuery.getQuery()), exception);
-        }
-    }
-
     public void commitAndClose() {
         transaction.commit();
         transaction.closeWithArtifacts();

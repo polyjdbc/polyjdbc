@@ -15,8 +15,8 @@
  */
 package org.polyjdbc.core.schema;
 
-import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.schema.model.Relation;
+import org.polyjdbc.core.schema.model.Schema;
 
 /**
  *
@@ -24,6 +24,11 @@ import org.polyjdbc.core.schema.model.Relation;
  */
 public interface SchemaManager {
 
-    void create(QueryRunner queryRunner, Relation relation);
+    void create(Schema schema);
 
+    void create(Relation relation);
+
+    void ddl(DDLQuery ddlQuery);
+
+    void close();
 }
