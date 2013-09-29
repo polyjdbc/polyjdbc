@@ -1,0 +1,69 @@
+/*
+ * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.polyjdbc.core.schema;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.polyjdbc.core.exception.SchemaInspectionException;
+import org.polyjdbc.core.transaction.Transaction;
+
+public class SchemaInspectorImpl implements SchemaInspector {
+
+    private Transaction transaction;
+
+    private DatabaseMetaData metadata;
+
+    private String catalog;
+
+    private String schema;
+
+    public SchemaInspectorImpl(Transaction transaction) {
+        this.transaction = transaction;
+        extractMetadata(transaction);
+    }
+
+    private ConnectionMetadata extractMetadata(Transaction transaction) {
+        try {
+            Connection connection = transaction.getConnection();
+            metadata = connection.getMetaData();
+            catalog = connection.getCatalog();
+            schema = connection.getSchema();
+
+            return new ConnectionMetadata(metadata, catalog, schema);
+        } catch (SQLException exception) {
+            throw new SchemaInspectionException("METADATA_EXTRACTION_ERROR", "Failed to obtain metadata from connection.", exception);
+        }
+    }
+
+    @Override
+    public boolean relationExists(String name) {
+        try {
+            ResultSet resultSet = metadata.getTables(catalog, schema, name, new String[]{"TABLE"});
+            transaction.registerCursor(resultSet);
+
+            return resultSet.first();
+        } catch (SQLException exception) {
+            throw new SchemaInspectionException("RELATION_LOOKUP_ERROR", "Failed to obtain relation list when looking for relation " + name, exception);
+        }
+    }
+
+    @Override
+    public void close() {
+        transaction.closeWithArtifacts();
+    }
+}

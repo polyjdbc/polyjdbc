@@ -15,13 +15,35 @@
  */
 package org.polyjdbc.core.schema;
 
+import java.sql.DatabaseMetaData;
+
 /**
  *
  * @author Adam Dubiel
  */
-public interface SchemaInspector {
+class ConnectionMetadata {
 
-    boolean relationExists(String name);
+    private DatabaseMetaData databaseMetaData;
 
-    void close();
+    private String catalog;
+
+    private String schema;
+
+    ConnectionMetadata(DatabaseMetaData databaseMetaData, String catalog, String schema) {
+        this.databaseMetaData = databaseMetaData;
+        this.catalog = catalog;
+        this.schema = schema;
+    }
+
+    DatabaseMetaData getDatabaseMetaData() {
+        return databaseMetaData;
+    }
+
+    String getCatalog() {
+        return catalog;
+    }
+
+    String getSchema() {
+        return schema;
+    }
 }

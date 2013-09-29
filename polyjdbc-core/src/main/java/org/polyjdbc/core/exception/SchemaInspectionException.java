@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.schema;
+package org.polyjdbc.core.exception;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface SchemaInspector {
+@SuppressWarnings("serial")
+public class SchemaInspectionException extends PolyJdbcException {
 
-    boolean relationExists(String name);
-
-    void close();
+    public SchemaInspectionException(String code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
 }
