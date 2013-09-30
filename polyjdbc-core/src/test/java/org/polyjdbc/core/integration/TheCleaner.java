@@ -39,7 +39,7 @@ public class TheCleaner {
             runner.delete(QueryFactory.delete().from(table));
         }
 
-        runner.commitAndClose();
+        runner.close();
     }
 
 }

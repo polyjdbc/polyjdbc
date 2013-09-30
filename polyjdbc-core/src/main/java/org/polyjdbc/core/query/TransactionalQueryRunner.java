@@ -53,6 +53,7 @@ public class TransactionalQueryRunner implements QueryRunner {
 
         if (results.size() != 1) {
             if (failOnNotUniqueOrNotFound) {
+                transaction.rollback();
                 if (results.isEmpty()) {
                     throw new NonUniqueException("NO_ITEM_FOUND", String.format("Asked for unique result but no items found for query:%n%s", rawQuery.getQuery()));
                 } else {
@@ -122,16 +123,25 @@ public class TransactionalQueryRunner implements QueryRunner {
         }
     }
 
-    public void commitAndClose() {
+    @Override
+    public void commit() {
         transaction.commit();
-        transaction.closeWithArtifacts();
     }
 
+    @Override
     public void rollback() {
         transaction.rollback();
     }
 
+    @Override
+    public void rollbackAndClose() {
+        rollback();
+        close();
+    }
+
+    @Override
     public void close() {
+        commit();
         transaction.closeWithArtifacts();
     }
 }

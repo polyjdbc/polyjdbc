@@ -58,7 +58,7 @@ public class SchemaInspectorImpl implements SchemaInspector {
     @Override
     public boolean relationExists(String name) {
         try {
-            ResultSet resultSet = metadata.getTables(catalog, schema, name.toUpperCase(locale), new String[]{"TABLE"});
+            ResultSet resultSet = metadata.getTables(catalog, schema, convertCase(name), new String[]{"TABLE"});
             transaction.registerCursor(resultSet);
 
             return resultSet.first();
@@ -67,8 +67,20 @@ public class SchemaInspectorImpl implements SchemaInspector {
         }
     }
 
+    private String convertCase(String identifier) throws SQLException {
+        if(metadata.storesLowerCaseIdentifiers()) {
+            return identifier.toLowerCase(locale);
+        }
+        if(metadata.storesUpperCaseIdentifiers()) {
+            return identifier.toUpperCase(locale);
+        }
+
+        return identifier;
+    }
+
     @Override
     public void close() {
+        transaction.commit();
         transaction.closeWithArtifacts();
     }
 }

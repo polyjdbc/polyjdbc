@@ -38,7 +38,7 @@ public class DatabaseBuilder {
     }
 
     public void buildAndCloseTransaction() {
-        queryRunner.commitAndClose();
+        queryRunner.close();
     }
 
     public DatabaseBuilder withItem(String name, int count) {

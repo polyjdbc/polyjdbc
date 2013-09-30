@@ -19,7 +19,7 @@
         </packages>
     </test>
 
-<!--    <test name="postgres">
+    <test name="postgres">
         <groups>
             <run>
                 <include name="integration"/>
@@ -34,6 +34,6 @@
         <packages>
             <package name="org.polyjdbc.core.*"/>
         </packages>
-    </test>-->
+    </test>
 
 </suite>

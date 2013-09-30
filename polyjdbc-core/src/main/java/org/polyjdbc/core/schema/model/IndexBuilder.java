@@ -45,7 +45,7 @@ public class IndexBuilder {
     }
 
     public Index build() {
-        if(schema != null ) {
+        if (schema != null) {
             schema.add(index);
         }
         return index;

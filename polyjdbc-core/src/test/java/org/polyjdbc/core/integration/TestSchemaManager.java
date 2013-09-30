@@ -16,9 +16,6 @@
 package org.polyjdbc.core.integration;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.schema.DDLQuery;
-import org.polyjdbc.core.query.loader.ClasspathQueryLoader;
-import org.polyjdbc.core.query.loader.QueryLoader;
 import org.polyjdbc.core.schema.SchemaManager;
 import org.polyjdbc.core.schema.SchemaManagerImpl;
 import org.polyjdbc.core.schema.model.Schema;
@@ -31,8 +28,6 @@ import org.polyjdbc.core.transaction.TransactionManager;
 public class TestSchemaManager {
 
     private Dialect dialect;
-
-    private QueryLoader queryLoader = new ClasspathQueryLoader();
 
     private Schema schema;
 
@@ -64,13 +59,4 @@ public class TestSchemaManager {
         manager.drop(schema);
         manager.close();
     }
-
-    private void executeDDL(TransactionManager transactionManager, String resourceName) {
-        DDLQuery query = DDLQuery.ddl(queryLoader.getQuery(resourceName));
-
-        SchemaManager manager = new SchemaManagerImpl(transactionManager.openTransaction());
-        manager.ddl(query);
-        manager.close();
-    }
-
 }

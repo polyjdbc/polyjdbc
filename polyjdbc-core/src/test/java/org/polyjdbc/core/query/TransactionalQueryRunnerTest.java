@@ -16,11 +16,10 @@
 package org.polyjdbc.core.query;
 
 import java.util.List;
-import org.polyjdbc.core.exception.PolyJdbcException;
+import org.polyjdbc.core.exception.NonUniqueException;
 import org.polyjdbc.core.integration.DatabaseTest;
 import org.polyjdbc.core.query.mapper.EmptyMapper;
 import org.testng.annotations.Test;
-import static com.googlecode.catchexception.CatchException.*;
 import static org.polyjdbc.core.test.assertions.PolyJdbcAssertions.*;
 import static org.polyjdbc.core.test.DatabaseBuilder.database;
 
@@ -41,7 +40,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         long insertedId = queryRunner.insert(insertQuery);
-        queryRunner.commitAndClose();
+        queryRunner.close();
 
         // then
         assertThat(insertedId).isGreaterThanOrEqualTo(100);
@@ -58,23 +57,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         queryRunner.insert(insertQuery);
-        queryRunner.rollback();
-
-        // then
-        assertThat(queryRunner()).hasNoItems().close();
-    }
-
-    @Test
-    public void shouldRollbackChangesMadeInTransactionWhenClosingWithoutCommit() {
-        // given
-        InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
-                .value("name", "test").value("count", 42).value("countable", true)
-                .value("separator", '|');
-        QueryRunner queryRunner = queryRunner();
-
-        // when
-        queryRunner.insert(insertQuery);
-        queryRunner.close();
+        queryRunner.rollbackAndClose();
 
         // then
         assertThat(queryRunner()).hasNoItems().close();
@@ -89,7 +72,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
-        runner.commitAndClose();
+        runner.close();
 
         // then
         assertThat(items).hasSize(10);
@@ -104,7 +87,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         Object item = runner.queryUnique(selectQuery, new EmptyMapper());
-        runner.commitAndClose();
+        runner.close();
 
         // then
         assertThat(item).isNotNull();
@@ -117,10 +100,15 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         SelectQuery selectQuery = QueryFactory.select().query("select * from test where count = :count").withArgument("count", 10);
 
         // when
-        catchException(queryRunner()).queryUnique(selectQuery, new EmptyMapper());
-
-        // then
-        assertThat((PolyJdbcException) caughtException()).hasCode("NON_UNIQUE_ITEM");
+        try {
+            queryRunner().queryUnique(selectQuery, new EmptyMapper());
+            fail("expected NonUniqueException");
+        } catch (NonUniqueException exception) {
+            // then
+            assertThat(exception).hasCode("NON_UNIQUE_ITEM");
+        } finally {
+            queryRunner().close();
+        }
     }
 
     @Test
@@ -130,10 +118,15 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unknown");
 
         // when
-        catchException(queryRunner()).queryUnique(selectQuery, new EmptyMapper());
-
-        // then
-        assertThat((PolyJdbcException) caughtException()).hasCode("NO_ITEM_FOUND");
+        try {
+            queryRunner().queryUnique(selectQuery, new EmptyMapper());
+            fail("expected NonUniqueException");
+        } catch (NonUniqueException exception) {
+            // then
+            assertThat(exception).hasCode("NO_ITEM_FOUND");
+        } finally {
+            queryRunner().close();
+        }
     }
 
     @Test
@@ -145,7 +138,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         Object item = runner.queryUnique(selectQuery, new EmptyMapper(), false);
-        runner.commitAndClose();
+        runner.close();
 
         // then
         assertThat(item).isNull();
@@ -159,7 +152,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         runner.delete(QueryFactory.delete().from("test"));
-        runner.commitAndClose();
+        runner.close();
 
         // then
         assertThat(queryRunner()).hasNoItems().close();
@@ -173,7 +166,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         runner.delete(QueryFactory.delete().from("test"));
 
         // when
-        runner.rollback();
+        runner.rollbackAndClose();
 
         // then
         assertThat(queryRunner()).hasItems(10).close();

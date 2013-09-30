@@ -15,8 +15,8 @@
  */
 package org.polyjdbc.core.schema;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.polyjdbc.core.exception.SchemaManagerException;
@@ -82,17 +82,18 @@ public class SchemaManagerImpl implements SchemaManager {
     public void ddl(DDLQuery ddlQuery) {
         String textQuery = ddlQuery.build();
         try {
-            PreparedStatement statement = transaction.getConnection().prepareStatement(textQuery);
+            Statement statement = transaction.getConnection().createStatement();
             transaction.registerPrepareStatement(statement);
-            transaction.execute(statement);
+            statement.execute(textQuery);
         } catch (SQLException exception) {
             transaction.rollback();
-            throw new SchemaManagerException("DDL_ERROR", String.format("Failed to run delete query:%n%s", textQuery), exception);
+            throw new SchemaManagerException("DDL_ERROR", String.format("Failed to run DDL:%n%s", textQuery), exception);
         }
     }
 
     @Override
     public void close() {
+        transaction.commit();
         transaction.closeWithArtifacts();
     }
 }

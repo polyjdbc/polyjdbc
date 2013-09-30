@@ -25,6 +25,8 @@ import org.polyjdbc.core.key.SequenceNextValGenerator;
  */
 public class PostgresDialect extends AbstractDialect {
 
+    private PostgresDialectTypes types = new PostgresDialectTypes();
+
     @Override
     public String getCode() {
         return "POSTGRES";
@@ -39,4 +41,8 @@ public class PostgresDialect extends AbstractDialect {
         });
     }
 
+    @Override
+    public DialectTypes types() {
+        return types;
+    }
 }

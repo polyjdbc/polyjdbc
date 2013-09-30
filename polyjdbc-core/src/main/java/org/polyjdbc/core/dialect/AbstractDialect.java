@@ -34,10 +34,6 @@ public abstract class AbstractDialect implements Dialect {
         return false;
     }
 
-    public String dateType() {
-        return "DATE";
-    }
-
     @Override
     public DialectTypes types() {
         return types;

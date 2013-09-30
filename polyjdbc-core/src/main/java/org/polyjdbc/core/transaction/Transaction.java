@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.polyjdbc.core.dialect.Dialect;
@@ -35,7 +36,7 @@ public class Transaction {
 
     private Connection connection;
 
-    private List<PreparedStatement> preparedStatements = new ArrayList<PreparedStatement>();
+    private List<Statement> statements = new ArrayList<Statement>();
 
     private List<ResultSet> resultSets = new ArrayList<ResultSet>();
 
@@ -88,8 +89,8 @@ public class Transaction {
         return dialect.keyGenerator();
     }
 
-    public void registerPrepareStatement(PreparedStatement preparedStatement) {
-        preparedStatements.add(0, preparedStatement);
+    public void registerPrepareStatement(Statement preparedStatement) {
+        statements.add(0, preparedStatement);
     }
 
     public void registerCursor(ResultSet resultSet) {
@@ -121,7 +122,7 @@ public class Transaction {
             for (ResultSet resultSet : resultSets) {
                 resultSet.close();
             }
-            for (PreparedStatement statement : preparedStatements) {
+            for (Statement statement : statements) {
                 statement.close();
             }
             if (connection != null) {

@@ -24,6 +24,7 @@ import static org.fest.assertions.api.Assertions.*;
  *
  * @author Adam Dubiel
  */
+@Test(groups = "integration")
 public class SchemaInspectorImplTest extends DatabaseTest {
 
     @Test
@@ -33,6 +34,7 @@ public class SchemaInspectorImplTest extends DatabaseTest {
 
         // when
         boolean exists = inspector.relationExists("test");
+        inspector.close();
 
         // then
         assertThat(exists).isTrue();
@@ -45,6 +47,7 @@ public class SchemaInspectorImplTest extends DatabaseTest {
 
         // when
         boolean exists = inspector.relationExists("unknown");
+        inspector.close();
 
         // then
         assertThat(exists).isFalse();
