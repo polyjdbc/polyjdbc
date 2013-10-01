@@ -2,11 +2,6 @@
 
 <suite name="unit">
     <test name="all">
-        <groups>
-            <run>
-                <exclude name="integration"/>
-            </run>
-        </groups>
         <packages>
             <package name="org.polyjdbc.core.*"/>
         </packages>
