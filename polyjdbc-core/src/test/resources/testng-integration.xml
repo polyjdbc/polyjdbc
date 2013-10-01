@@ -36,4 +36,21 @@
         </packages>
     </test>
 
+    <test name="mysql">
+        <groups>
+            <run>
+                <include name="integration"/>
+            </run>
+        </groups>
+
+        <parameter name="dialect" value="MYSQL"/>
+        <parameter name="url" value="jdbc:mysql://localhost/polly"/>
+        <parameter name="user" value="polly"/>
+        <parameter name="password" value="polly"/>
+
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
+
 </suite>

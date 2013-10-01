@@ -15,23 +15,37 @@
  */
 package org.polyjdbc.core.dialect;
 
+import org.polyjdbc.core.key.AutoIncremented;
+import org.polyjdbc.core.key.KeyGenerator;
+
 /**
  *
  * @author Adam Dubiel
  */
-public abstract class AbstractDialect implements Dialect {
+public class MysqlDialect extends AbstractDialect {
 
-    private DialectTypes types = new DefaultDialectTypes();
+    private MysqlDialectTypes types = new MysqlDialectTypes();
 
-    private DialectConstraints constraints = new DefultDialectConstraints();
+    public String getCode() {
+        return "MYSQL";
+    }
 
     @Override
     public boolean supportsSequences() {
-        return true;
+        return false;
     }
 
+    @Override
     public boolean supportsAttributeModifier(String modifier) {
+        if (modifier.equals("AUTO_INCREMENT")) {
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public KeyGenerator keyGenerator() {
+        return new AutoIncremented(0);
     }
 
     @Override
@@ -40,12 +54,7 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     @Override
-    public DialectConstraints constraints() {
-        return constraints;
-    }
-
-    @Override
     public String createRelationDefaultOptions() {
-        return "";
+        return "ENGINE = InnoDB";
     }
 }

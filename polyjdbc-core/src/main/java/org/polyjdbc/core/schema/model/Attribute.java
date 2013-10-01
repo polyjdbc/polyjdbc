@@ -18,6 +18,7 @@ package org.polyjdbc.core.schema.model;
 import java.util.Arrays;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.util.TypeUtil;
 
 /**
  *
@@ -68,7 +69,7 @@ public abstract class Attribute implements SchemaPart {
             builder.append("NOT NULL ");
         }
         if (defaultValue != null) {
-            builder.append("DEFAULT '").append(defaultValue).append("' ");
+            appendDefaultValue(builder);
         }
         if (additionalModifiers != null) {
             for (String additionalModifier : additionalModifiers) {
@@ -78,6 +79,20 @@ public abstract class Attribute implements SchemaPart {
             }
         }
         return builder.toString().trim();
+    }
+
+    private void appendDefaultValue(StringBuilder builder) {
+        boolean primitive = TypeUtil.isNonQuotablePrimitive(defaultValue);
+
+        builder.append("DEFAULT ");
+        if (!primitive) {
+            builder.append("'");
+        }
+        builder.append(defaultValue);
+        if (!primitive) {
+            builder.append("'");
+        }
+        builder.append(" ");
     }
 
     @Override

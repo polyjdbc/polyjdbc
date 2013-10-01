@@ -15,35 +15,17 @@
  */
 package org.polyjdbc.core.dialect;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author Adam Dubiel
  */
-public class DialectRegistry {
+public class MysqlDialectTypes extends DefaultDialectTypes {
 
-    private static final Map<String, Dialect> dialects = new HashMap<String, Dialect>();
-
-    static {
-        addDialect(new H2Dialect());
-        addDialect(new PostgresDialect());
-        addDialect(new MysqlDialect());
+    @Override
+    public String character() {
+        return "CHAR(1)";
     }
 
-    private DialectRegistry() {
-    }
 
-    private static void addDialect(Dialect dialect) {
-        dialects.put(dialect.getCode(), dialect);
-    }
 
-    public static boolean hasDialect(String code) {
-        return dialects.containsKey(code);
-    }
-
-    public static Dialect dialect(String code) {
-        return dialects.get(code);
-    }
 }

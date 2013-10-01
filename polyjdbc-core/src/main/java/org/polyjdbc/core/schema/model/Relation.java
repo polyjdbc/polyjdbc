@@ -58,7 +58,8 @@ public class Relation implements SchemaEntity {
         if (constraintsDDL.length() > 0) {
             builder.append(",\n");
         }
-        builder.append(constraintsDDL).append("\n)");
+        builder.append(constraintsDDL).append("\n) ")
+                .append(dialect.createRelationDefaultOptions());
 
         return builder.toString();
     }

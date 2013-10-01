@@ -119,6 +119,10 @@ public class Transaction {
 
     public void closeWithArtifacts() {
         try {
+            if (connection != null && connection.isClosed()) {
+                throw new PolyJdbcException("CLOSING_CLOSED_CONNECTION", "Tried to close already closed connection! Check for some unwanted close() in your code.");
+            }
+
             for (ResultSet resultSet : resultSets) {
                 resultSet.close();
             }

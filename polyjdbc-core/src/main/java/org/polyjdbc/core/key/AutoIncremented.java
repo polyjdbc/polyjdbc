@@ -44,6 +44,7 @@ public class AutoIncremented implements KeyGenerator {
         ResultSet resultSet = statement.executeQuery();
         transaction.registerCursor(resultSet);
 
+        resultSet.next();
         return resultSet.getLong(1);
     }
 }

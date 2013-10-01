@@ -45,6 +45,7 @@ public final class DataSourceFactory {
         dataSource.setUrl(databaseUrl);
         dataSource.setUsername(user);
         dataSource.setPassword(password);
+        dataSource.setDefaultAutoCommit(false);
 
         return dataSource;
     }

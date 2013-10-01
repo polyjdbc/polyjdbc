@@ -39,11 +39,11 @@ public class TestSchemaManager {
         schema = new Schema(dialect);
 
         schema.addRelation("test")
-                .withAttribute().longAttr("id").and()
+                .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").and()
                 .withAttribute().string("name").unique().notNull().withMaxLength(200).and()
                 .withAttribute().integer("count").and()
                 .withAttribute().booleanAttr("countable").withDefaultValue(true).notNull().and()
-                .withAttribute().character("separator").withDefaultValue(';').notNull().and()
+                .withAttribute().character("separator_char").withDefaultValue(';').notNull().and()
                 .constrainedBy().primaryKey("pk").using("id").and()
                 .build();
         schema.addIndex("idx_test_name").on("test").indexing("name").build();

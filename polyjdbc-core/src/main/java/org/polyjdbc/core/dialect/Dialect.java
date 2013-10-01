@@ -34,4 +34,6 @@ public interface Dialect {
     boolean supportsAttributeModifier(String modifier);
 
     KeyGenerator keyGenerator();
+
+    String createRelationDefaultOptions();
 }

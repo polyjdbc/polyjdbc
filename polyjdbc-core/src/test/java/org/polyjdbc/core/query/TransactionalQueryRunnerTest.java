@@ -35,7 +35,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         // given
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
                 .value("name", "test").value("count", 42).value("countable", true)
-                .value("separator", '|');
+                .value("separator_char", '|');
         QueryRunner queryRunner = queryRunner();
 
         // when
@@ -43,7 +43,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         queryRunner.close();
 
         // then
-        assertThat(insertedId).isGreaterThanOrEqualTo(100);
+        assertThat(insertedId).isGreaterThanOrEqualTo(1);
         assertThat(queryRunner()).contains("test").close();
     }
 
@@ -52,7 +52,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         // given
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
                 .value("name", "test").value("count", 42).value("countable", true)
-                .value("separator", '|');
+                .value("separator_char", '|');
         QueryRunner queryRunner = queryRunner();
 
         // when

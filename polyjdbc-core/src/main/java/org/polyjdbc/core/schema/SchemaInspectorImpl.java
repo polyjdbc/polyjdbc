@@ -61,7 +61,7 @@ public class SchemaInspectorImpl implements SchemaInspector {
             ResultSet resultSet = metadata.getTables(catalog, schema, convertCase(name), new String[]{"TABLE"});
             transaction.registerCursor(resultSet);
 
-            return resultSet.first();
+            return resultSet.next();
         } catch (SQLException exception) {
             throw new SchemaInspectionException("RELATION_LOOKUP_ERROR", "Failed to obtain relation list when looking for relation " + name, exception);
         }

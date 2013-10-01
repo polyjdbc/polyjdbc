@@ -44,7 +44,7 @@ public class DatabaseBuilder {
     public DatabaseBuilder withItem(String name, int count) {
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
                 .value("name", name).value("count", count).value("countable", true)
-                .value("separator", '|');
+                .value("separator_char", '|');
         queryRunner.insert(insertQuery);
         return this;
     }

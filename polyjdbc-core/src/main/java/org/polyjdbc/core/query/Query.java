@@ -32,7 +32,7 @@ import org.polyjdbc.core.type.ColumnType;
  */
 public class Query {
 
-    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z]*");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z_-]*");
 
     private static final String QUERY_PLACEHOLDER = "?";
 
