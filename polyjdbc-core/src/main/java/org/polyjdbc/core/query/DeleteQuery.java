@@ -38,7 +38,7 @@ public class DeleteQuery {
     }
 
     public DeleteQuery where(String conditions) {
-        query.append("where ").append(conditions);
+        query.append(" where ").append(conditions);
         return this;
     }
 

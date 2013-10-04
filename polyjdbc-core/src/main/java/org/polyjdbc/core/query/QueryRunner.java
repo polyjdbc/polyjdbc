@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 import java.util.List;
+import java.util.Set;
 import org.polyjdbc.core.query.mapper.ObjectMapper;
 
 /**
@@ -29,6 +30,8 @@ public interface QueryRunner {
     <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound);
 
     <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper);
+
+    <T> Set<T> querySet(SelectQuery query, ObjectMapper<T> mapper);
 
     boolean queryExistence(SelectQuery query);
 

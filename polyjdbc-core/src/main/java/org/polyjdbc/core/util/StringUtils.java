@@ -20,22 +20,26 @@ package org.polyjdbc.core.util;
  * @author Adam Dubiel
  */
 public final class StringUtils {
+
     private static final int SINGLE_VALUE_LENGTH = 20;
 
     private StringUtils() {
     }
 
+    public static String concatenate(char separator, Object... values) {
+        return concatenate(Character.toString(separator), values);
+    }
+
     public static String concatenate(String separator, Object... values) {
-        if(values.length == 0) {
+        if (values.length == 0) {
             return "";
         }
 
         StringBuilder builder = new StringBuilder(values.length * SINGLE_VALUE_LENGTH);
-        for(Object value : values) {
+        for (Object value : values) {
             builder.append(value.toString()).append(separator);
         }
         StringBuilderUtil.deleteLastCharacters(builder, separator.length());
         return builder.toString();
     }
-
 }

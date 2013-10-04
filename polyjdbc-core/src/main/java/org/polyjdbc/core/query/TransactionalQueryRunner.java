@@ -19,7 +19,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.polyjdbc.core.exception.NonUniqueException;
 import org.polyjdbc.core.exception.QueryExecutionException;
 import org.polyjdbc.core.key.KeyGenerator;
@@ -49,7 +52,7 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound) {
         Query rawQuery = query.build();
-        List<T> results = queryList(rawQuery, mapper);
+        List<T> results = queryCollection(rawQuery, mapper, new ArrayList<T>());
 
         if (results.size() != 1) {
             if (failOnNotUniqueOrNotFound) {
@@ -68,19 +71,23 @@ public class TransactionalQueryRunner implements QueryRunner {
 
     @Override
     public <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper) {
-        return queryList(query.build(), mapper);
+        return queryCollection(query.build(), mapper, new ArrayList<T>());
     }
 
-    private <T> List<T> queryList(Query query, ObjectMapper<T> mapper) {
+    @Override
+    public <T> Set<T> querySet(SelectQuery query, ObjectMapper<T> mapper) {
+        return queryCollection(query.build(), mapper, new HashSet<T>());
+    }
+
+    private <T, C extends Collection<T>> C queryCollection(Query query, ObjectMapper<T> mapper, C collection) {
         try {
             PreparedStatement statement = query.createStatementWithValues(transaction);
             ResultSet resultSet = transaction.executeQuery(statement);
 
-            List<T> results = new ArrayList<T>();
             while (resultSet.next()) {
-                results.add(mapper.createObject(resultSet));
+                collection.add(mapper.createObject(resultSet));
             }
-            return results;
+            return collection;
         } catch (SQLException exception) {
             transaction.rollback();
             throw new QueryExecutionException("SELECT_ERROR", String.format("Failed to run select query:%n%s", query.getQuery()), exception);
