@@ -37,6 +37,8 @@ public interface QueryRunner {
 
     long insert(InsertQuery insertQuery);
 
+    void insertWithoutKey(InsertQuery insertQuery);
+
     int delete(DeleteQuery deleteQuery);
 
     void commit();

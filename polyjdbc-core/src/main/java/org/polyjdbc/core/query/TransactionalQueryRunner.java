@@ -106,11 +106,22 @@ public class TransactionalQueryRunner implements QueryRunner {
             long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
             insertQuery.sequenceValue(key);
 
+            insertWithoutKey(insertQuery);
+
+            return keyGenerator.getKeyFromLastInsert(transaction);
+        } catch (SQLException exception) {
+            transaction.rollback();
+            Query rawQuery = insertQuery.build();
+            throw new QueryExecutionException("INSERT_ERROR", String.format("Failed to run insert query:%n%s", rawQuery), exception);
+        }
+    }
+
+    @Override
+    public void insertWithoutKey(InsertQuery insertQuery) {
+        try {
             Query rawQuery = insertQuery.build();
             PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
             transaction.executeUpdate(statement);
-
-            return keyGenerator.getKeyFromLastInsert(transaction);
         } catch (SQLException exception) {
             transaction.rollback();
             Query rawQuery = insertQuery.build();

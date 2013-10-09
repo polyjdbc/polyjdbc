@@ -18,6 +18,7 @@ package org.polyjdbc.core.schema;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.polyjdbc.core.exception.SchemaManagerException;
 import org.polyjdbc.core.schema.model.Schema;
@@ -62,6 +63,8 @@ public class SchemaManagerImpl implements SchemaManager {
 
     public void drop(Schema schema) {
         List<SchemaEntity> entitiesToDrop = new ArrayList<SchemaEntity>(schema.getEntities());
+        Collections.reverse(entitiesToDrop);
+
         if (schema.getDialect().supportsSequences()) {
             entitiesToDrop.addAll(schema.getSequences());
         }

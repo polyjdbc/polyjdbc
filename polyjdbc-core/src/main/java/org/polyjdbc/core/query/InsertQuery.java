@@ -35,6 +35,8 @@ public class InsertQuery {
 
     private String sequenceName;
 
+    private boolean sequenceValueSet;
+
     InsertQuery() {
         this.query = new Query();
     }
@@ -78,6 +80,11 @@ public class InsertQuery {
 
     public InsertQuery sequenceValue(long value) {
         query.setArgument(sequenceField, value);
+        sequenceValueSet = true;
         return this;
+    }
+
+    public boolean isSequenceValueSet() {
+        return sequenceValueSet;
     }
 }

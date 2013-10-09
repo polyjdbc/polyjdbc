@@ -32,7 +32,7 @@ import org.polyjdbc.core.type.ColumnType;
  */
 public class Query {
 
-    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z_-]*");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z0-9_-]*");
 
     private static final String QUERY_PLACEHOLDER = "?";
 
@@ -87,7 +87,11 @@ public class Query {
     public void injectValues(PreparedStatement preparedStatement) throws SQLException {
         int index = 1;
         for (Object argument : orderedArguments) {
-            preparedStatement.setObject(index, argument, ColumnType.forClass(argument.getClass()).getSqlType());
+            if (argument != null) {
+                preparedStatement.setObject(index, argument, ColumnType.forClass(argument.getClass()).getSqlType());
+            } else {
+                preparedStatement.setObject(index, argument);
+            }
             index++;
         }
     }
