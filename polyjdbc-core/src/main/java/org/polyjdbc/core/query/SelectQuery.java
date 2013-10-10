@@ -15,25 +15,50 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.util.StringBuilderUtil;
+
 /**
  *
  * @author Adam Dubiel
  */
 public class SelectQuery {
 
+    private static final int ORDER_BY_LENGTH = 20;
+
     private Query query;
+
+    private StringBuilder orderBy;
 
     SelectQuery() {
         this.query = new Query();
     }
 
     Query build() {
+        if (orderBy != null) {
+            StringBuilderUtil.deleteLastCharacters(orderBy, 2);
+            query.append(orderBy.toString());
+        }
         query.compile();
         return query;
     }
 
     public SelectQuery query(String queryText) {
         query.append(queryText);
+        return this;
+    }
+
+    public SelectQuery append(String queryText) {
+        query.append(queryText);
+        return this;
+    }
+
+    public SelectQuery orderBy(String name, Order order) {
+        if (orderBy == null) {
+            orderBy = new StringBuilder(ORDER_BY_LENGTH);
+            orderBy.append(" order by ");
+        }
+        orderBy.append(name).append(" ").append(order.getStringCode()).append(", ");
+
         return this;
     }
 

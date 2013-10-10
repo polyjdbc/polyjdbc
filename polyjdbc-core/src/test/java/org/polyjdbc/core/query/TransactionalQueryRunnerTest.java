@@ -19,9 +19,11 @@ import java.util.List;
 import org.polyjdbc.core.exception.NonUniqueException;
 import org.polyjdbc.core.integration.DatabaseTest;
 import org.polyjdbc.core.query.mapper.EmptyMapper;
+import org.polyjdbc.core.test.TestItem;
+import org.polyjdbc.core.test.TestItemMapper;
 import org.testng.annotations.Test;
-import static org.polyjdbc.core.test.assertions.PolyJdbcAssertions.*;
 import static org.polyjdbc.core.test.DatabaseBuilder.database;
+import static org.polyjdbc.core.test.assertions.PolyJdbcAssertions.*;
 
 /**
  *
@@ -34,7 +36,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldInsertRecordAndReturnId() {
         // given
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
-                .value("name", "test").value("count", 42).value("countable", true)
+                .value("name", "test").value("some_count", 42).value("countable", true)
                 .value("separator_char", '|');
         QueryRunner queryRunner = queryRunner();
 
@@ -51,7 +53,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldRollbackInsertsMadeInTransaction() {
         // given
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
-                .value("name", "test").value("count", 42).value("countable", true)
+                .value("name", "test").value("some_count", 42).value("countable", true)
                 .value("separator_char", '|');
         QueryRunner queryRunner = queryRunner();
 
@@ -79,6 +81,22 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     }
 
     @Test
+    public void shouldReturnListOfItemsInSpecifiedOrder() {
+        // given
+        database(queryRunner()).withItem("last", "A", 10).withItem("second", "B", 45).withItem("first", "B", 43)
+                .buildAndCloseTransaction();
+        SelectQuery selectQuery = QueryFactory.select().query("select * from test").orderBy("pseudo", Order.DESC).orderBy("some_count", Order.ASC);
+        QueryRunner runner = queryRunner();
+
+        // when
+        List<TestItem> items = runner.queryList(selectQuery, new TestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(items).containsExactly(new TestItem("B", 43), new TestItem("B", 45), new TestItem("A", 10));
+    }
+
+    @Test
     public void shouldFindUniqueItem() {
         // given
         database(queryRunner()).withItems(10).withItem("unique").buildAndCloseTransaction();
@@ -97,7 +115,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldThrowExceptionWithDistinctCodeWhenMoreThanOneItemFoundWhileLookingForUnique() {
         // given
         database(queryRunner()).withItems(10).withItem("unique", 10).withItem("unique2", 10).buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test where count = :count").withArgument("count", 10);
+        SelectQuery selectQuery = QueryFactory.select().query("select * from test where some_count = :count").withArgument("count", 10);
 
         // when
         try {

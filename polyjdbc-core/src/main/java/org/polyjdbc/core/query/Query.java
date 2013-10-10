@@ -58,6 +58,11 @@ public class Query {
         return this;
     }
 
+    Query wrap(String prefix, String sufix) {
+        builder.insert(0, prefix).append(sufix);
+        return this;
+    }
+
     public Query setArgument(String name, Object value) {
         arguments.put(name, value);
         return this;

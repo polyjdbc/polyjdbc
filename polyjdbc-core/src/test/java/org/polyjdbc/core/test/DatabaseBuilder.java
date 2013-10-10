@@ -42,9 +42,15 @@ public class DatabaseBuilder {
     }
 
     public DatabaseBuilder withItem(String name, int count) {
+        return withItem(name, null, count);
+    }
+
+    public DatabaseBuilder withItem(String name, String pseudo, int count) {
         InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
-                .value("name", name).value("count", count).value("countable", true)
+                .value("name", name).value("pseudo", pseudo)
+                .value("some_count", count).value("countable", true)
                 .value("separator_char", '|');
+
         queryRunner.insert(insertQuery);
         return this;
     }
