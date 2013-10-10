@@ -51,6 +51,9 @@ public class TransactionalQueryRunner implements QueryRunner {
 
     @Override
     public <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound) {
+        // in case it is VERY non-unique item, do not fetch whole DB, 2 items is enough
+        query.limit(2);
+        
         Query rawQuery = query.build();
         List<T> results = queryCollection(rawQuery, mapper, new ArrayList<T>());
 

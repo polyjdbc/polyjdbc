@@ -96,6 +96,37 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         assertThat(items).containsExactly(new TestItem("B", 43), new TestItem("B", 45), new TestItem("A", 10));
     }
 
+        @Test
+    public void shouldReturnLimitedListOfItems() {
+        // given
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
+        SelectQuery selectQuery = QueryFactory.select().query("select * from test").limit(5);
+        QueryRunner runner = queryRunner();
+
+        // when
+        List<TestItem> items = runner.queryList(selectQuery, new TestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(items).hasSize(5);
+    }
+
+    @Test
+    public void shouldReturnLimitedAndOffsettedListOfItems() {
+        // given
+        database(queryRunner()).withItem("A", "A", 10).withItem("B", "B", 45).withItem("C", "C", 43)
+                .buildAndCloseTransaction();
+        SelectQuery selectQuery = QueryFactory.select().query("select * from test").orderBy("name", Order.ASC).limit(2, 1);
+        QueryRunner runner = queryRunner();
+
+        // when
+        List<TestItem> items = runner.queryList(selectQuery, new TestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(items).containsExactly(new TestItem("B", 45), new TestItem("C", 43));
+    }
+
     @Test
     public void shouldFindUniqueItem() {
         // given

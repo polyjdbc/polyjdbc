@@ -29,6 +29,8 @@ public class SelectQuery {
 
     private StringBuilder orderBy;
 
+    private String limit;
+
     SelectQuery() {
         this.query = new Query();
     }
@@ -38,6 +40,10 @@ public class SelectQuery {
             StringBuilderUtil.deleteLastCharacters(orderBy, 2);
             query.append(orderBy.toString());
         }
+        if(limit != null) {
+            query.append(limit);
+        }
+
         query.compile();
         return query;
     }
@@ -60,6 +66,15 @@ public class SelectQuery {
         orderBy.append(name).append(" ").append(order.getStringCode()).append(", ");
 
         return this;
+    }
+
+    public SelectQuery limit(int limit, int offset) {
+        this.limit = " LIMIT " + limit + " OFFSET " + offset;
+        return this;
+    }
+
+    public SelectQuery limit(int limit) {
+        return limit(limit, 0);
     }
 
     public SelectQuery withArgument(String argumentName, Object object) {
