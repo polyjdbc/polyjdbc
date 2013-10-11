@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.exception.PolyJdbcException;
+import org.polyjdbc.core.key.KeyGenerator;
 
 /**
  *
@@ -31,9 +32,12 @@ public class DataSourceTransactionManager implements TransactionManager {
 
     private DataSource dataSource;
 
+    private KeyGenerator keyGenerator;
+
     public DataSourceTransactionManager(Dialect dialect, DataSource dataSource) {
         this.dialect = dialect;
         this.dataSource = dataSource;
+        this.keyGenerator = dialect.keyGenerator();
     }
 
     @Override
@@ -47,7 +51,7 @@ public class DataSourceTransactionManager implements TransactionManager {
         try {
             connection = dataSource.getConnection();
             connection.setAutoCommit(autoCommit);
-            return new Transaction(dialect, connection);
+            return new Transaction(dialect, connection, keyGenerator);
         } catch (SQLException e) {
             throw new PolyJdbcException("OPEN_CONNECTION_ERROR", "Failed to obtain connection from datasource.", e);
         }

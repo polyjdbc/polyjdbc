@@ -36,13 +36,16 @@ public class Transaction {
 
     private Connection connection;
 
+    private KeyGenerator keyGenerator;
+
     private List<Statement> statements = new ArrayList<Statement>();
 
     private List<ResultSet> resultSets = new ArrayList<ResultSet>();
 
-    public Transaction(Dialect dialect, Connection connection) {
+    public Transaction(Dialect dialect, Connection connection, KeyGenerator keyGenerator) {
         this.dialect = dialect;
         this.connection = connection;
+        this.keyGenerator = keyGenerator;
     }
 
     public Dialect getDialect() {
@@ -86,7 +89,7 @@ public class Transaction {
     }
 
     public KeyGenerator dialectKeyGenerator() {
-        return dialect.keyGenerator();
+        return keyGenerator;
     }
 
     public void registerPrepareStatement(Statement preparedStatement) {
