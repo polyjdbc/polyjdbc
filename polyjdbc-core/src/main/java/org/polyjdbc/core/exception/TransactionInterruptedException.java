@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.query;
-
-import org.polyjdbc.core.exception.TransactionInterruptedException;
+package org.polyjdbc.core.exception;
 
 /**
  *
  * @author Adam Dubiel
  */
-public abstract class VoidTransactionWrapper implements TransactionWrapper<Void> {
+@SuppressWarnings("serial")
+public class TransactionInterruptedException extends PolyJdbcException {
 
-    @Override
-    public Void perform(QueryRunner queryRunner) throws TransactionInterruptedException {
-        performVoid(queryRunner);
-        return null;
+    public TransactionInterruptedException(String code, String message, Throwable cause) {
+        super(code, message, cause);
     }
 
-    public abstract void performVoid(QueryRunner queryRunner);
+    public TransactionInterruptedException(Throwable cause) {
+        super("TRANSACTION_INTERRUPTED", "Transaction interrupted by exception", cause);
+    }
 }
