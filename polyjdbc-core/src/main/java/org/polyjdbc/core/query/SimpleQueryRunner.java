@@ -26,49 +26,41 @@ import org.polyjdbc.core.transaction.TransactionManager;
  */
 public class SimpleQueryRunner {
 
-    private TransactionManager transactionManager;
+    private TransactionRunner runner;
 
     public SimpleQueryRunner(TransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
+        runner = new TransactionRunner(transactionManager);
     }
 
-    private QueryRunner queryRunner() {
-        return new TransactionalQueryRunner(transactionManager.openTransaction());
+    public <T> T queryUnique(final SelectQuery query, final ObjectMapper<T> mapper) {
+        return runner.run(new TransactionWrapper<T>() {
+            public T perform(QueryRunner queryRunner) {
+                return queryRunner.queryUnique(query, mapper);
+            }
+        });
     }
 
-    public <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper) {
-        QueryRunner queryRunner = queryRunner();
-        try {
-            return queryRunner.queryUnique(query, mapper);
-        } finally {
-            queryRunner.close();
-        }
+    public <T> List<T> queryList(final SelectQuery query, final ObjectMapper<T> mapper) {
+        return runner.run(new TransactionWrapper<List<T>>() {
+            public List<T> perform(QueryRunner queryRunner) {
+                return queryRunner.queryList(query, mapper);
+            }
+        });
     }
 
-    public <T> List<T> queryList(SelectQuery query, ObjectMapper<T> mapper) {
-        QueryRunner queryRunner = queryRunner();
-        try {
-            return queryRunner.queryList(query, mapper);
-        } finally {
-            queryRunner.close();
-        }
+    public <T> Set<T> querySet(final SelectQuery query, final ObjectMapper<T> mapper) {
+        return runner.run(new TransactionWrapper<Set<T>>() {
+            public Set<T> perform(QueryRunner queryRunner) {
+                return queryRunner.querySet(query, mapper);
+            }
+        });
     }
 
-    public <T> Set<T> querySet(SelectQuery query, ObjectMapper<T> mapper) {
-        QueryRunner queryRunner = queryRunner();
-        try {
-            return queryRunner.querySet(query, mapper);
-        } finally {
-            queryRunner.close();
-        }
-    }
-
-    public boolean queryExistence(SelectQuery query) {
-        QueryRunner queryRunner = queryRunner();
-        try {
-            return queryRunner.queryExistence(query);
-        } finally {
-            queryRunner.close();
-        }
+    public boolean queryExistence(final SelectQuery query) {
+        return runner.run(new TransactionWrapper<Boolean>() {
+            public Boolean perform(QueryRunner queryRunner) {
+                return queryRunner.queryExistence(query);
+            }
+        });
     }
 }
