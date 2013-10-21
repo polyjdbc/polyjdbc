@@ -58,7 +58,7 @@ public class Transaction {
 
     public int executeUpdate(PreparedStatement preparedStatement) throws SQLException {
         try {
-            registerPrepareStatement(preparedStatement);
+            registerStatement(preparedStatement);
             return preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             rollback();
@@ -68,7 +68,7 @@ public class Transaction {
 
     public boolean execute(PreparedStatement preparedStatement) throws SQLException {
         try {
-            registerPrepareStatement(preparedStatement);
+            registerStatement(preparedStatement);
             return preparedStatement.execute();
         } catch (SQLException exception) {
             rollback();
@@ -78,7 +78,7 @@ public class Transaction {
 
     public ResultSet executeQuery(PreparedStatement preparedStatement) throws SQLException {
         try {
-            registerPrepareStatement(preparedStatement);
+            registerStatement(preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
             registerCursor(resultSet);
             return resultSet;
@@ -92,8 +92,28 @@ public class Transaction {
         return keyGenerator;
     }
 
-    public void registerPrepareStatement(Statement preparedStatement) {
-        statements.add(0, preparedStatement);
+    public PreparedStatement prepareStatement(String query) throws SQLException {
+        try {
+            return connection.prepareStatement(query);
+        } catch (SQLException exception) {
+            rollback();
+            throw exception;
+        }
+    }
+
+    public Statement createStatement() throws SQLException {
+        try {
+            Statement statement = connection.createStatement();
+            registerStatement(statement);
+            return statement;
+        } catch (SQLException exception) {
+            rollback();
+            throw exception;
+        }
+    }
+
+    public void registerStatement(Statement statement) {
+        statements.add(0, statement);
     }
 
     public void registerCursor(ResultSet resultSet) {

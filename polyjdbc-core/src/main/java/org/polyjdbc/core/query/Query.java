@@ -105,7 +105,7 @@ public class Query {
         if (!compiled) {
             compile();
         }
-        return transaction.getConnection().prepareStatement(query);
+        return transaction.prepareStatement(query);
     }
 
     public PreparedStatement createStatementWithValues(Transaction transaction) throws SQLException {
@@ -116,5 +116,10 @@ public class Query {
 
     public String getQuery() {
         return query;
+    }
+
+    @Override
+    public String toString() {
+        return originalQuery;
     }
 }

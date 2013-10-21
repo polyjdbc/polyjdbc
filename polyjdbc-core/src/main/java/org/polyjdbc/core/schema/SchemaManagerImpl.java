@@ -85,8 +85,7 @@ public class SchemaManagerImpl implements SchemaManager {
     public void ddl(DDLQuery ddlQuery) {
         String textQuery = ddlQuery.build();
         try {
-            Statement statement = transaction.getConnection().createStatement();
-            transaction.registerPrepareStatement(statement);
+            Statement statement = transaction.createStatement();
             statement.execute(textQuery);
         } catch (SQLException exception) {
             transaction.rollback();

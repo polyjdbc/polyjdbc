@@ -39,8 +39,7 @@ public class AutoIncremented implements KeyGenerator {
 
     @Override
     public long getKeyFromLastInsert(Transaction transaction) throws SQLException {
-        PreparedStatement statement = transaction.getConnection().prepareStatement("select last_insert_id()");
-        transaction.registerPrepareStatement(statement);
+        PreparedStatement statement = transaction.prepareStatement("select last_insert_id()");
         ResultSet resultSet = statement.executeQuery();
         transaction.registerCursor(resultSet);
 
