@@ -58,7 +58,7 @@ Simple usage of low-level query runner:
 
 ```java
 Dialect dialect = DialectRegistry.dialect("H2");
-TransactionManager manager = new TransactionManager(dialect, dataSource);
+TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
 
 QueryRunner queryRunner = new TransactionalQueryRunner(manager.openTransaction());
 
@@ -78,7 +78,7 @@ perform operations without runner create/close boilerplate use reusable **Simple
 
 ```java
 Dialect dialect = DialectRegistry.dialect("H2");
-TransactionManager manager = new TransactionManager(dialect, dataSource);
+TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
 
 SimpleQueryRunner simpleRunner = new SimpleQueryRunner(manager);
 
@@ -93,13 +93,13 @@ custom (or multiple) operations use reusable **TransactionRunner**:
 
 ```java
 Dialect dialect = DialectRegistry.dialect("H2");
-TransactionManager manager = new TransactionManager(dialect, dataSource);
+TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
 
 TransactionRunner transactionRunner = new TransactionRunner(manager);
 
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
     @Override
-    public Parameter perform(QueryRunner queryRunner) {
+    public Test perform(QueryRunner queryRunner) {
         SelectQuery query = QueryFactory.select().query("select * from test where name = :name")
             .withArgument("name", "test");
         return queryRunner.queryUnique(query, new TestMapper());
