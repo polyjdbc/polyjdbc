@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class CharAttributeBuilder extends AttributeBuilder<CharAttributeBuilder, CharAttribute> {
+public final class CharAttributeBuilder extends AttributeBuilder<CharAttributeBuilder, CharAttribute> {
 
     private CharAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
         super(new CharAttribute(dialect, name), parent);
@@ -35,5 +35,4 @@ public class CharAttributeBuilder extends AttributeBuilder<CharAttributeBuilder,
     protected CharAttributeBuilder self() {
         return this;
     }
-
 }

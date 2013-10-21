@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class SequenceBuilder {
+public final class SequenceBuilder {
 
     private Sequence sequence;
 
@@ -45,10 +45,9 @@ public class SequenceBuilder {
     }
 
     public Sequence build() {
-        if(schema != null ) {
+        if (schema != null) {
             schema.add(sequence);
         }
         return sequence;
     }
-
 }

@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class BooleanAttributeBuilder extends AttributeBuilder<BooleanAttributeBuilder, BooleanAttribute> {
+public final class BooleanAttributeBuilder extends AttributeBuilder<BooleanAttributeBuilder, BooleanAttribute> {
 
     private BooleanAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
         super(new BooleanAttribute(dialect, name), parent);
@@ -35,5 +35,4 @@ public class BooleanAttributeBuilder extends AttributeBuilder<BooleanAttributeBu
     protected BooleanAttributeBuilder self() {
         return this;
     }
-
 }

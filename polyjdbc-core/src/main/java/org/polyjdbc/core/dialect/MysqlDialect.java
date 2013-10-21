@@ -26,6 +26,8 @@ public class MysqlDialect extends AbstractDialect {
 
     private MysqlDialectTypes types = new MysqlDialectTypes();
 
+    private MysqlDialectConstraints constraints = new MysqlDialectConstraints();
+
     public String getCode() {
         return "MYSQL";
     }
@@ -51,6 +53,11 @@ public class MysqlDialect extends AbstractDialect {
     @Override
     public DialectTypes types() {
         return types;
+    }
+
+    @Override
+    public DialectConstraints constraints() {
+        return constraints;
     }
 
     @Override

@@ -15,13 +15,11 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.exception.TransactionInterruptedException;
-
 /**
  *
  * @author Adam Dubiel
  */
 public interface TransactionWrapper<T> {
 
-    T perform(QueryRunner queryRunner) throws TransactionInterruptedException;
+    T perform(QueryRunner queryRunner);
 }

@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class RelationBuilder {
+public final class RelationBuilder {
 
     private Relation relation;
 

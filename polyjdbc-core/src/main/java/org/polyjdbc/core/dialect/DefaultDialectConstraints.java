@@ -15,37 +15,23 @@
  */
 package org.polyjdbc.core.dialect;
 
+import org.polyjdbc.core.util.StringUtils;
+
 /**
  *
  * @author Adam Dubiel
  */
-public abstract class AbstractDialect implements Dialect {
+public class DefaultDialectConstraints implements DialectConstraints {
 
-    private DialectTypes types = new DefaultDialectTypes();
-
-    private DialectConstraints constraints = new DefaultDialectConstraints();
-
-    @Override
-    public boolean supportsSequences() {
-        return true;
+    public String primaryKey(String name, String[] targetAttributes) {
+        return "CONSTRAINT " + name + " PRIMARY KEY(" + StringUtils.concatenate(", ", (Object[]) targetAttributes) + ")";
     }
 
-    public boolean supportsAttributeModifier(String modifier) {
-        return false;
+    public String foreignKey(String name, String targetAttribute, String targetRelation, String targetRelationAttribute) {
+        return "CONSTRAINT " + name + " FOREIGN KEY(" + targetAttribute + ") REFERENCES " + targetRelation + "(" + targetRelationAttribute + ")";
     }
 
-    @Override
-    public DialectTypes types() {
-        return types;
-    }
-
-    @Override
-    public DialectConstraints constraints() {
-        return constraints;
-    }
-
-    @Override
-    public String createRelationDefaultOptions() {
-        return "";
+    public String dropIndex(String name, String targetRelationName) {
+        return "DROP INDEX " + name;
     }
 }

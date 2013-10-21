@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.schema.model;
 
+import java.util.Arrays;
 import org.polyjdbc.core.dialect.Dialect;
 
 /**
@@ -35,6 +36,8 @@ public class PrimaryKeyConstraint extends Constraint {
     }
 
     void withTargetAttributes(String[] targetAttributes) {
-        this.targetAttributes = targetAttributes;
+        if (targetAttributes != null) {
+            this.targetAttributes = Arrays.copyOf(targetAttributes, targetAttributes.length);
+        }
     }
 }

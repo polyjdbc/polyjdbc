@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class LongAttributeBuilder extends AttributeBuilder<LongAttributeBuilder, LongAttribute> {
+public final class LongAttributeBuilder extends AttributeBuilder<LongAttributeBuilder, LongAttribute> {
 
     private LongAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
         super(new LongAttribute(dialect, name), parent);

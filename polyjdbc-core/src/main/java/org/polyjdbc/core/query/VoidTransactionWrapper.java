@@ -15,8 +15,6 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.exception.TransactionInterruptedException;
-
 /**
  *
  * @author Adam Dubiel
@@ -24,7 +22,7 @@ import org.polyjdbc.core.exception.TransactionInterruptedException;
 public abstract class VoidTransactionWrapper implements TransactionWrapper<Void> {
 
     @Override
-    public Void perform(QueryRunner queryRunner) throws TransactionInterruptedException {
+    public Void perform(QueryRunner queryRunner) {
         performVoid(queryRunner);
         return null;
     }

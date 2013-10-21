@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class ForeignKeyConstraintBuilder {
+public final class ForeignKeyConstraintBuilder {
 
     private RelationBuilder parent;
 

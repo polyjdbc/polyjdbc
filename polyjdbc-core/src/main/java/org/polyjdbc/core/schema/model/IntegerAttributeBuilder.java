@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class IntegerAttributeBuilder extends AttributeBuilder<IntegerAttributeBuilder, IntegerAttribute> {
+public final class IntegerAttributeBuilder extends AttributeBuilder<IntegerAttributeBuilder, IntegerAttribute> {
 
     private IntegerAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
         super(new IntegerAttribute(dialect, name), parent);

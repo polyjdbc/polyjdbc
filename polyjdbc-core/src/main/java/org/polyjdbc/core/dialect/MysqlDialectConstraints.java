@@ -15,19 +15,14 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.util.StringUtils;
-
 /**
  *
  * @author Adam Dubiel
  */
-public class DefultDialectConstraints implements DialectConstraints {
+public class MysqlDialectConstraints extends DefaultDialectConstraints {
 
-    public String primaryKey(String name, String[] targetAttributes) {
-        return "CONSTRAINT " + name + " PRIMARY KEY(" + StringUtils.concatenate(", ", (Object[]) targetAttributes) + ")";
-    }
-
-    public String foreignKey(String name, String targetAttribute, String targetRelation, String targetRelationAttribute) {
-        return "CONSTRAINT " + name + " FOREIGN KEY(" + targetAttribute + ") REFERENCES " + targetRelation + "(" + targetRelationAttribute + ")";
+    @Override
+    public String dropIndex(String name, String targetRelationName) {
+        return "ALTER TABLE " + targetRelationName + " DROP INDEX " + name;
     }
 }

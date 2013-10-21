@@ -21,7 +21,7 @@ import org.polyjdbc.core.dialect.Dialect;
  *
  * @author Adam Dubiel
  */
-public class IndexBuilder {
+public final class IndexBuilder {
 
     private Index index;
 

@@ -25,6 +25,10 @@ import org.polyjdbc.core.util.StringUtils;
  */
 public class Index implements SchemaEntity {
 
+    private static final int DDL_LENGTH = 50;
+
+    private Dialect dialect;
+
     private String name;
 
     private String targetRelation;
@@ -32,6 +36,7 @@ public class Index implements SchemaEntity {
     private String[] targetAttributes;
 
     Index(Dialect dialect, String name) {
+        this.dialect = dialect;
         this.name = name;
     }
 
@@ -45,14 +50,14 @@ public class Index implements SchemaEntity {
     }
 
     public String ddl() {
-        StringBuilder builder = new StringBuilder(50);
+        StringBuilder builder = new StringBuilder(DDL_LENGTH);
         builder.append("CREATE INDEX ").append(name).append(" ON ").append(targetRelation).append("(")
                 .append(StringUtils.concatenate(",", (Object[]) targetAttributes)).append(")");
         return builder.toString();
     }
 
     public String dropDDL() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return dialect.constraints().dropIndex(name, targetRelation);
     }
 
     public String getTargetRelation() {

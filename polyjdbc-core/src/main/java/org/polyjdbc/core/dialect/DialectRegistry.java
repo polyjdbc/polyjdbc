@@ -17,14 +17,15 @@ package org.polyjdbc.core.dialect;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.polyjdbc.core.exception.DialectNotSupportedException;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class DialectRegistry {
+public final class DialectRegistry {
 
-    private static final Map<String, Dialect> dialects = new HashMap<String, Dialect>();
+    private static final Map<String, Dialect> DIALECTS = new HashMap<String, Dialect>();
 
     static {
         addDialect(new H2Dialect());
@@ -36,14 +37,17 @@ public class DialectRegistry {
     }
 
     private static void addDialect(Dialect dialect) {
-        dialects.put(dialect.getCode(), dialect);
+        DIALECTS.put(dialect.getCode(), dialect);
     }
 
     public static boolean hasDialect(String code) {
-        return dialects.containsKey(code);
+        return DIALECTS.containsKey(code);
     }
 
     public static Dialect dialect(String code) {
-        return dialects.get(code);
+        if (!hasDialect(code)) {
+            throw new DialectNotSupportedException(code, DIALECTS.keySet());
+        }
+        return DIALECTS.get(code);
     }
 }

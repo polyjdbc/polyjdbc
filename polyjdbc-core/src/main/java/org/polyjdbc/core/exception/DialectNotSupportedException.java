@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.schema.model;
+package org.polyjdbc.core.exception;
+
+import java.util.Set;
 
 /**
  *
  * @author Adam Dubiel
  */
-public final class Attributes {
+@SuppressWarnings("serial")
+public class DialectNotSupportedException extends PolyJdbcException {
 
-    private Attributes() {
+    public DialectNotSupportedException(String dialectCode, Set<String> supportedDialects) {
+        super("DIALECT_NOT_SUPPORTED", "Dialect " + dialectCode + " is not supported. Supported dialects: " + supportedDialects);
     }
 }
