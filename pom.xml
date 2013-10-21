@@ -38,8 +38,8 @@
     </developers>
 
     <scm>
-        <url>https://bitbucket.org/adubiel/polyjdbc</url>
-        <connection>scm:git:https://bitbucket.org/adubiel/polyjdbc.git</connection>
+        <url>https://bitbucket.org/smartparam/polyjdbc</url>
+        <connection>scm:git:https://bitbucket.org/smartparam/polyjdbc.git</connection>
     </scm>
 
     <properties>
