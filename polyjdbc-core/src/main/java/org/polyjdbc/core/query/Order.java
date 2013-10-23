@@ -16,12 +16,19 @@
 package org.polyjdbc.core.query;
 
 /**
+ * Defines ordering of rows in select query.
  *
  * @author Adam Dubiel
  */
 public enum Order {
 
+    /**
+     * Sort ascending.
+     */
     ASC("asc"),
+    /**
+     * Sort descending.
+     */
     DESC("desc");
 
     private String stringCode;

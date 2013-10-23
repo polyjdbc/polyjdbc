@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 /**
+ * Creates query using simple DSL.
  *
  * @author Adam Dubiel
  */
@@ -24,22 +25,45 @@ public final class QueryFactory {
     private QueryFactory() {
     }
 
+    /**
+     * Create insert query.
+     */
     public static InsertQuery insert() {
         return new InsertQuery();
     }
 
+    /**
+     * Create select query, specifying the <b>select</b> clause.
+     * <pre>QueryFactory.select("columnA, columnB");</pre>
+     */
     public static SelectQuery select(String what) {
         return new SelectQuery(what);
     }
 
+    /**
+     * Create select query which selects all columns, equivalent to
+     * <code>QueryFactory.select("*")</code>.
+     */
     public static SelectQuery selectAll() {
         return new SelectQuery("*");
     }
 
+    /**
+     * Create empty select statement, can only be used with
+     * {@link SelectQuery#query(java.lang.String)} and must contain all clauses
+     * except from order by and limit.
+     * <pre>
+     * QueryFactory.select().query("select * from test where column > :column").orderBy("column", Order.ASC)
+     * .withArgument("column", 2);
+     * </pre>
+     */
     public static SelectQuery select() {
         return new SelectQuery();
     }
 
+    /**
+     * Create delete query.
+     */
     public static DeleteQuery delete() {
         return new DeleteQuery();
     }

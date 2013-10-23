@@ -16,6 +16,8 @@
 package org.polyjdbc.core.schema;
 
 /**
+ * Query type which allows running custom DDL tasks. No support for setting
+ * parameters, DDL text has to be a complete query.
  *
  * @author Adam Dubiel
  */
@@ -27,6 +29,9 @@ public class DDLQuery {
         this.query = query;
     }
 
+    /**
+     * Create new query with given text.
+     */
     public static DDLQuery ddl(String query) {
         return new DDLQuery(query);
     }

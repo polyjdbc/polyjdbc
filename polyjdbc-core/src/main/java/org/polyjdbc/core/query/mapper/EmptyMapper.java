@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Simple mapper that creates new object for any result set passed.
  *
  * @author Adam Dubiel
  */
@@ -28,5 +29,4 @@ public class EmptyMapper implements ObjectMapper<Object> {
     public Object createObject(ResultSet resultSet) throws SQLException {
         return new Object();
     }
-
 }

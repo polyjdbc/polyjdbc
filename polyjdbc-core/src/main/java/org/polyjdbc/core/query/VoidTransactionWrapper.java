@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 /**
+ * Perform any number of operations without returning value.
  *
  * @author Adam Dubiel
  */

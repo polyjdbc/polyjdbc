@@ -16,6 +16,11 @@
 package org.polyjdbc.core.query;
 
 /**
+ * Builds insert query, use {@link QueryFactory#delete() } to create new instance.
+ *
+ * <pre>
+ * QueryFactory.delete().from("test").where("id > :maxId").withArgument("maxId", 1000);
+ * </pre>
  *
  * @author Adam Dubiel
  */
@@ -32,16 +37,35 @@ public class DeleteQuery {
         return query;
     }
 
+    /**
+     * Creates <b>FROM</b> clause with given table name.
+     */
     public DeleteQuery from(String tableName) {
         query.append("delete from ").append(tableName);
         return this;
     }
 
+    /**
+     * Adds <b>WHERE</b> clause with given conditions. Words prefixed with
+     * <b>:</b> are replaced into value placeholders, which can be populated
+     * using {@link #withArgument(java.lang.String, java.lang.Object) } method.
+     * <pre>
+     * .where("value > :value").withArgument("value", 10);
+     * </pre>
+     */
     public DeleteQuery where(String conditions) {
         query.append(" where ").append(conditions);
         return this;
     }
 
+    /**
+     * Sets value for placeholder defined in query. Placeholder name should
+     * not start with <b>:</b>, it is stripped off. Based on passed object type,
+     * appropriate JDBC type is chosen.
+     *
+     * @see org.polyjdbc.core.type.ColumnType
+     *
+     */
     public DeleteQuery withArgument(String argumentName, Object object) {
         query.setArgument(argumentName, object);
         return this;

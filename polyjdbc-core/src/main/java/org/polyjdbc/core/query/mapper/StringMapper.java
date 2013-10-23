@@ -19,6 +19,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Simple mapper for returning results of simple queries, creates string
+ * out of first result set column.
  *
  * @author Adam Dubiel
  */

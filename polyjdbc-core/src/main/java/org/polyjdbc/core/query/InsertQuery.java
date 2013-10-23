@@ -18,6 +18,14 @@ package org.polyjdbc.core.query;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
+ * Builds insert query, use {@link QueryFactory#insert() } to create new instance.
+ *
+ * <pre>
+ * QueryFactory.insert().into("test").sequence("id", "seq_test")
+ *      .value("columnA", "A")
+ *      .value("columnB", 2)
+ *      .value("columnC", BigDecimal.valueOf(3.1415));
+ * </pre>
  *
  * @author Adam Dubiel
  */
@@ -52,11 +60,18 @@ public class InsertQuery {
         return query;
     }
 
+    /**
+     * Creates <b>INSERT INTO</b> clause for given table name.
+     */
     public InsertQuery into(String tableName) {
         query.append("INSERT INTO ").append(tableName);
         return this;
     }
 
+    /**
+     * Insert next sequence value into column of given name. Only one sequenced
+     * column per table is supported so far.
+     */
     public InsertQuery sequence(String sequenceField, String sequenceName) {
         this.sequenceField = sequenceField;
         this.sequenceName = sequenceName;
@@ -71,6 +86,12 @@ public class InsertQuery {
         return sequenceField;
     }
 
+    /**
+     * Insert value into column of given name. Object is automatically translated
+     * onto matching JDBC type.
+     *
+     * @see org.polyjdbc.core.type.ColumnType
+     */
     public InsertQuery value(String fieldName, Object value) {
         valueNames.append(fieldName).append(", ");
         values.append(":").append(fieldName).append(", ");
@@ -78,12 +99,19 @@ public class InsertQuery {
         return this;
     }
 
+    /**
+     * Manually set sequenced field value.
+     */
     public InsertQuery sequenceValue(long value) {
         query.setArgument(sequenceField, value);
         sequenceValueSet = true;
         return this;
     }
 
+    /**
+     * Returns true if sequenced field value was set manually and there is no
+     * need to use sequence generator.
+     */
     public boolean isSequenceValueSet() {
         return sequenceValueSet;
     }

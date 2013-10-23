@@ -19,11 +19,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Maps contents of result set onto Java object.
+ * For simple usages consider using {@link StringMapper} or {@link EmptyMapper}.
  *
  * @author Adam Dubiel
  */
 public interface ObjectMapper<T> {
 
+    /**
+     * Create bean using contents of result set and return it.
+     */
     T createObject(ResultSet resultSet) throws SQLException;
 
 }

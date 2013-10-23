@@ -21,6 +21,9 @@ import org.polyjdbc.core.query.mapper.ObjectMapper;
 import org.polyjdbc.core.transaction.TransactionManager;
 
 /**
+ * Runs simple query in one-time transaction, can be used multiple times, resources are always freed.
+ * Internally uses {@link TransactionRunner}. Each time a query is made, new transaction is
+ * opened, closed after query execution.
  *
  * @author Adam Dubiel
  */
@@ -28,10 +31,16 @@ public class SimpleQueryRunner {
 
     private TransactionRunner runner;
 
+    /**
+     * Create new runner that will use given transaction manager to open new transactions.
+     */
     public SimpleQueryRunner(TransactionManager transactionManager) {
         runner = new TransactionRunner(transactionManager);
     }
 
+    /**
+     * Find unique entry, uses {@link QueryRunner#queryUnique(org.polyjdbc.core.query.SelectQuery, org.polyjdbc.core.query.mapper.ObjectMapper) }.
+     */
     public <T> T queryUnique(final SelectQuery query, final ObjectMapper<T> mapper) {
         return runner.run(new TransactionWrapper<T>() {
             public T perform(QueryRunner queryRunner) {
@@ -40,6 +49,9 @@ public class SimpleQueryRunner {
         });
     }
 
+    /**
+     * Retrieve list, uses {@link QueryRunner#queryList(org.polyjdbc.core.query.SelectQuery, org.polyjdbc.core.query.mapper.ObjectMapper) }.
+     */
     public <T> List<T> queryList(final SelectQuery query, final ObjectMapper<T> mapper) {
         return runner.run(new TransactionWrapper<List<T>>() {
             public List<T> perform(QueryRunner queryRunner) {
@@ -48,6 +60,9 @@ public class SimpleQueryRunner {
         });
     }
 
+    /**
+     * Retrieve set, uses {@link QueryRunner#querySet(org.polyjdbc.core.query.SelectQuery, org.polyjdbc.core.query.mapper.ObjectMapper) }.
+     */
     public <T> Set<T> querySet(final SelectQuery query, final ObjectMapper<T> mapper) {
         return runner.run(new TransactionWrapper<Set<T>>() {
             public Set<T> perform(QueryRunner queryRunner) {
@@ -56,6 +71,9 @@ public class SimpleQueryRunner {
         });
     }
 
+    /**
+     * Check if any result exists for query, uses {@link QueryRunner#queryExistence(org.polyjdbc.core.query.SelectQuery) }.
+     */
     public boolean queryExistence(final SelectQuery query) {
         return runner.run(new TransactionWrapper<Boolean>() {
             public Boolean perform(QueryRunner queryRunner) {

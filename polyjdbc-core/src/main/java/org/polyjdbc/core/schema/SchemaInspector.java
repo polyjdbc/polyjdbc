@@ -16,12 +16,19 @@
 package org.polyjdbc.core.schema;
 
 /**
+ * Inspects database metadata. Should use one transaction per instance.
  *
  * @author Adam Dubiel
  */
 public interface SchemaInspector {
 
+    /**
+     * Return if relation of given name exists in database.
+     */
     boolean relationExists(String name);
 
+    /**
+     * Close underlying transaction.
+     */
     void close();
 }

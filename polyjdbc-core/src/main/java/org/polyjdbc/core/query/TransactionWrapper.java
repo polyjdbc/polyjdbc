@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 /**
+ * Perform any actions using query runner in safe block, must return value.
  *
  * @author Adam Dubiel
  */

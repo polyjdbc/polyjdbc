@@ -19,20 +19,39 @@ import org.polyjdbc.core.schema.model.Schema;
 import org.polyjdbc.core.schema.model.SchemaEntity;
 
 /**
+ * Performs schema alteration. Should use one transaction per instance.
  *
  * @author Adam Dubiel
  */
 public interface SchemaManager {
 
+    /**
+     * Create schema matching provided schema model.
+     */
     void create(Schema schema);
 
+    /**
+     * Create single entity (relation, sequence, index).
+     */
     void create(SchemaEntity entity);
 
+    /**
+     * Drop any entities defined inside schema.
+     */
     void drop(Schema schema);
 
+    /**
+     * Drop single entity.
+     */
     void drop(SchemaEntity entity);
 
+    /**
+     * Run custom DDL query.
+     */
     void ddl(DDLQuery ddlQuery);
 
+    /**
+     * Close underlying transaction.
+     */
     void close();
 }
