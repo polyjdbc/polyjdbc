@@ -28,7 +28,7 @@ import static org.fest.assertions.api.Assertions.*;
 public class SchemaInspectorImplTest extends DatabaseTest {
 
     @Test
-    public void shouldReturnTrueWhenRelationExists() throws Exception {
+    public void shouldReturnTrueWhenRelationExists() {
         // given
         SchemaInspector inspector = new SchemaInspectorImpl(transaction());
 

@@ -31,6 +31,11 @@ public class SelectQuery {
 
     private String limit;
 
+    SelectQuery(String what) {
+        this.query = new Query();
+        this.query.append("select ").append(what).append(" ");
+    }
+
     SelectQuery() {
         this.query = new Query();
     }
@@ -40,7 +45,7 @@ public class SelectQuery {
             StringBuilderUtil.deleteLastCharacters(orderBy, 2);
             query.append(orderBy.toString());
         }
-        if(limit != null) {
+        if (limit != null) {
             query.append(limit);
         }
 
@@ -48,8 +53,18 @@ public class SelectQuery {
         return query;
     }
 
+    public SelectQuery from(String from) {
+        query.append("from ").append(from).append(" ");
+        return this;
+    }
+
+    public SelectQuery where(String where) {
+        query.append("where ").append(where).append(" ");
+        return this;
+    }
+
     public SelectQuery query(String queryText) {
-        query.append(queryText);
+        query.overwrite(queryText);
         return this;
     }
 

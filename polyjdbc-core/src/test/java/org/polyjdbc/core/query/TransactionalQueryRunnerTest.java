@@ -69,7 +69,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldListAllItemsInTable() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test");
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test");
         QueryRunner runner = queryRunner();
 
         // when
@@ -85,7 +85,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         // given
         database(queryRunner()).withItem("last", "A", 10).withItem("second", "B", 45).withItem("first", "B", 43)
                 .buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test").orderBy("pseudo", Order.DESC).orderBy("some_count", Order.ASC);
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").orderBy("pseudo", Order.DESC).orderBy("some_count", Order.ASC);
         QueryRunner runner = queryRunner();
 
         // when
@@ -100,7 +100,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldReturnLimitedListOfItems() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test").limit(5);
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").limit(5);
         QueryRunner runner = queryRunner();
 
         // when
@@ -116,7 +116,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         // given
         database(queryRunner()).withItem("A", "A", 10).withItem("B", "B", 45).withItem("C", "C", 43)
                 .buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test").orderBy("name", Order.ASC).limit(2, 1);
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").orderBy("name", Order.ASC).limit(2, 1);
         QueryRunner runner = queryRunner();
 
         // when
@@ -131,7 +131,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldFindUniqueItem() {
         // given
         database(queryRunner()).withItems(10).withItem("unique").buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unique");
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name = :name").withArgument("name", "unique");
         QueryRunner runner = queryRunner();
 
         // when
@@ -146,7 +146,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldThrowExceptionWithDistinctCodeWhenMoreThanOneItemFoundWhileLookingForUnique() {
         // given
         database(queryRunner()).withItems(10).withItem("unique", 10).withItem("unique2", 10).buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test where some_count = :count").withArgument("count", 10);
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("some_count = :count").withArgument("count", 10);
 
         // when
         try {
@@ -164,7 +164,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldThrowExceptionWithDistinctCodeWhenNoItemFoundWhileLookingForUnique() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unknown");
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name = :name").withArgument("name", "unknown");
 
         // when
         try {
@@ -182,7 +182,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     public void shouldReturnNullWhenNotFindingUniqueWithExceptionsSuppressed() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.select().query("select * from test where name = :name").withArgument("name", "unknown");
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name = :name").withArgument("name", "unknown");
         QueryRunner runner = queryRunner();
 
         // when

@@ -28,6 +28,14 @@ public final class QueryFactory {
         return new InsertQuery();
     }
 
+    public static SelectQuery select(String what) {
+        return new SelectQuery(what);
+    }
+
+    public static SelectQuery selectAll() {
+        return new SelectQuery("*");
+    }
+
     public static SelectQuery select() {
         return new SelectQuery();
     }

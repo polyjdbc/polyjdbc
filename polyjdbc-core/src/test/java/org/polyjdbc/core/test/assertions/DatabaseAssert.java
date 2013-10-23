@@ -37,7 +37,7 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, QueryRunner> 
     }
 
     public DatabaseAssert contains(String name) {
-        boolean exists = actual.queryExistence(QueryFactory.select().query("select * from test where name = :name").withArgument("name", name));
+        boolean exists = actual.queryExistence(QueryFactory.selectAll().from("test").where("name = :name").withArgument("name", name));
         Assertions.assertThat(exists).isTrue();
         return this;
     }
@@ -55,7 +55,7 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, QueryRunner> 
     }
 
     private List<Object> selectAllItems() {
-        List<Object> items = actual.queryList(QueryFactory.select().query("select * from test"), new EmptyMapper());
+        List<Object> items = actual.queryList(QueryFactory.selectAll().from("test"), new EmptyMapper());
         return items;
     }
 
