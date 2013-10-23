@@ -3,6 +3,8 @@
 PolyJDBC is a polyglot, lightweight wrapper around standard JDBC drivers with
 schema inspection/creation capabilities.
 
+See project wiki for changelog.
+
 ## Why?
 
 When developing [SmartParam](http://smartparam.org) JDBC repository i realized
