@@ -28,7 +28,7 @@ only 75kB, no dependencies except for slf4j logging API.
 * transaction-oriented
 * resources (Statements, ResultSets) are managed inside transaction scope
 * intiutive transaction commit/rollback support
-* DDL operation DSL (CREATE TABLE/INDEX/SEQUENCE with constraints, DROP *)
+* DDL operation DSL (CREATE TABLE/INDEX/SEQUENCE with constraints, DROP \*)
 * SQL query DSL (INSERT, SELECT, UPDATE, DELETE)
 * lightweight
 * schema inspection (table/sequence exists?)
@@ -50,7 +50,7 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
@@ -65,7 +65,7 @@ TransactionManager manager = new DataSourceTransactionManager(dialect, dataSourc
 QueryRunner queryRunner = new TransactionalQueryRunner(manager.openTransaction());
 
 try {
-    SelectQuery query = QueryFactory.select().query("select * from test where year = :year")
+    SelectQuery query = QueryFactory.selectAll().from("test").where("year = :year")
         .withArgument("year", 2013).limit(10);
     List<Test> tests = queryRunner.selectList(query, new TestMapper());
 }
@@ -84,7 +84,7 @@ TransactionManager manager = new DataSourceTransactionManager(dialect, dataSourc
 
 SimpleQueryRunner simpleRunner = new SimpleQueryRunner(manager);
 
-SelectQuery query = QueryFactory.select().query("select * from test where name = :name")
+SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
         .withArgument("name", "test");
 
 Test test = simpleRunner.queryUnique(query, new TestMapper());
@@ -102,7 +102,7 @@ TransactionRunner transactionRunner = new TransactionRunner(manager);
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
     @Override
     public Test perform(QueryRunner queryRunner) {
-        SelectQuery query = QueryFactory.select().query("select * from test where name = :name")
+        SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
             .withArgument("name", "test");
         return queryRunner.queryUnique(query, new TestMapper());
     }
