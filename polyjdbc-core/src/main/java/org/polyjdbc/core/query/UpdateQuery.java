@@ -15,33 +15,54 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.util.StringBuilderUtil;
+
 /**
- * Builds insert query, use {@link QueryFactory#delete() } to create new instance.
+ * Builds update query, use {@link QueryFactory#update() } to create new instance.
  *
  * <pre>
- * QueryFactory.delete().from("test").where("id > :maxId").withArgument("maxId", 1000);
+ * QueryFactory.update("test")
+ *      .value("columnA", "A")
+ *      .value("columnB", 2)
+ *      .value("columnC", BigDecimal.valueOf(3.1415))
+ *      .where("columnA > :maxId").withArgument("maxId", 10000);
  * </pre>
  *
  * @author Adam Dubiel
  */
-public class DeleteQuery {
+public class UpdateQuery {
+
+    private static final int VALUES_LENGTH = 50;
 
     private Query query;
 
-    DeleteQuery() {
+    private StringBuilder values = new StringBuilder(VALUES_LENGTH);
+
+    private StringBuilder where = new StringBuilder(VALUES_LENGTH);
+
+    UpdateQuery(String what) {
         this.query = new Query();
+        this.query.append("UPDATE ").append(what).append(" SET ");
     }
 
     Query build() {
+        StringBuilderUtil.deleteLastCharacters(values, 2);
+        query.append(values.toString()).append(" ").append(where.toString());
         query.compile();
+
         return query;
     }
 
     /**
-     * Creates <b>FROM</b> clause with given table name.
+     * Set column to update. Object is automatically translated
+     * onto matching JDBC type.
+     *
+     * @see org.polyjdbc.core.type.ColumnType
      */
-    public DeleteQuery from(String tableName) {
-        query.append("DELETE FROM ").append(tableName);
+    public UpdateQuery set(String fieldName, Object value) {
+        String updatedFieldName = "update_" + fieldName;
+        values.append(fieldName).append(" = :").append(updatedFieldName).append(", ");
+        query.setArgument(updatedFieldName, value);
         return this;
     }
 
@@ -53,8 +74,8 @@ public class DeleteQuery {
      * .where("value > :value").withArgument("value", 10);
      * </pre>
      */
-    public DeleteQuery where(String conditions) {
-        query.append(" WHERE ").append(conditions);
+    public UpdateQuery where(String conditions) {
+        where.append("WHERE ").append(conditions);
         return this;
     }
 
@@ -66,7 +87,7 @@ public class DeleteQuery {
      * @see org.polyjdbc.core.type.ColumnType
      *
      */
-    public DeleteQuery withArgument(String argumentName, Object object) {
+    public UpdateQuery withArgument(String argumentName, Object object) {
         query.setArgument(argumentName, object);
         return this;
     }

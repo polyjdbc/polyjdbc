@@ -90,6 +90,11 @@ public interface QueryRunner {
     void insertWithoutKey(InsertQuery insertQuery);
 
     /**
+     * Run delete query, returns number of records changed.
+     */
+    int update(UpdateQuery updateQuery);
+
+    /**
      * Run delete query, returns number of records deleted.
      */
     int delete(DeleteQuery deleteQuery);

@@ -41,7 +41,7 @@ public class SelectQuery {
 
     SelectQuery(String what) {
         this.query = new Query();
-        this.query.append("select ").append(what).append(" ");
+        this.query.append("SELECT ").append(what).append(" ");
     }
 
     SelectQuery() {
@@ -65,7 +65,7 @@ public class SelectQuery {
      * Fill <b>FROM</b> clause.
      */
     public SelectQuery from(String from) {
-        query.append("from ").append(from).append(" ");
+        query.append("FROM ").append(from).append(" ");
         return this;
     }
 
@@ -73,7 +73,7 @@ public class SelectQuery {
      * Fill <b>WHERE</b> clause.
      */
     public SelectQuery where(String where) {
-        query.append("where ").append(where).append(" ");
+        query.append("WHERE ").append(where).append(" ");
         return this;
     }
 
@@ -103,7 +103,7 @@ public class SelectQuery {
     public SelectQuery orderBy(String name, Order order) {
         if (orderBy == null) {
             orderBy = new StringBuilder(ORDER_BY_LENGTH);
-            orderBy.append(" order by ");
+            orderBy.append(" ORDER BY ");
         }
         orderBy.append(name).append(" ").append(order.getStringCode()).append(", ");
 

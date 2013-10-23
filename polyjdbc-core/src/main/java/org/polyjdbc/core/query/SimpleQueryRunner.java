@@ -81,4 +81,15 @@ public class SimpleQueryRunner {
             }
         });
     }
+
+    /**
+     * Run update query, uses {@link QueryRunner#update(org.polyjdbc.core.query.UpdateQuery) }.
+     */
+    public int update(final UpdateQuery query) {
+        return runner.run(new TransactionWrapper<Integer>() {
+            public Integer perform(QueryRunner queryRunner) {
+                return queryRunner.update(query);
+            }
+        });
+    }
 }

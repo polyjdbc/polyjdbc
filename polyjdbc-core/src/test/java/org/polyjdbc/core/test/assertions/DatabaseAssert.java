@@ -21,6 +21,7 @@ import org.fest.assertions.api.Assertions;
 import org.polyjdbc.core.query.mapper.EmptyMapper;
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
+import org.polyjdbc.core.query.SelectQuery;
 
 /**
  *
@@ -39,6 +40,18 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, QueryRunner> 
     public DatabaseAssert contains(String name) {
         boolean exists = actual.queryExistence(QueryFactory.selectAll().from("test").where("name = :name").withArgument("name", name));
         Assertions.assertThat(exists).isTrue();
+        return this;
+    }
+
+    public DatabaseAssert contains(SelectQuery query) {
+        boolean exists = actual.queryExistence(query);
+        Assertions.assertThat(exists).isTrue();
+        return this;
+    }
+
+    public DatabaseAssert doesNotContain(SelectQuery query) {
+        boolean exists = actual.queryExistence(query);
+        Assertions.assertThat(exists).isFalse();
         return this;
     }
 

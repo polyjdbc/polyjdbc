@@ -194,6 +194,62 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     }
 
     @Test
+    public void shouldUpdateItemsInDatabase() {
+        // given
+        database(queryRunner()).withItem("test", "wrongPseudo", 10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.update(QueryFactory.update("test").set("pseudo", "goodPseudo").where("name = :name").withArgument("name", "test"));
+        runner.close();
+
+        // then
+        assertThat(queryRunner()).contains(QueryFactory.selectAll().from("test").where("pseudo = :pseudo").withArgument("pseudo", "goodPseudo")).close();
+    }
+
+    @Test
+    public void shouldRunUpdateEvenIfQueryContainsFieldWithSameNameInSetAndWhereClause() {
+        // given
+        database(queryRunner()).withItem("test", "wrongPseudo", 10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.update(QueryFactory.update("test").set("pseudo", "goodPseudo").where("pseudo = :pseudo").withArgument("pseudo", "wrongPseudo"));
+        runner.close();
+
+        // then
+        assertThat(queryRunner()).contains(QueryFactory.selectAll().from("test").where("pseudo = :pseudo").withArgument("pseudo", "goodPseudo")).close();
+    }
+
+    @Test
+    public void shouldReturnNumberOfEntriesChangedWhenUpdating() {
+        // given
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+
+        // when
+        int changedCount = runner.update(QueryFactory.update("test").set("pseudo", "the same"));
+        runner.close();
+
+        // then
+        assertThat(changedCount).isEqualTo(10);
+    }
+
+    @Test
+    public void shouldRollbackUpdatesMadeInTransaction() {
+        // given
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+        runner.update(QueryFactory.update("test").set("pseudo", "should be rollbacked"));
+
+        // when
+        runner.rollbackAndClose();
+
+        // then
+        assertThat(queryRunner()).doesNotContain(QueryFactory.selectAll().from("test").where("pseudo = :pseudo").withArgument("pseudo", "should be rollbacked")).close();
+    }
+
+    @Test
     public void shouldDeleteItemsFromDatabase() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();
@@ -205,6 +261,20 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // then
         assertThat(queryRunner()).hasNoItems().close();
+    }
+
+    @Test
+    public void shouldReturnNumberOfDeletedEntriesWhenDeleting() {
+        // given
+        database(queryRunner()).withItems(10).buildAndCloseTransaction();
+        QueryRunner runner = queryRunner();
+
+        // when
+        int deletedCount = runner.delete(QueryFactory.delete().from("test"));
+        runner.close();
+
+        // then
+        assertThat(deletedCount).isEqualTo(10);
     }
 
     @Test

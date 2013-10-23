@@ -53,7 +53,7 @@ public class TransactionalQueryRunner implements QueryRunner {
     public <T> T queryUnique(SelectQuery query, ObjectMapper<T> mapper, boolean failOnNotUniqueOrNotFound) {
         // in case it is VERY non-unique item, do not fetch whole DB, 2 items is enough
         query.limit(2);
-        
+
         Query rawQuery = query.build();
         List<T> results = queryCollection(rawQuery, mapper, new ArrayList<T>());
 
@@ -129,6 +129,18 @@ public class TransactionalQueryRunner implements QueryRunner {
             transaction.rollback();
             Query rawQuery = insertQuery.build();
             throw new QueryExecutionException("INSERT_ERROR", String.format("Failed to run insert query:%n%s", rawQuery), exception);
+        }
+    }
+
+    @Override
+    public int update(UpdateQuery updateQuery) {
+        Query rawQuery = updateQuery.build();
+        try {
+            PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
+            return transaction.executeUpdate(statement);
+        } catch (SQLException exception) {
+            transaction.rollback();
+            throw new QueryExecutionException("UPDATE_ERROR", String.format("Failed to run update query:%n%s", rawQuery.getQuery()), exception);
         }
     }
 

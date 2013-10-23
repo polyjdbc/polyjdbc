@@ -62,6 +62,13 @@ public final class QueryFactory {
     }
 
     /**
+     * Create update query on given table.
+     */
+    public static UpdateQuery update(String what) {
+        return new UpdateQuery(what);
+    }
+
+    /**
      * Create delete query.
      */
     public static DeleteQuery delete() {
