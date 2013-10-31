@@ -15,10 +15,6 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.SequenceAllocation;
-import org.polyjdbc.core.key.SequenceNextValGenerator;
-
 /**
  *
  * @author Adam Dubiel
@@ -33,12 +29,8 @@ public class PostgresDialect extends AbstractDialect {
     }
 
     @Override
-    public KeyGenerator keyGenerator() {
-        return new SequenceAllocation(new SequenceNextValGenerator() {
-            public String nextval(String sequenceName) {
-                return "SELECT nextval('" + sequenceName + "')";
-            }
-        });
+    public String nextFromSequence(String sequenceName) {
+        return "SELECT nextval('" + sequenceName + "')";
     }
 
     @Override

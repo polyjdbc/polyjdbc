@@ -18,7 +18,6 @@ package org.polyjdbc.core.query;
 import java.util.List;
 import java.util.Set;
 import org.polyjdbc.core.query.mapper.ObjectMapper;
-import org.polyjdbc.core.transaction.TransactionManager;
 
 /**
  * Runs simple query in one-time transaction, can be used multiple times, resources are always freed.
@@ -32,10 +31,10 @@ public class SimpleQueryRunner {
     private TransactionRunner runner;
 
     /**
-     * Create new runner that will use given transaction manager to open new transactions.
+     * Create new runner that will use given query runner factory to create query runners.
      */
-    public SimpleQueryRunner(TransactionManager transactionManager) {
-        runner = new TransactionRunner(transactionManager);
+    public SimpleQueryRunner(QueryRunnerFactory queryRunnerFactory) {
+        runner = new TransactionRunner(queryRunnerFactory);
     }
 
     /**

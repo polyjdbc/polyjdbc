@@ -13,29 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.key;
+
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.exception.PolyJdbcException;
 
 /**
  *
  * @author Adam Dubiel
  */
-public enum DialectRegistry {
+@SuppressWarnings("serial")
+public class NoKeyGeneratorForDialectException extends PolyJdbcException {
 
-    H2(new H2Dialect()),
-    POSTGRES(new PostgresDialect()),
-    MYSQL(new MysqlDialect());
-
-    private Dialect dialect;
-
-    private DialectRegistry(Dialect dialect) {
-        this.dialect = dialect;
-    }
-
-    public Dialect getDialect() {
-        return dialect;
-    }
-
-    public static Dialect dialect(String dialectCode) {
-        return DialectRegistry.valueOf(dialectCode).getDialect();
+    NoKeyGeneratorForDialectException(Dialect dialect) {
+        super("NO_KEYGEN_FOR_DIALECT", "No key generator for dialect " + dialect.getCode() + " registered.");
     }
 }

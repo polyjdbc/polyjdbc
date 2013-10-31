@@ -30,6 +30,7 @@ public abstract class AbstractDialect implements Dialect {
         return true;
     }
 
+    @Override
     public boolean supportsAttributeModifier(String modifier) {
         return false;
     }

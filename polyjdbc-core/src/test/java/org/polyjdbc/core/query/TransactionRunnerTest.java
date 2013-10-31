@@ -16,8 +16,6 @@
 package org.polyjdbc.core.query;
 
 import org.polyjdbc.core.exception.PolyJdbcException;
-import org.polyjdbc.core.transaction.Transaction;
-import org.polyjdbc.core.transaction.TransactionManager;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -32,19 +30,19 @@ public class TransactionRunnerTest {
 
     private TransactionRunner transactionRunner;
 
-    private TransactionManager transactionManager;
+    private QueryRunnerFactory queryRunnerFactory;
 
     @BeforeMethod
     public void setUp() {
-        transactionManager = mock(TransactionManager.class);
-        transactionRunner = new TransactionRunner(transactionManager);
+        queryRunnerFactory = mock(QueryRunnerFactory.class);
+        transactionRunner = new TransactionRunner(queryRunnerFactory);
     }
 
     @Test
     public void shouldCreateQueryRunnerAndCloseItAfterPerformingTransaction() {
         // given
-        Transaction transaction = mock(Transaction.class);
-        when(transactionManager.openTransaction()).thenReturn(transaction);
+        QueryRunner queryRunner = mock(QueryRunner.class);
+        when(queryRunnerFactory.create()).thenReturn(queryRunner);
 
         // when
         transactionRunner.run(new VoidTransactionWrapper() {
@@ -54,16 +52,14 @@ public class TransactionRunnerTest {
         });
 
         // then
-        verify(transactionManager).openTransaction();
-        verify(transaction).commit();
-        verify(transaction).closeWithArtifacts();
+        verify(queryRunner).close();
     }
 
     @Test
     public void shouldCloseTransactionEvenWhenExceptionWasThrown() {
         // given
-        Transaction transaction = mock(Transaction.class);
-        when(transactionManager.openTransaction()).thenReturn(transaction);
+        QueryRunner queryRunner = mock(QueryRunner.class);
+        when(queryRunnerFactory.create()).thenReturn(queryRunner);
 
         // when
         catchException(transactionRunner).run(new VoidTransactionWrapper() {
@@ -74,7 +70,6 @@ public class TransactionRunnerTest {
         });
 
         // then
-        verify(transaction).commit();
-        verify(transaction).closeWithArtifacts();
+        verify(queryRunner).close();
     }
 }

@@ -40,8 +40,11 @@ public class TransactionalQueryRunner implements QueryRunner {
 
     private Transaction transaction;
 
-    public TransactionalQueryRunner(Transaction transaction) {
+    private KeyGenerator keyGenerator;
+
+    public TransactionalQueryRunner(Transaction transaction, KeyGenerator keyGenerator) {
         this.transaction = transaction;
+        this.keyGenerator = keyGenerator;
     }
 
     @Override
@@ -105,7 +108,6 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public long insert(InsertQuery insertQuery) {
         try {
-            KeyGenerator keyGenerator = transaction.dialectKeyGenerator();
             long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
             insertQuery.sequenceValue(key);
 

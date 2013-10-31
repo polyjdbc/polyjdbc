@@ -26,15 +26,11 @@ import org.polyjdbc.core.transaction.Transaction;
  */
 public class AutoIncremented implements KeyGenerator {
 
-    private long defaultValue;
-
-    public AutoIncremented(long defaultValue) {
-        this.defaultValue = defaultValue;
-    }
+    private static final long DEFAULT_VALUE = 0;
 
     @Override
     public long generateKey(String sequenceName, Transaction transaction) throws SQLException {
-        return defaultValue;
+        return DEFAULT_VALUE;
     }
 
     @Override

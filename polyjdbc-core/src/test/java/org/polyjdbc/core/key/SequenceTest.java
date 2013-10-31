@@ -17,7 +17,6 @@ package org.polyjdbc.core.key;
 
 import org.polyjdbc.core.exception.SequenceLimitReachedException;
 import org.testng.annotations.Test;
-import static com.googlecode.catchexception.CatchException.*;
 import static org.fest.assertions.api.Assertions.*;
 
 /**
@@ -83,9 +82,12 @@ public class SequenceTest {
         Sequence sequence = new Sequence("test", 1);
 
         // when
-        catchException(sequence).nextValue();
-
-        // then
-        assertThat(caughtException()).isNotNull().isInstanceOf(SequenceLimitReachedException.class);
+        try {
+            sequence.nextValue();
+            fail("expected SequenceLimitReachedException!");
+        } catch (Exception exception) {
+            // then
+            assertThat(exception).isInstanceOf(SequenceLimitReachedException.class);
+        }
     }
 }

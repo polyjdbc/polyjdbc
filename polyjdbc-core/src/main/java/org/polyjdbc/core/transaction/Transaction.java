@@ -22,9 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.exception.PolyJdbcException;
-import org.polyjdbc.core.key.KeyGenerator;
 
 /**
  *
@@ -32,24 +30,14 @@ import org.polyjdbc.core.key.KeyGenerator;
  */
 public class Transaction {
 
-    private Dialect dialect;
-
     private Connection connection;
-
-    private KeyGenerator keyGenerator;
 
     private List<Statement> statements = new ArrayList<Statement>();
 
     private List<ResultSet> resultSets = new ArrayList<ResultSet>();
 
-    public Transaction(Dialect dialect, Connection connection, KeyGenerator keyGenerator) {
-        this.dialect = dialect;
+    public Transaction(Connection connection) {
         this.connection = connection;
-        this.keyGenerator = keyGenerator;
-    }
-
-    public Dialect getDialect() {
-        return dialect;
     }
 
     public Connection getConnection() {
@@ -86,10 +74,6 @@ public class Transaction {
             rollback();
             throw exception;
         }
-    }
-
-    public KeyGenerator dialectKeyGenerator() {
-        return keyGenerator;
     }
 
     public PreparedStatement prepareStatement(String query) throws SQLException {

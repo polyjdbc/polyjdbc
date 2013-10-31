@@ -15,8 +15,6 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.KeyGenerator;
-
 /**
  *
  * @author Adam Dubiel
@@ -31,9 +29,9 @@ public interface Dialect {
 
     boolean supportsSequences();
 
-    boolean supportsAttributeModifier(String modifier);
+    String nextFromSequence(String sequenceName);
 
-    KeyGenerator keyGenerator();
+    boolean supportsAttributeModifier(String modifier);
 
     String createRelationDefaultOptions();
 }

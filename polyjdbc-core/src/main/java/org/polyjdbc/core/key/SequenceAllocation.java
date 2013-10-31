@@ -18,8 +18,9 @@ package org.polyjdbc.core.key;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.transaction.Transaction;
 
 /**
@@ -30,25 +31,29 @@ public class SequenceAllocation implements KeyGenerator {
 
     private static final long SEQUENCE_ALLOCATION_SIZE = 100;
 
-    private SequenceNextValGenerator sequenceNextValGenerator;
+    private final Object lock = new Object();
 
-    private Map<String, Sequence> sequences = new HashMap<String, Sequence>();
+    private final Dialect dialect;
 
-    private long lastKey;
+    private Map<String, Sequence> sequences = new ConcurrentHashMap<String, Sequence>();
 
-    public SequenceAllocation(SequenceNextValGenerator sequenceNextValGenerator) {
-        this.sequenceNextValGenerator = sequenceNextValGenerator;
+    private ThreadLocal<Long> lastKey = new ThreadLocal<Long>();
+
+    public SequenceAllocation(Dialect dialect) {
+        this.dialect = dialect;
     }
 
     @Override
     public long generateKey(String sequenceName, Transaction transaction) throws SQLException {
         Sequence sequence = findSequence(sequenceName);
         if (sequence.recalculationNeeded()) {
-            long currentSequenceValue = fetchSequenceValue(sequenceName, transaction);
-            sequence.recalculate(currentSequenceValue);
+            synchronized (lock) {
+                long currentSequenceValue = fetchSequenceValue(sequenceName, transaction);
+                sequence.recalculate(currentSequenceValue);
+            }
         }
-        lastKey = sequence.nextValue();
-        return lastKey;
+        lastKey.set(sequence.nextValue());
+        return lastKey.get();
     }
 
     private Sequence findSequence(String sequenceName) {
@@ -62,7 +67,7 @@ public class SequenceAllocation implements KeyGenerator {
     }
 
     private long fetchSequenceValue(String sequenceName, Transaction transaction) throws SQLException {
-        PreparedStatement statement = transaction.prepareStatement(sequenceNextValGenerator.nextval(sequenceName));
+        PreparedStatement statement = transaction.prepareStatement(dialect.nextFromSequence(sequenceName));
         ResultSet resultSet = statement.executeQuery();
         transaction.registerCursor(resultSet);
 
@@ -72,6 +77,6 @@ public class SequenceAllocation implements KeyGenerator {
 
     @Override
     public long getKeyFromLastInsert(Transaction transaction) {
-        return lastKey;
+        return lastKey.get();
     }
 }

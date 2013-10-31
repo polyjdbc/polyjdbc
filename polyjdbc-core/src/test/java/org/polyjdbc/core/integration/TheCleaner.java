@@ -17,8 +17,7 @@ package org.polyjdbc.core.integration;
 
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.TransactionalQueryRunner;
-import org.polyjdbc.core.transaction.TransactionManager;
+import org.polyjdbc.core.query.QueryRunnerFactory;
 
 /**
  *
@@ -26,20 +25,19 @@ import org.polyjdbc.core.transaction.TransactionManager;
  */
 public class TheCleaner {
 
-    private TransactionManager transactionManager;
+    private QueryRunnerFactory queryRunnerFactory;
 
-    public TheCleaner(TransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
+    public TheCleaner(QueryRunnerFactory queryRunnerFactory) {
+        this.queryRunnerFactory = queryRunnerFactory;
     }
 
     public void cleanDB(String... tables) {
-        QueryRunner runner = new TransactionalQueryRunner(transactionManager.openTransaction());
+        QueryRunner runner = queryRunnerFactory.create();
 
-        for(String table : tables) {
+        for (String table : tables) {
             runner.delete(QueryFactory.delete().from(table));
         }
 
         runner.close();
     }
-
 }

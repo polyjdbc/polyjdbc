@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.TransactionalQueryRunner;
+import org.polyjdbc.core.query.QueryRunnerFactory;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.transaction.TransactionManager;
@@ -37,6 +37,8 @@ public class DatabaseTest {
 
     private TransactionManager transactionManager;
 
+    private QueryRunnerFactory queryRunnerFactory;
+
     private TestSchemaManager schemaManager;
 
     private TheCleaner cleaner;
@@ -46,7 +48,7 @@ public class DatabaseTest {
     }
 
     protected QueryRunner queryRunner() {
-        return new TransactionalQueryRunner(transaction());
+        return queryRunnerFactory.create();
     }
 
     @Parameters({"dialect", "url", "user", "password"})
@@ -55,9 +57,10 @@ public class DatabaseTest {
         Dialect dialect = DialectRegistry.dialect(dialectCode);
         DataSource dataSource = DataSourceFactory.create(dialect, url, user, password);
 
-        this.transactionManager = new DataSourceTransactionManager(dialect, dataSource);
+        this.transactionManager = new DataSourceTransactionManager(dataSource);
+        this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
         this.schemaManager = new TestSchemaManager(dialect);
-        this.cleaner = new TheCleaner(transactionManager);
+        this.cleaner = new TheCleaner(queryRunnerFactory);
 
         schemaManager.createSchema(transactionManager);
     }

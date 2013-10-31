@@ -21,7 +21,7 @@ import org.polyjdbc.core.exception.SequenceLimitReachedException;
  *
  * @author Adam Dubiel
  */
-class Sequence {
+final class Sequence {
 
     private String sequenceName;
 
@@ -36,7 +36,7 @@ class Sequence {
         this.sequenceName = sequenceName;
     }
 
-    void recalculate(long currentSequenceValue) {
+    final synchronized void recalculate(long currentSequenceValue) {
         currentValue = allocationSize * currentSequenceValue;
         currentLimit = allocationSize * (currentSequenceValue + 1) - 1;
     }
@@ -45,7 +45,7 @@ class Sequence {
         return currentValue > currentLimit;
     }
 
-    long nextValue() {
+    final synchronized long nextValue() {
         if(recalculationNeeded()) {
             throw new SequenceLimitReachedException("Sequence " + sequenceName + " has reached its limit of " + currentLimit + ". "
                     + "Before fetching value, check if recalculation is needed using recalculationNeeded() method.");

@@ -15,8 +15,6 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.transaction.TransactionManager;
-
 /**
  * Run any number of operations in single transaction without the need to wrap
  * code in try-finally block as TransactionRunner takes care of resource freeing
@@ -41,10 +39,10 @@ import org.polyjdbc.core.transaction.TransactionManager;
  */
 public class TransactionRunner {
 
-    private TransactionManager transactionManager;
+    private QueryRunnerFactory queryRunnerFactory;
 
-    public TransactionRunner(TransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
+    public TransactionRunner(QueryRunnerFactory queryRunnerFactory) {
+        this.queryRunnerFactory = queryRunnerFactory;
     }
 
     /**
@@ -53,7 +51,7 @@ public class TransactionRunner {
     public <T> T run(TransactionWrapper<T> operation) {
         QueryRunner runner = null;
         try {
-            runner = new TransactionalQueryRunner(transactionManager.openTransaction());
+            runner = queryRunnerFactory.create();
             return operation.perform(runner);
         } finally {
             if (runner != null) {

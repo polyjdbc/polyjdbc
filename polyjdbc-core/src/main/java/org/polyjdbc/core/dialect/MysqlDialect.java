@@ -15,9 +15,6 @@
  */
 package org.polyjdbc.core.dialect;
 
-import org.polyjdbc.core.key.AutoIncremented;
-import org.polyjdbc.core.key.KeyGenerator;
-
 /**
  *
  * @author Adam Dubiel
@@ -37,17 +34,16 @@ public class MysqlDialect extends AbstractDialect {
         return false;
     }
 
+    public String nextFromSequence(String sequenceName) {
+        throw new UnsupportedOperationException("MySQL dialect does not support sequences, check Dialce.supportsSequence() before trying to reach sequence!");
+    }
+
     @Override
     public boolean supportsAttributeModifier(String modifier) {
         if (modifier.equals("AUTO_INCREMENT")) {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public KeyGenerator keyGenerator() {
-        return new AutoIncremented(0);
     }
 
     @Override
