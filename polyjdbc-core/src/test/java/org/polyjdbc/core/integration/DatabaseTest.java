@@ -20,6 +20,7 @@ import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.QueryRunnerFactory;
+import org.polyjdbc.core.schema.SchemaManagerFactory;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.transaction.TransactionManager;
@@ -59,10 +60,10 @@ public class DatabaseTest {
 
         this.transactionManager = new DataSourceTransactionManager(dataSource);
         this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
-        this.schemaManager = new TestSchemaManager(dialect);
+        this.schemaManager = new TestSchemaManager(dialect, new SchemaManagerFactory(transactionManager));
         this.cleaner = new TheCleaner(queryRunnerFactory);
 
-        schemaManager.createSchema(transactionManager);
+        schemaManager.createSchema();
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -72,6 +73,6 @@ public class DatabaseTest {
 
     @AfterClass(alwaysRun = true)
     public void tearDownDatabase() throws Exception {
-        schemaManager.dropSchema(transactionManager);
+        schemaManager.dropSchema();
     }
 }

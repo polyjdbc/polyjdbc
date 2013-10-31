@@ -23,11 +23,11 @@ import java.util.Locale;
 import org.polyjdbc.core.exception.SchemaInspectionException;
 import org.polyjdbc.core.transaction.Transaction;
 
-public class SchemaInspectorImpl implements SchemaInspector {
+class SchemaInspectorImpl implements SchemaInspector {
 
     private Locale locale;
 
-    private Transaction transaction;
+    private final Transaction transaction;
 
     private DatabaseMetaData metadata;
 
@@ -35,12 +35,12 @@ public class SchemaInspectorImpl implements SchemaInspector {
 
     private String schema;
 
-    public SchemaInspectorImpl(Transaction transaction) {
+    SchemaInspectorImpl(Transaction transaction) {
         this(transaction, Locale.ENGLISH);
         extractMetadata(transaction);
     }
 
-    public SchemaInspectorImpl(Transaction transaction, Locale locale) {
+    SchemaInspectorImpl(Transaction transaction, Locale locale) {
         this.transaction = transaction;
         this.locale = locale;
     }

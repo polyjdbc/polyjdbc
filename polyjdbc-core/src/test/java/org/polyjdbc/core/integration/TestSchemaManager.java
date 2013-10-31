@@ -17,9 +17,8 @@ package org.polyjdbc.core.integration;
 
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.schema.SchemaManager;
-import org.polyjdbc.core.schema.SchemaManagerImpl;
+import org.polyjdbc.core.schema.SchemaManagerFactory;
 import org.polyjdbc.core.schema.model.Schema;
-import org.polyjdbc.core.transaction.TransactionManager;
 
 /**
  *
@@ -31,11 +30,14 @@ public class TestSchemaManager {
 
     private Schema schema;
 
-    public TestSchemaManager(Dialect dialect) {
+    private SchemaManagerFactory schemaManagerFactory;
+
+    public TestSchemaManager(Dialect dialect, SchemaManagerFactory schemaManagerFactory) {
         this.dialect = dialect;
+        this.schemaManagerFactory = schemaManagerFactory;
     }
 
-    public void createSchema(TransactionManager transactionManager) {
+    public void createSchema() {
         schema = new Schema(dialect);
 
         schema.addRelation("test")
@@ -50,13 +52,13 @@ public class TestSchemaManager {
         schema.addIndex("idx_test_name").on("test").indexing("name").build();
         schema.addSequence("seq_test").build();
 
-        SchemaManager manager = new SchemaManagerImpl(transactionManager.openTransaction());
+        SchemaManager manager = schemaManagerFactory.createManager();
         manager.create(schema);
         manager.close();
     }
 
-    public void dropSchema(TransactionManager transactionManager) {
-        SchemaManager manager = new SchemaManagerImpl(transactionManager.openTransaction());
+    public void dropSchema() {
+        SchemaManager manager = schemaManagerFactory.createManager();
         manager.drop(schema);
         manager.close();
     }

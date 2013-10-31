@@ -31,13 +31,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Adam Dubiel
  */
-public class SchemaManagerImpl implements SchemaManager {
+class SchemaManagerImpl implements SchemaManager {
 
     private static final Logger logger = LoggerFactory.getLogger(SchemaManagerImpl.class);
 
-    private Transaction transaction;
+    private final Transaction transaction;
 
-    public SchemaManagerImpl(Transaction transaction) {
+    SchemaManagerImpl(Transaction transaction) {
         this.transaction = transaction;
     }
 
@@ -61,6 +61,7 @@ public class SchemaManagerImpl implements SchemaManager {
         ddl(DDLQuery.ddl(entity.ddl()));
     }
 
+    @Override
     public void drop(Schema schema) {
         List<SchemaEntity> entitiesToDrop = new ArrayList<SchemaEntity>(schema.getEntities());
         Collections.reverse(entitiesToDrop);
@@ -77,6 +78,7 @@ public class SchemaManagerImpl implements SchemaManager {
         }
     }
 
+    @Override
     public void drop(SchemaEntity entity) {
         ddl(DDLQuery.ddl(entity.dropDDL()));
     }
