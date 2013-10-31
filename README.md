@@ -50,7 +50,7 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
@@ -59,10 +59,11 @@ all engines.
 Simple usage of low-level query runner:
 
 ```java
-Dialect dialect = DialectRegistry.dialect("H2");
-TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
+TransactionManager manager = new DataSourceTransactionManager(dataSource);
+Dialect dialect = DialectRegistry.H2.getDialect();
+QUeryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
 
-QueryRunner queryRunner = new TransactionalQueryRunner(manager.openTransaction());
+QueryRunner queryRunner = queryRunnerFactory.create();
 
 try {
     SelectQuery query = QueryFactory.selectAll().from("test").where("year = :year")
@@ -79,10 +80,11 @@ finally {
 perform operations without runner create/close boilerplate use reusable **SimpleQueryRunner**:
 
 ```java
-Dialect dialect = DialectRegistry.dialect("H2");
-TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
+TransactionManager manager = new DataSourceTransactionManager(dataSource);
+Dialect dialect = DialectRegistry.H2.getDialect();
+QUeryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
 
-SimpleQueryRunner simpleRunner = new SimpleQueryRunner(manager);
+SimpleQueryRunner simpleRunner = new SimpleQueryRunner(queryRunnerFactory);
 
 SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
         .withArgument("name", "test");
@@ -94,10 +96,11 @@ Test test = simpleRunner.queryUnique(query, new TestMapper());
 custom (or multiple) operations use reusable **TransactionRunner**:
 
 ```java
-Dialect dialect = DialectRegistry.dialect("H2");
-TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
+TransactionManager manager = new DataSourceTransactionManager(dataSource);
+Dialect dialect = DialectRegistry.H2.getDialect();
+QUeryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
 
-TransactionRunner transactionRunner = new TransactionRunner(manager);
+TransactionRunner transactionRunner = new TransactionRunner(queryRunnerFactory);
 
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
     @Override
