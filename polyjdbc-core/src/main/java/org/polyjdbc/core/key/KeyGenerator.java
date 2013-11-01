@@ -27,4 +27,6 @@ public interface KeyGenerator {
     long generateKey(String sequenceName, Transaction transaction) throws SQLException;
 
     long getKeyFromLastInsert(Transaction transaction)  throws SQLException;
+
+    void reset();
 }

@@ -42,4 +42,7 @@ public class AutoIncremented implements KeyGenerator {
         resultSet.next();
         return resultSet.getLong(1);
     }
+
+    public void reset() {
+    }
 }

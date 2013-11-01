@@ -79,4 +79,10 @@ public class SequenceAllocation implements KeyGenerator {
     public long getKeyFromLastInsert(Transaction transaction) {
         return lastKey.get();
     }
+
+    public void reset() {
+        synchronized (lock) {
+            sequences.clear();
+        }
+    }
 }

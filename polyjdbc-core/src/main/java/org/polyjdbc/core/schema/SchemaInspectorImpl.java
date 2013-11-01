@@ -81,6 +81,6 @@ class SchemaInspectorImpl implements SchemaInspector {
     @Override
     public void close() {
         transaction.commit();
-        transaction.closeWithArtifacts();
+        transaction.close();
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.Set;
 import org.polyjdbc.core.query.mapper.ObjectMapper;
@@ -39,7 +40,7 @@ import org.polyjdbc.core.query.mapper.ObjectMapper;
  *
  * @author Adam Dubiel
  */
-public interface QueryRunner {
+public interface QueryRunner extends Closeable {
 
     /**
      * Return single object retrieved using query and mapped to Java using mapper.

@@ -18,6 +18,7 @@ package org.polyjdbc.core.integration;
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.QueryRunnerFactory;
+import org.polyjdbc.core.util.TheCloser;
 
 /**
  *
@@ -32,12 +33,15 @@ public class TheCleaner {
     }
 
     public void cleanDB(String... tables) {
-        QueryRunner runner = queryRunnerFactory.create();
+        QueryRunner runner = null;
 
-        for (String table : tables) {
-            runner.delete(QueryFactory.delete().from(table));
+        try {
+            runner = queryRunnerFactory.create();
+            for (String table : tables) {
+                runner.delete(QueryFactory.delete().from(table));
+            }
+        } finally {
+            TheCloser.close(runner);
         }
-
-        runner.close();
     }
 }

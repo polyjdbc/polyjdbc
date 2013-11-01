@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.transaction;
 
+import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ import org.polyjdbc.core.exception.PolyJdbcException;
  *
  * @author Adam Dubiel
  */
-public class Transaction {
+public class Transaction implements Closeable {
 
     private Connection connection;
 
@@ -124,7 +125,7 @@ public class Transaction {
         }
     }
 
-    public void closeWithArtifacts() {
+    public void close() {
         try {
             if (connection != null && connection.isClosed()) {
                 throw new PolyJdbcException("CLOSING_CLOSED_CONNECTION", "Tried to close already closed connection! Check for some unwanted close() in your code.");

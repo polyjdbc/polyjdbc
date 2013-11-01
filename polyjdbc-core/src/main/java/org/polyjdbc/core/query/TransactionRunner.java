@@ -15,6 +15,8 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.util.TheCloser;
+
 /**
  * Run any number of operations in single transaction without the need to wrap
  * code in try-finally block as TransactionRunner takes care of resource freeing
@@ -54,9 +56,7 @@ public class TransactionRunner {
             runner = queryRunnerFactory.create();
             return operation.perform(runner);
         } finally {
-            if (runner != null) {
-                runner.close();
-            }
+            TheCloser.close(runner);
         }
     }
 }

@@ -98,6 +98,6 @@ class SchemaManagerImpl implements SchemaManager {
     @Override
     public void close() {
         transaction.commit();
-        transaction.closeWithArtifacts();
+        transaction.close();
     }
 }

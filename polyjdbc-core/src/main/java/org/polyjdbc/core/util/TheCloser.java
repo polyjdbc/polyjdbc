@@ -13,24 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.schema;
+package org.polyjdbc.core.util;
 
 import java.io.Closeable;
+import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Inspects database metadata. Should use one transaction per instance.
  *
  * @author Adam Dubiel
  */
-public interface SchemaInspector extends Closeable {
+public final class TheCloser {
 
-    /**
-     * Return if relation of given name exists in database.
-     */
-    boolean relationExists(String name);
+    private static final Logger logger = LoggerFactory.getLogger(TheCloser.class);
 
-    /**
-     * Close underlying transaction.
-     */
-    void close();
+    private TheCloser() {
+    }
+
+    public static void close(Closeable... toClose) {
+        try {
+            for (Closeable closeable : toClose) {
+                if (closeable != null) {
+                    closeable.close();
+                }
+            }
+        } catch (IOException exception) {
+            logger.warn("Failed to close resources!", exception);
+        }
+    }
 }

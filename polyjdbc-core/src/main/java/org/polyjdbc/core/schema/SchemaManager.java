@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.schema;
 
+import java.io.Closeable;
 import org.polyjdbc.core.schema.model.Schema;
 import org.polyjdbc.core.schema.model.SchemaEntity;
 
@@ -23,7 +24,7 @@ import org.polyjdbc.core.schema.model.SchemaEntity;
  *
  * @author Adam Dubiel
  */
-public interface SchemaManager {
+public interface SchemaManager extends Closeable {
 
     /**
      * Create schema matching provided schema model.

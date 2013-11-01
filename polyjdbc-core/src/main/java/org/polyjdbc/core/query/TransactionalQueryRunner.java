@@ -171,12 +171,12 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public void rollbackAndClose() {
         rollback();
-        transaction.closeWithArtifacts();
+        transaction.close();
     }
 
     @Override
     public void close() {
         commit();
-        transaction.closeWithArtifacts();
+        transaction.close();
     }
 }
