@@ -1,7 +1,4 @@
-
 # PolyJDBC
-----
-[![Build Status](https://drone.io/bitbucket.org/smartparam/polyjdbc/status.png)](https://drone.io/bitbucket.org/smartparam/polyjdbc/latest)
 
 PolyJDBC is a polyglot, lightweight wrapper around standard JDBC drivers with
 schema inspection/creation capabilities.
@@ -31,7 +28,7 @@ only 75kB, no dependencies except for slf4j logging API.
 * transaction-oriented
 * resources (Statements, ResultSets) are managed inside transaction scope
 * intiutive transaction commit/rollback support
-* DDL operation DSL (CREATE TABLE/INDEX/SEQUENCE with constraints, DROP \*)
+* DDL operation DSL (CREATE TABLE/INDEX/SEQUENCE with constraints, DROP *)
 * SQL query DSL (INSERT, SELECT, UPDATE, DELETE)
 * lightweight
 * schema inspection (table/sequence exists?)
@@ -53,31 +50,27 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.2.0</version>
+    <version>0.1.1</version>
 </dependency>
 ```
 
 ## Enough, show me the code
 
-### Querying
-
 Simple usage of low-level query runner:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-Dialect dialect = DialectRegistry.H2.getDialect();
-QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+Dialect dialect = DialectRegistry.dialect("H2");
+TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
 
-QueryRunner queryRunner = null;
+QueryRunner queryRunner = new TransactionalQueryRunner(manager.openTransaction());
 
 try {
-    queryRunner = queryRunnerFactory.create();
-    SelectQuery query = QueryFactory.selectAll().from("test").where("year = :year")
+    SelectQuery query = QueryFactory.select().query("select * from test where year = :year")
         .withArgument("year", 2013).limit(10);
     List<Test> tests = queryRunner.selectList(query, new TestMapper());
 }
 finally {
-    TheCloser.close(queryRunner);
+    queryRunner.close();
 }
 ```
 
@@ -86,13 +79,12 @@ finally {
 perform operations without runner create/close boilerplate use reusable **SimpleQueryRunner**:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-Dialect dialect = DialectRegistry.H2.getDialect();
-QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+Dialect dialect = DialectRegistry.dialect("H2");
+TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
 
-SimpleQueryRunner simpleRunner = new SimpleQueryRunner(queryRunnerFactory);
+SimpleQueryRunner simpleRunner = new SimpleQueryRunner(manager);
 
-SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
+SelectQuery query = QueryFactory.select().query("select * from test where name = :name")
         .withArgument("name", "test");
 
 Test test = simpleRunner.queryUnique(query, new TestMapper());
@@ -102,16 +94,15 @@ Test test = simpleRunner.queryUnique(query, new TestMapper());
 custom (or multiple) operations use reusable **TransactionRunner**:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-Dialect dialect = DialectRegistry.H2.getDialect();
-QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+Dialect dialect = DialectRegistry.dialect("H2");
+TransactionManager manager = new DataSourceTransactionManager(dialect, dataSource);
 
-TransactionRunner transactionRunner = new TransactionRunner(queryRunnerFactory);
+TransactionRunner transactionRunner = new TransactionRunner(manager);
 
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
     @Override
     public Test perform(QueryRunner queryRunner) {
-        SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
+        SelectQuery query = QueryFactory.select().query("select * from test where name = :name")
             .withArgument("name", "test");
         return queryRunner.queryUnique(query, new TestMapper());
     }
@@ -127,61 +118,6 @@ transactionRunner.run(new VoidTransactionWrapper() {
 });
 ```
 
-### Schema management
-
-PolyJDBC comes with tools for schema creating and deletion. More options for
-schema inspection are planned, although there is no concrete release date.
-
-To check if relation exists:
-
-```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
-
-SchemaInspector schemaInspector = null;
-try {
-    schemaInspector = schemaManagerFactory.createInspector();
-    boolean relationExists = schemaInspector.relationExists("testRelation);
-
-} finally {
-    TheCloser.close(schemaManager);
-}
-```
-
-To create new schema (group of relations):
-
-```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
-
-SchemaManager schemaManager = null;
-try {
-    schemaManager = schemaManagerFactory.createManager();
-
-    Schema schema = new Schema(configuration.getDialect());
-    schema.addRelation("test_one")
-        .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").notNull().and()
-        .withAttribute().string("name").withMaxLength(200).notNull().unique().and()
-        .withAttribute().integer("age").notNull().and()
-        .primaryKey("pk_test_one").using("id").and()
-        .build();
-    schema.addSequence("seq_test_one").build();
-    schema.addRelation("test_two")
-        .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").notNull().and()
-        .withAttribute().longAttr("fk_test_one").notNull().and()
-        .foreignKey("fk_test_one_id").references("test_one", "id").on("fk_test_one").and()
-        .build();
-    schema.addSequence("seq_test_two").build();
-
-    schemaManager.create(schema);
-} finally {
-    TheCloser.close(schemaManager);
-}
-```
-
-You don't need to define `Schema` object. Single `Relation`, `Sequence` or 'Index' can be
-created using `SchemaManager` as well.
-
 ## License
 
-PolyJDBC is published under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+PolyJDBC is published under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0). 
