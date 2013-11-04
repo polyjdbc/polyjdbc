@@ -59,22 +59,25 @@ all engines.
 
 ## Enough, show me the code
 
+### Querying
+
 Simple usage of low-level query runner:
 
 ```java
 TransactionManager manager = new DataSourceTransactionManager(dataSource);
 Dialect dialect = DialectRegistry.H2.getDialect();
-QUeryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
 
-QueryRunner queryRunner = queryRunnerFactory.create();
+QueryRunner queryRunner = null;
 
 try {
+    queryRunner = queryRunnerFactory.create();
     SelectQuery query = QueryFactory.selectAll().from("test").where("year = :year")
         .withArgument("year", 2013).limit(10);
     List<Test> tests = queryRunner.selectList(query, new TestMapper());
 }
 finally {
-    queryRunner.close();
+    TheCloser.close(queryRunner);
 }
 ```
 
@@ -85,7 +88,7 @@ perform operations without runner create/close boilerplate use reusable **Simple
 ```java
 TransactionManager manager = new DataSourceTransactionManager(dataSource);
 Dialect dialect = DialectRegistry.H2.getDialect();
-QUeryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
 
 SimpleQueryRunner simpleRunner = new SimpleQueryRunner(queryRunnerFactory);
 
@@ -101,7 +104,7 @@ custom (or multiple) operations use reusable **TransactionRunner**:
 ```java
 TransactionManager manager = new DataSourceTransactionManager(dataSource);
 Dialect dialect = DialectRegistry.H2.getDialect();
-QUeryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
 
 TransactionRunner transactionRunner = new TransactionRunner(queryRunnerFactory);
 
@@ -123,6 +126,61 @@ transactionRunner.run(new VoidTransactionWrapper() {
     }
 });
 ```
+
+### Schema management
+
+PolyJDBC comes with tools for schema creating and deletion. More options for
+schema inspection are planned, although there is no concrete release date.
+
+To check if relation exists:
+
+```java
+TransactionManager manager = new DataSourceTransactionManager(dataSource);
+SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
+
+SchemaInspector schemaInspector = null;
+try {
+    schemaInspector = schemaManagerFactory.createInspector();
+    boolean relationExists = schemaInspector.relationExists("testRelation);
+
+} finally {
+    TheCloser.close(schemaManager);
+}
+```
+
+To create new schema (group of relations):
+
+```java
+TransactionManager manager = new DataSourceTransactionManager(dataSource);
+SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
+
+SchemaManager schemaManager = null;
+try {
+    schemaManager = schemaManagerFactory.createManager();
+
+    Schema schema = new Schema(configuration.getDialect());
+    schema.addRelation("test_one")
+        .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").notNull().and()
+        .withAttribute().string("name").withMaxLength(200).notNull().unique().and()
+        .withAttribute().integer("age").notNull().and()
+        .primaryKey("pk_test_one").using("id").and()
+        .build();
+    schema.addSequence("seq_test_one").build();
+    schema.addRelation("test_two")
+        .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").notNull().and()
+        .withAttribute().longAttr("fk_test_one").notNull().and()
+        .foreignKey("fk_test_one_id").references("test_one", "id").on("fk_test_one").and()
+        .build();
+    schema.addSequence("seq_test_two").build();
+
+    schemaManager.create(schema);
+} finally {
+    TheCloser.close(schemaManager);
+}
+```
+
+You don't need to define `Schema` object. Single `Relation`, `Sequence` or 'Index' can be
+created using `SchemaManager` as well.
 
 ## License
 
