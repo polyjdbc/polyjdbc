@@ -141,8 +141,7 @@ SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
 SchemaInspector schemaInspector = null;
 try {
     schemaInspector = schemaManagerFactory.createInspector();
-    boolean relationExists = schemaInspector.relationExists("testRelation);
-
+    boolean relationExists = schemaInspector.relationExists("testRelation");
 } finally {
     TheCloser.close(schemaManager);
 }

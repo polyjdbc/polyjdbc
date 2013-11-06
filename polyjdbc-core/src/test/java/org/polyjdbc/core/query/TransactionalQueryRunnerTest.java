@@ -66,6 +66,22 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     }
 
     @Test
+    public void shouldInsertWithoutUsingSequenceAndReturn0IfNoneSequenceDefinedInInsertQuery() {
+        // given
+        InsertQuery insertQuery = QueryFactory.insert().into("test").value("id", 123)
+                .value("name", "test").value("some_count", 42).value("countable", true)
+                .value("separator_char", '|');
+        QueryRunner queryRunner = queryRunner();
+
+        // when
+        long generatedId = queryRunner.insert(insertQuery);
+        queryRunner.close();
+
+        // then
+        assertThat(generatedId).isEqualTo(0);
+    }
+
+    @Test
     public void shouldListAllItemsInTable() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();
@@ -96,7 +112,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
         assertThat(items).containsExactly(new TestItem("B", 43), new TestItem("B", 45), new TestItem("A", 10));
     }
 
-        @Test
+    @Test
     public void shouldReturnLimitedListOfItems() {
         // given
         database(queryRunner()).withItems(10).buildAndCloseTransaction();

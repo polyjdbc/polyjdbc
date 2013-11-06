@@ -41,7 +41,7 @@ import org.polyjdbc.core.util.TheCloser;
  */
 public class TransactionRunner {
 
-    private QueryRunnerFactory queryRunnerFactory;
+    private final QueryRunnerFactory queryRunnerFactory;
 
     public TransactionRunner(QueryRunnerFactory queryRunnerFactory) {
         this.queryRunnerFactory = queryRunnerFactory;

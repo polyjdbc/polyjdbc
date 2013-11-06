@@ -38,9 +38,9 @@ public class TransactionalQueryRunner implements QueryRunner {
 
     private static final EmptyMapper EMPTY_MAPPER = new EmptyMapper();
 
-    private Transaction transaction;
+    private final Transaction transaction;
 
-    private KeyGenerator keyGenerator;
+    private final KeyGenerator keyGenerator;
 
     public TransactionalQueryRunner(Transaction transaction, KeyGenerator keyGenerator) {
         this.transaction = transaction;
@@ -108,12 +108,16 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public long insert(InsertQuery insertQuery) {
         try {
-            long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
-            insertQuery.sequenceValue(key);
+            boolean useSequence = insertQuery.sequenceSet();
+
+            if (useSequence) {
+                long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
+                insertQuery.sequenceValue(key);
+            }
 
             insertWithoutKey(insertQuery);
 
-            return keyGenerator.getKeyFromLastInsert(transaction);
+            return useSequence ? keyGenerator.getKeyFromLastInsert(transaction) : 0;
         } catch (SQLException exception) {
             transaction.rollback();
             Query rawQuery = insertQuery.build();

@@ -33,11 +33,11 @@ public class InsertQuery {
 
     private static final int VALUES_LENGTH = 50;
 
-    private Query query;
+    private final Query query;
 
-    private StringBuilder valueNames = new StringBuilder(VALUES_LENGTH);
+    private final StringBuilder valueNames = new StringBuilder(VALUES_LENGTH);
 
-    private StringBuilder values = new StringBuilder(VALUES_LENGTH);
+    private final StringBuilder values = new StringBuilder(VALUES_LENGTH);
 
     private String sequenceField;
 
@@ -76,6 +76,10 @@ public class InsertQuery {
         this.sequenceField = sequenceField;
         this.sequenceName = sequenceName;
         return value(sequenceField, sequenceField);
+    }
+
+    boolean sequenceSet() {
+        return sequenceName != null;
     }
 
     String getSequenceName() {
