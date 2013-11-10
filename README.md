@@ -1,3 +1,5 @@
+![screenshot](https://bitbucket.org/smartparam/polyjdbc/raw/master/project-resources/polyjdbc_logo.png)
+
 # PolyJDBC
 
 PolyJDBC is a polyglot, lightweight wrapper around standard JDBC drivers with
