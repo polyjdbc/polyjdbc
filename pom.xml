@@ -10,7 +10,7 @@
 
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc-parent</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -41,7 +41,7 @@
         <url>https://bitbucket.org/smartparam/polyjdbc</url>
         <connection>scm:git:git@bitbucket.org:smartparam/polyjdbc.git</connection>
         <developerConnection>scm:git:git@bitbucket.org:smartparam/polyjdbc.git</developerConnection>
-        <tag>polyjdbc-0.2.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
