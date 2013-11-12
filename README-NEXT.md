@@ -1,3 +1,4 @@
+![screenshot](https://bitbucket.org/smartparam/polyjdbc/raw/master/project-resources/polyjdbc_logo.png)
 
 # PolyJDBC
 ----
