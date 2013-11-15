@@ -114,22 +114,6 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
     }
 
     @Test
-    public void shouldReturnNoItemsWhenINClauseIsEmpty() {
-        // given
-        database(queryRunner()).withItem("test1").withItem("test2").withItem("tes3").buildAndCloseTransaction();
-        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name in (:name)")
-                .withArgument("name", new String[] { });
-        QueryRunner runner = queryRunner();
-
-        // when
-        List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
-        runner.close();
-
-        // then
-        assertThat(items).hasSize(0);
-    }
-
-    @Test
     public void shouldReturnItemsMatchingContentsOfINClauseEvenIfNullElementPassed() {
         // given
         database(queryRunner()).withItem("test1").withItem("test2").withItem("tes3").buildAndCloseTransaction();
