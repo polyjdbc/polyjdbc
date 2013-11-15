@@ -15,8 +15,6 @@
  */
 package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
@@ -27,17 +25,17 @@ public final class SequenceBuilder {
 
     private Schema schema;
 
-    private SequenceBuilder(Dialect dialect, String name) {
-        this.sequence = new Sequence(dialect, name);
+    private SequenceBuilder(String name) {
+        this.sequence = new Sequence(name);
     }
 
     private SequenceBuilder(Schema schema, String name) {
-        this(schema.getDialect(), name);
+        this(name);
         this.schema = schema;
     }
 
-    public static SequenceBuilder sequence(Dialect dialect, String name) {
-        return new SequenceBuilder(dialect, name);
+    public static SequenceBuilder sequence(String name) {
+        return new SequenceBuilder(name);
     }
 
     public static SequenceBuilder sequence(Schema schema, String name) {

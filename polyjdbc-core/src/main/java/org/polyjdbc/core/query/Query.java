@@ -100,7 +100,6 @@ public class Query {
             replacement = createReplacement(arguments.get(argumentName));
             query = query.replaceFirst(foundPattern, replacement);
         }
-//        query = matcher.replaceAll(QUERY_PLACEHOLDER);
         compiled = true;
     }
 

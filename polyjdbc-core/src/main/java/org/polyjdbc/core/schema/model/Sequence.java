@@ -15,17 +15,15 @@
  */
 package org.polyjdbc.core.schema.model;
 
-import org.polyjdbc.core.dialect.Dialect;
-
 /**
  *
  * @author Adam Dubiel
  */
 public class Sequence implements SchemaEntity {
 
-    private String name;
+    private final String name;
 
-    Sequence(Dialect dialect, String name) {
+    Sequence(String name) {
         this.name = name;
     }
 

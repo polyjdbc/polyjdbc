@@ -25,7 +25,7 @@ public enum DialectRegistry {
     POSTGRES(new PostgresDialect()),
     MYSQL(new MysqlDialect());
 
-    private Dialect dialect;
+    private final Dialect dialect;
 
     private DialectRegistry(Dialect dialect) {
         this.dialect = dialect;
