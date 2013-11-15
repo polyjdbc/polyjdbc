@@ -25,7 +25,7 @@ import org.polyjdbc.core.query.QueryRunner;
  */
 public class DatabaseBuilder {
 
-    private QueryRunner queryRunner;
+    private final QueryRunner queryRunner;
 
     private int insertedItems;
 

@@ -18,13 +18,16 @@ package org.polyjdbc.core.query;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
  *
@@ -38,15 +41,17 @@ public class Query {
 
     private static final int AVERAGE_QUERY_LENGTH = 100;
 
+    private static final int ARGUMENT_REPLACEMENT_SIZE = 10;
+
     private String originalQuery;
 
     private String query;
 
     private StringBuilder builder = new StringBuilder(AVERAGE_QUERY_LENGTH);
 
-    private Map<String, Object> arguments = new HashMap<String, Object>();
+    private final Map<String, Object> arguments = new HashMap<String, Object>();
 
-    private List<Object> orderedArguments = new ArrayList<Object>();
+    private final List<Object> orderedArguments = new ArrayList<Object>();
 
     private boolean compiled = false;
 
@@ -86,25 +91,75 @@ public class Query {
         query = originalQuery;
 
         Matcher matcher = ARGUMENT_PATTERN.matcher(query);
-        String foundPattern;
+        String foundPattern, argumentName, replacement;
         while (matcher.find()) {
             foundPattern = matcher.group();
-            orderedArguments.add(arguments.get(foundPattern.replace(":", "")));
+            argumentName = foundPattern.substring(1);
+            orderedArguments.add(arguments.get(argumentName));
+
+            replacement = createReplacement(arguments.get(argumentName));
+            query = query.replaceFirst(foundPattern, replacement);
         }
-        query = matcher.replaceAll(QUERY_PLACEHOLDER);
+//        query = matcher.replaceAll(QUERY_PLACEHOLDER);
         compiled = true;
     }
 
-    public void injectValues(PreparedStatement preparedStatement) throws SQLException {
-        int index = 1;
-        for (Object argument : orderedArguments) {
-            if (argument != null) {
-                preparedStatement.setObject(index, argument, ColumnType.forClass(argument.getClass()).getSqlType());
-            } else {
-                preparedStatement.setObject(index, argument);
+    private String createReplacement(Object argument) {
+        if (isCollection(argument)) {
+            Iterator<?> iterator = createCollectionIterator(argument);
+
+            StringBuilder replacementBuilder = new StringBuilder(ARGUMENT_REPLACEMENT_SIZE);
+            if (!iterator.hasNext()) {
+                return "";
             }
-            index++;
+
+            while (iterator.hasNext()) {
+                replacementBuilder.append(QUERY_PLACEHOLDER).append(", ");
+                iterator.next();
+            }
+
+            StringBuilderUtil.deleteLastCharacters(replacementBuilder, 2);
+            return replacementBuilder.toString();
         }
+        return QUERY_PLACEHOLDER;
+    }
+
+    public void injectValues(PreparedStatement preparedStatement) throws SQLException {
+        int argumentNumber = 1;
+        for (Object argument : orderedArguments) {
+            if (isCollection(argument)) {
+                Iterator<?> iterator = createCollectionIterator(argument);
+                while (iterator.hasNext()) {
+                    injectValue(preparedStatement, argumentNumber, iterator.next());
+                    argumentNumber++;
+                }
+            } else {
+                injectValue(preparedStatement, argumentNumber, argument);
+                argumentNumber++;
+            }
+        }
+    }
+
+    private void injectValue(PreparedStatement preparedStatement, int argumentNumber, Object value) throws SQLException {
+        if (value != null) {
+            preparedStatement.setObject(argumentNumber, value, ColumnType.forClass(value.getClass()).getSqlType());
+        } else {
+            preparedStatement.setObject(argumentNumber, value);
+        }
+    }
+
+    private boolean isCollection(Object object) {
+        return object != null && (Iterable.class.isAssignableFrom(object.getClass()) || object.getClass().isArray());
+    }
+
+    private Iterator<?> createCollectionIterator(Object argument) {
+        Iterator<?> iterator;
+        if (argument.getClass().isArray()) {
+            iterator = Arrays.asList((Object[]) argument).iterator();
+        } else {
+            iterator = ((Iterable<?>) argument).iterator();
+        }
+        return iterator;
     }
 
     public PreparedStatement createStatement(Transaction transaction) throws SQLException {

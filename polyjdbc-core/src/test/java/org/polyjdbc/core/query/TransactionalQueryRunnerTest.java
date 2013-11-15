@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
+import java.util.Arrays;
 import java.util.List;
 import org.polyjdbc.core.exception.NonUniqueException;
 import org.polyjdbc.core.integration.DatabaseTest;
@@ -94,6 +95,54 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // then
         assertThat(items).hasSize(10);
+    }
+
+    @Test
+    public void shouldReturnItemsMatchingContentsOfINClause() {
+        // given
+        database(queryRunner()).withItem("test1").withItem("test2").withItem("tes3").buildAndCloseTransaction();
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name in (:name)")
+                .withArgument("name", Arrays.asList("test1", "test2"));
+        QueryRunner runner = queryRunner();
+
+        // when
+        List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
+        runner.close();
+
+        // then
+        assertThat(items).hasSize(2);
+    }
+
+    @Test
+    public void shouldReturnNoItemsWhenINClauseIsEmpty() {
+        // given
+        database(queryRunner()).withItem("test1").withItem("test2").withItem("tes3").buildAndCloseTransaction();
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name in (:name)")
+                .withArgument("name", new String[] { });
+        QueryRunner runner = queryRunner();
+
+        // when
+        List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
+        runner.close();
+
+        // then
+        assertThat(items).hasSize(0);
+    }
+
+    @Test
+    public void shouldReturnItemsMatchingContentsOfINClauseEvenIfNullElementPassed() {
+        // given
+        database(queryRunner()).withItem("test1").withItem("test2").withItem("tes3").buildAndCloseTransaction();
+        SelectQuery selectQuery = QueryFactory.selectAll().from("test").where("name in (:name)")
+                .withArgument("name", new String[] {"test1", null});
+        QueryRunner runner = queryRunner();
+
+        // when
+        List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
+        runner.close();
+
+        // then
+        assertThat(items).hasSize(1);
     }
 
     @Test

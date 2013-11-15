@@ -26,10 +26,9 @@ package org.polyjdbc.core.query;
  */
 public class DeleteQuery {
 
-    private Query query;
+    private final Query query = new Query();
 
     DeleteQuery() {
-        this.query = new Query();
     }
 
     Query build() {
