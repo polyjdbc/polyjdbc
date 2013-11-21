@@ -26,11 +26,11 @@ import org.polyjdbc.core.schema.model.Schema;
  */
 public class TestSchemaManager {
 
-    private Dialect dialect;
+    private final Dialect dialect;
 
     private Schema schema;
 
-    private SchemaManagerFactory schemaManagerFactory;
+    private final SchemaManagerFactory schemaManagerFactory;
 
     public TestSchemaManager(Dialect dialect, SchemaManagerFactory schemaManagerFactory) {
         this.dialect = dialect;
@@ -47,10 +47,23 @@ public class TestSchemaManager {
                 .withAttribute().integer("some_count").and()
                 .withAttribute().booleanAttr("countable").withDefaultValue(true).notNull().and()
                 .withAttribute().character("separator_char").withDefaultValue(';').notNull().and()
-                .constrainedBy().primaryKey("pk").using("id").and()
+                .constrainedBy().primaryKey("pk_test").using("id").and()
                 .build();
         schema.addIndex("idx_test_name").on("test").indexing("name").build();
         schema.addSequence("seq_test").build();
+
+        schema.addRelation("type_test")
+                .withAttribute().string("code").withMaxLength(40).unique().notNull().and()
+                .withAttribute().longAttr("long_attr").withDefaultValue(0).and()
+                .withAttribute().string("string_attr").withMaxLength(40).and()
+                .withAttribute().integer("integer_attr").withDefaultValue(0).and()
+                .withAttribute().booleanAttr("boolean_attr").withDefaultValue(false).and()
+                .withAttribute().character("character_attr").withDefaultValue('0').and()
+                .withAttribute().text("text_attr").and()
+                .withAttribute().date("date_attr").and()
+                .withAttribute().timestamp("timestamp_attr").and()
+                .constrainedBy().primaryKey("pk_type_test").using("code").and()
+                .build();
 
         SchemaManager manager = schemaManagerFactory.createManager();
         manager.create(schema);

@@ -84,12 +84,24 @@ public final class RelationBuilder {
         return StringAttributeBuilder.string(dialect, name, this);
     }
 
+    public TextAttributeBuilder text(String name) {
+        return TextAttributeBuilder.text(dialect, name, this);
+    }
+
     public CharAttributeBuilder character(String name) {
         return CharAttributeBuilder.character(dialect, name, this);
     }
 
     public BooleanAttributeBuilder booleanAttr(String name) {
         return BooleanAttributeBuilder.booleanAttr(dialect, name, this);
+    }
+
+    public DateAttributeBuilder date(String name) {
+        return DateAttributeBuilder.date(dialect, name, this);
+    }
+
+    public TimestampAttributeBuilder timestamp(String name) {
+        return TimestampAttributeBuilder.timestamp(dialect, name, this);
     }
 
     public RelationBuilder constrainedBy() {

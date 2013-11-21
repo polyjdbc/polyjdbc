@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2013 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+
+package org.polyjdbc.core.type;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface DialectTypes {
+public interface TypeWrapper {
 
-    String string(int characters);
+    Object value();
 
-    String text();
-
-    String character();
-
-    String date();
-
-    String timestamp();
-
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-
-    String bool();
 }

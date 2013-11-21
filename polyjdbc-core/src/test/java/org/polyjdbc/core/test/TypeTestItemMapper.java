@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2013 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+
+package org.polyjdbc.core.test;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.polyjdbc.core.query.mapper.ObjectMapper;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface DialectTypes {
+public class TypeTestItemMapper implements ObjectMapper<TypeTestItem> {
 
-    String string(int characters);
+    @Override
+    public TypeTestItem createObject(ResultSet resultSet) throws SQLException {
+        TypeTestItem item = new TypeTestItem();
 
-    String text();
+        item.text = resultSet.getString("text_attr");
+        item.date = resultSet.getDate("date_attr");
+        item.timestamp = resultSet.getTimestamp("timestamp_attr");
 
-    String character();
+        return item;
+    }
 
-    String date();
-
-    String timestamp();
-
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-
-    String bool();
 }

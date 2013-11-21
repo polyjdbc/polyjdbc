@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2013 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+
+package org.polyjdbc.core.type;
+
+import java.util.Date;
 
 /**
  *
  * @author Adam Dubiel
  */
-public interface DialectTypes {
+public class Timestamp implements TypeWrapper {
 
-    String string(int characters);
+    private final Date timestamp;
 
-    String text();
+    private Timestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 
-    String character();
+    public static Timestamp from(Date date) {
+        return new Timestamp(date);
+    }
 
-    String date();
+    public static Timestamp from(long millis) {
+        return new Timestamp(new Date(millis));
+    }
 
-    String timestamp();
+    public Object value() {
+        return timestamp;
+    }
 
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-
-    String bool();
 }

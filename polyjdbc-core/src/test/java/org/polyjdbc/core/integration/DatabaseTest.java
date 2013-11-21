@@ -68,7 +68,7 @@ public class DatabaseTest {
 
     @BeforeMethod(alwaysRun = true)
     public void cleanDatabase() {
-        cleaner.cleanDB("test");
+        cleaner.cleanDB("test", "type_test");
     }
 
     @AfterClass(alwaysRun = true)

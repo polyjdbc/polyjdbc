@@ -19,7 +19,7 @@ package org.polyjdbc.core.dialect;
  *
  * @author Adam Dubiel
  */
-public class DefaultDialectTypes implements DialectTypes{
+public class DefaultDialectTypes implements DialectTypes {
 
     @Override
     public String string(int characters) {
@@ -39,6 +39,11 @@ public class DefaultDialectTypes implements DialectTypes{
     @Override
     public String date() {
         return "DATE";
+    }
+
+    @Override
+    public String timestamp() {
+        return "TIMESTAMP";
     }
 
     @Override

@@ -26,7 +26,7 @@ import org.polyjdbc.core.util.TheCloser;
  */
 public class TheCleaner {
 
-    private QueryRunnerFactory queryRunnerFactory;
+    private final QueryRunnerFactory queryRunnerFactory;
 
     public TheCleaner(QueryRunnerFactory queryRunnerFactory) {
         this.queryRunnerFactory = queryRunnerFactory;

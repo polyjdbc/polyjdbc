@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.type.TypeWrapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
@@ -141,7 +142,13 @@ public class Query {
 
     private void injectValue(PreparedStatement preparedStatement, int argumentNumber, Object value) throws SQLException {
         if (value != null) {
-            preparedStatement.setObject(argumentNumber, value, ColumnType.forClass(value.getClass()).getSqlType());
+            ColumnType type = ColumnType.forClass(value.getClass());
+            Object injectedValue = value;
+            if(injectedValue instanceof TypeWrapper) {
+                injectedValue = ((TypeWrapper) value).value();
+            }
+
+            preparedStatement.setObject(argumentNumber, injectedValue, type.getSqlType());
         } else {
             preparedStatement.setObject(argumentNumber, value);
         }
