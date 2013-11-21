@@ -54,7 +54,7 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 </dependency>
 ```
 
