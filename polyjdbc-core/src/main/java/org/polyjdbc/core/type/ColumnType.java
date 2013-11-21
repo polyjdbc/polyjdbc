@@ -26,7 +26,7 @@ import org.polyjdbc.core.exception.UnknownColumnTypeException;
 public enum ColumnType {
 
     STRING(String.class, Types.VARCHAR),
-    TEXT(Text.class, Types.LONGNVARCHAR),
+    TEXT(Text.class, Types.VARCHAR),
     INT(Integer.class, Types.INTEGER),
     LONG(Long.class, Types.BIGINT),
     CHAR(Character.class, Types.CHAR),
