@@ -37,6 +37,106 @@ import static org.polyjdbc.core.query.QueryFactory.*;
 public class QueryColumnTypesTest extends DatabaseTest {
 
     @Test
+    public void shouldPersistAndReadStringColumn() {
+        // given
+        String persistedString = "I'm a string";
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("string_attr", persistedString);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getString()).isEqualTo(persistedString);
+    }
+
+    @Test
+    public void shouldPersistAndReadLongColumn() {
+        // given
+        long persistedLong = 124L;
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("long_attr", persistedLong);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getLongAttr()).isEqualTo(persistedLong);
+    }
+
+    @Test
+    public void shouldPersistAndReadIntegerColumn() {
+        // given
+        int persistedInt = 1241;
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("integer_attr", persistedInt);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getIntegerAttr()).isEqualTo(persistedInt);
+    }
+
+    @Test
+    public void shouldPersistAndReadBooleanColumn() {
+        // given
+        boolean persistedBoolean = true;
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("boolean_attr", persistedBoolean);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getBooleanAttr()).isEqualTo(persistedBoolean);
+    }
+
+    @Test
+    public void shouldPersistAndReadCharacterColumn() {
+        // given
+        char persistedChar = 'A';
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("character_attr", persistedChar);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getCharacter()).isEqualTo(persistedChar);
+    }
+
+    @Test
     public void shouldPersistAndReadDateColumn() {
         // given
         Date persistedDate = new LocalDate(2013, 5, 2).toDate();

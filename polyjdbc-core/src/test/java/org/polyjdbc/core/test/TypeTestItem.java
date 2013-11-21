@@ -54,7 +54,7 @@ public class TypeTestItem {
         return integerAttr;
     }
 
-    public boolean isBooleanAttr() {
+    public boolean getBooleanAttr() {
         return booleanAttr;
     }
 

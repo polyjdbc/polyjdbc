@@ -30,6 +30,11 @@ public class TypeTestItemMapper implements ObjectMapper<TypeTestItem> {
     public TypeTestItem createObject(ResultSet resultSet) throws SQLException {
         TypeTestItem item = new TypeTestItem();
 
+        item.string = resultSet.getString("string_attr");
+        item.longAttr = resultSet.getLong("long_attr");
+        item.integerAttr = resultSet.getInt("integer_attr");
+        item.booleanAttr = resultSet.getBoolean("boolean_attr");
+        item.character = resultSet.getString("character_attr").charAt(0);
         item.text = resultSet.getString("text_attr");
         item.date = resultSet.getDate("date_attr");
         item.timestamp = resultSet.getTimestamp("timestamp_attr");
