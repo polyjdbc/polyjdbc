@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.polyjdbc.core.query;
 
 import java.util.Date;
@@ -22,7 +21,6 @@ import org.joda.time.LocalDateTime;
 import org.polyjdbc.core.integration.DatabaseTest;
 import org.polyjdbc.core.test.TypeTestItem;
 import org.polyjdbc.core.test.TypeTestItemMapper;
-import org.polyjdbc.core.type.Text;
 import org.polyjdbc.core.type.Timestamp;
 import org.testng.annotations.Test;
 
@@ -181,7 +179,7 @@ public class QueryColumnTypesTest extends DatabaseTest {
         // given
         String persistedText = "Hello, this is a very very long text";
         InsertQuery insert = insert().into("type_test").value("code", "test")
-                .value("text_attr", Text.from(persistedText));
+                .value("text_attr", persistedText);
         SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
