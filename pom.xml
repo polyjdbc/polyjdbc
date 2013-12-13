@@ -38,9 +38,9 @@
     </developers>
 
     <scm>
-        <url>https://bitbucket.org/smartparam/polyjdbc</url>
-        <connection>scm:git:git@bitbucket.org:smartparam/polyjdbc.git</connection>
-        <developerConnection>scm:git:git@bitbucket.org:smartparam/polyjdbc.git</developerConnection>
+        <url>https://polyjdbc.org/polyjdbc/polyjdbc</url>
+        <connection>scm:git:git@github.com:polyjdbc/polyjdbc.git</connection>
+        <developerConnection>scm:git:git@github.com:polyjdbc/polyjdbc.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -236,11 +236,11 @@
 
     <distributionManagement>
         <repository>
-            <id>sonatype-nexus-staging</id>
+            <id>sonatype-nexus-staging-smartparam</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
+            <id>sonatype-nexus-snapshots-smartparam</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
