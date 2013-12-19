@@ -2,7 +2,7 @@
 
 # PolyJDBC
 ----
-[![Build Status](https://drone.io/bitbucket.org/smartparam/polyjdbc/status.png)](https://drone.io/bitbucket.org/smartparam/polyjdbc/latest)
+[![Build Status](https://travis-ci.org/polyjdbc/polyjdbc.png?branch=master)](https://travis-ci.org/polyjdbc/polyjdbc)
 
 PolyJDBC is a polyglot, lightweight wrapper around standard JDBC drivers with
 schema inspection/creation capabilities.
