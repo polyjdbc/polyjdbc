@@ -15,15 +15,9 @@
  */
 package org.polyjdbc.core.integration;
 
-import javax.sql.DataSource;
-import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.dialect.DialectRegistry;
-import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.QueryRunnerFactory;
-import org.polyjdbc.core.schema.SchemaManagerFactory;
-import org.polyjdbc.core.transaction.DataSourceTransactionManager;
-import org.polyjdbc.core.transaction.Transaction;
-import org.polyjdbc.core.transaction.TransactionManager;
+import java.util.Arrays;
+import java.util.List;
+import org.polyjdbc.core.infrastructure.PolyDatabaseTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -34,45 +28,37 @@ import org.testng.annotations.Parameters;
  *
  * @author Adam Dubiel
  */
-public class DatabaseTest {
-
-    private TransactionManager transactionManager;
-
-    private QueryRunnerFactory queryRunnerFactory;
+public class DatabaseTest extends PolyDatabaseTest {
 
     private TestSchemaManager schemaManager;
-
-    private TheCleaner cleaner;
-
-    protected Transaction transaction() {
-        return transactionManager.openTransaction();
-    }
-
-    protected QueryRunner queryRunner() {
-        return queryRunnerFactory.create();
-    }
 
     @Parameters({"dialect", "url", "user", "password"})
     @BeforeClass(alwaysRun = true)
     public void setUpDatabase(@Optional("H2") String dialectCode, @Optional("jdbc:h2:mem:test") String url, @Optional("polly") String user, @Optional("polly") String password) throws Exception {
-        Dialect dialect = DialectRegistry.dialect(dialectCode);
-        DataSource dataSource = DataSourceFactory.create(dialect, url, user, password);
+        super.createDatabase(dialectCode, url, user, password);
 
-        this.transactionManager = new DataSourceTransactionManager(dataSource);
-        this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
-        this.schemaManager = new TestSchemaManager(dialect, new SchemaManagerFactory(transactionManager));
-        this.cleaner = new TheCleaner(queryRunnerFactory);
-
+        this.schemaManager = new TestSchemaManager(dialect(), schemaManagerFactory());
         schemaManager.createSchema();
     }
 
     @BeforeMethod(alwaysRun = true)
+    @Override
     public void cleanDatabase() {
-        cleaner.cleanDB("test", "type_test");
+        super.cleanDatabase();
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDownDatabase() throws Exception {
+        super.dropDatabase();
+    }
+
+    @Override
+    protected List<String> entitiesToClean() {
+        return Arrays.asList("test", "type_test");
+    }
+
+    @Override
+    protected void dropSchema() {
         schemaManager.dropSchema();
     }
 }

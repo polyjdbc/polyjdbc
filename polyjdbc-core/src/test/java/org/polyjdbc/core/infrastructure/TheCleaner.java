@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.integration;
+package org.polyjdbc.core.infrastructure;
 
+import java.util.Arrays;
+import java.util.List;
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.QueryRunnerFactory;
@@ -32,12 +34,16 @@ public class TheCleaner {
         this.queryRunnerFactory = queryRunnerFactory;
     }
 
-    public void cleanDB(String... tables) {
+    public void cleanDB(String... entities) {
+        cleanDB(Arrays.asList(entities));
+    }
+
+    public void cleanDB(List<String> entities) {
         QueryRunner runner = null;
 
         try {
             runner = queryRunnerFactory.create();
-            for (String table : tables) {
+            for (String table : entities) {
                 runner.delete(QueryFactory.delete().from(table));
             }
         } finally {
