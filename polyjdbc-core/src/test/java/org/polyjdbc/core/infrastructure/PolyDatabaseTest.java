@@ -90,15 +90,13 @@ public abstract class PolyDatabaseTest {
         this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
 
         this.cleaner = new TheCleaner(queryRunnerFactory);
-        
+
         return dataSource;
     }
 
-    protected void cleanDatabase() {
-        cleaner.cleanDB(entitiesToClean());
+    protected void deleteFromRelations(List<String> relations) {
+        cleaner.cleanDB(relations);
     }
-
-    protected abstract List<String> entitiesToClean();
 
     protected void dropDatabase() throws Exception {
         dropSchema();

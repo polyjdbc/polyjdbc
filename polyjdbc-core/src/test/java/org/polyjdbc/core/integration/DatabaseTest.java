@@ -42,19 +42,13 @@ public class DatabaseTest extends PolyDatabaseTest {
     }
 
     @BeforeMethod(alwaysRun = true)
-    @Override
     public void cleanDatabase() {
-        super.cleanDatabase();
+        super.deleteFromRelations(Arrays.asList("test", "type_test"));
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDownDatabase() throws Exception {
         super.dropDatabase();
-    }
-
-    @Override
-    protected List<String> entitiesToClean() {
-        return Arrays.asList("test", "type_test");
     }
 
     @Override
