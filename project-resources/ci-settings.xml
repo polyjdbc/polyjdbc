@@ -7,12 +7,12 @@
         <server>
             <id>sonatype-nexus-staging-smartparam</id>
             <username>smartparam</username>
-            <password>${env.NEUXS_PASSWORD}</password>
+            <password>${env.NEXUS_PASSWORD}</password>
         </server>
 	    <server>
             <id>sonatype-nexus-snapshots-smartparam</id>
             <username>smartparam</username>
-            <password>${env.NEUXS_PASSWORD}</password>
+            <password>${env.NEXUS_PASSWORD}</password>
         </server>
     </servers>
 
