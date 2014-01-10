@@ -7,4 +7,4 @@ branches:
 
 env:
   global:
-    - secure: "fVwI32/S/+4AzyWxriYf7KLSc6PItRYMXKAI+e3yGF0V+ZAUHZUocrBFkerOE8T7qOkHdr4Sr+7xeahWMKQOg4ySmpeUn0+TT5YNZDtfcGy53DuJHaPFO9eJ6R8gx6Pn1idDtq06FDVXHGH9jsokm/QIQd1ddcXK7M2RYmaZ9RI="
+    - secure: "DcgB1wHDG1GiFZukDbUnHctE9iA1GogSyIqtsVnPdtVa9OelkVMtb7uVeb1S/X02rjGhrI8f1VGZ6Vqnm8+Uvqf91lMPrpn5/EBQ9LOUJEIqDErXswAWQTSa4yxwAhUGE99eI9pglxh40dAGmDhrKe7Lq1lnQbr3IGUrYgnolLw=" 
