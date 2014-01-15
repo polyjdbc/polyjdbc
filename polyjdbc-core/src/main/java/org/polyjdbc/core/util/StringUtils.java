@@ -37,7 +37,7 @@ public final class StringUtils {
 
         StringBuilder builder = new StringBuilder(values.length * SINGLE_VALUE_LENGTH);
         for (Object value : values) {
-            builder.append(value.toString()).append(separator);
+            builder.append(value == null ? "" : value.toString()).append(separator);
         }
         StringBuilderUtil.deleteLastCharacters(builder, separator.length());
         return builder.toString();
