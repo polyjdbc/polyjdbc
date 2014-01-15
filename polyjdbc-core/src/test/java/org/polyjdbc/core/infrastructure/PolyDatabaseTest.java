@@ -37,6 +37,8 @@ public abstract class PolyDatabaseTest {
 
     private Dialect dialect;
 
+    private DataSource dataSource;
+
     private TransactionManager transactionManager;
 
     private QueryRunnerFactory queryRunnerFactory;
@@ -47,6 +49,10 @@ public abstract class PolyDatabaseTest {
 
     protected Dialect dialect() {
         return dialect;
+    }
+
+    protected DataSource dataSource() {
+        return dataSource;
     }
 
     protected QueryRunnerFactory queryRunnerFactory() {
@@ -84,7 +90,7 @@ public abstract class PolyDatabaseTest {
     protected DataSource createDatabase(String dialectCode, String jdbcUrl, String user, String password) throws Exception {
         dialect = DialectRegistry.dialect(dialectCode);
 
-        DataSource dataSource = DataSourceFactory.create(dialect, jdbcUrl, user, password);
+        this.dataSource = DataSourceFactory.create(dialect, jdbcUrl, user, password);
         this.transactionManager = new DataSourceTransactionManager(dataSource);
         this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
         this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
