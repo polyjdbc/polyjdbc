@@ -10,7 +10,7 @@
 
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc-parent</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.2.2</version>
 
     <packaging>pom</packaging>
 
@@ -41,7 +41,7 @@
         <url>https://polyjdbc.org/polyjdbc/polyjdbc</url>
         <connection>scm:git:git@github.com:polyjdbc/polyjdbc.git</connection>
         <developerConnection>scm:git:git@github.com:polyjdbc/polyjdbc.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>polyjdbc-0.2.2</tag>
     </scm>
 
     <properties>
