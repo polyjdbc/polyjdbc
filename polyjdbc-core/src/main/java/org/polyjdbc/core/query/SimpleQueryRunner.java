@@ -28,7 +28,7 @@ import org.polyjdbc.core.query.mapper.ObjectMapper;
  */
 public class SimpleQueryRunner {
 
-    private TransactionRunner runner;
+    private final TransactionRunner runner;
 
     /**
      * Create new runner that will use given query runner factory to create query runners.
@@ -77,6 +77,17 @@ public class SimpleQueryRunner {
         return runner.run(new TransactionWrapper<Boolean>() {
             public Boolean perform(QueryRunner queryRunner) {
                 return queryRunner.queryExistence(query);
+            }
+        });
+    }
+
+    /**
+     * Run insert query, uses {@link QueryRunner#insert(org.polyjdbc.core.query.InsertQuery) }.
+     */
+    public long insert(final InsertQuery query) {
+        return runner.run(new TransactionWrapper<Long>() {
+            public Long perform(QueryRunner queryRunner) {
+                return queryRunner.insert(query);
             }
         });
     }
