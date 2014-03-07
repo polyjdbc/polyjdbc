@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core;
 
+import java.io.Closeable;
 import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.query.QueryRunner;
@@ -26,6 +27,7 @@ import org.polyjdbc.core.schema.SchemaManager;
 import org.polyjdbc.core.schema.SchemaManagerFactory;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.TransactionManager;
+import org.polyjdbc.core.util.TheCloser;
 
 /**
  *
@@ -69,5 +71,9 @@ public class PolyJDBC {
 
     public SchemaInspector schemaInspector() {
         return schemaManagerFactory.createInspector();
+    }
+
+    public void close(Closeable... toClose) {
+        TheCloser.close(toClose);
     }
 }

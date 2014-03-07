@@ -52,7 +52,7 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -63,20 +63,19 @@ all engines.
 Simple usage of low-level query runner:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
 Dialect dialect = DialectRegistry.H2.getDialect();
-QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
 
 QueryRunner queryRunner = null;
 
 try {
-    queryRunner = queryRunnerFactory.create();
+    queryRunner = polyjdbc.queryRunner();
     SelectQuery query = QueryFactory.selectAll().from("test").where("year = :year")
         .withArgument("year", 2013).limit(10);
     List<Test> tests = queryRunner.selectList(query, new TestMapper());
 }
 finally {
-    TheCloser.close(queryRunner);
+    polyjdbc.close(queryRunner);
 }
 ```
 
@@ -85,27 +84,23 @@ finally {
 perform operations without runner create/close boilerplate use reusable **SimpleQueryRunner**:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
 Dialect dialect = DialectRegistry.H2.getDialect();
-QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
-
-SimpleQueryRunner simpleRunner = new SimpleQueryRunner(queryRunnerFactory);
+PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
 
 SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
         .withArgument("name", "test");
 
-Test test = simpleRunner.queryUnique(query, new TestMapper());
+Test test = polyjdbc.simpleQueryRunner().queryUnique(query, new TestMapper());
 ```
 
 **SimpleQueryRunner** performs each query in new transaction. If you need to perform
 custom (or multiple) operations use reusable **TransactionRunner**:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
 Dialect dialect = DialectRegistry.H2.getDialect();
-QueryRunnerFactory queryRunnerFactory = new QueryRunnerFactory(dialect, manager);
+PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
 
-TransactionRunner transactionRunner = new TransactionRunner(queryRunnerFactory);
+TransactionRunner transactionRunner = polyjdbc.transactionRunner();
 
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
     @Override
@@ -134,27 +129,27 @@ schema inspection are planned, although there is no concrete release date.
 To check if relation exists:
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
+Dialect dialect = DialectRegistry.H2.getDialect();
+PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
 
 SchemaInspector schemaInspector = null;
 try {
-    schemaInspector = schemaManagerFactory.createInspector();
+    schemaInspector = polyjdbc.schemaInspector();
     boolean relationExists = schemaInspector.relationExists("testRelation");
 } finally {
-    TheCloser.close(schemaManager);
+    polyjdbc.close(schemaManager);
 }
 ```
 
 To create new schema (group of relations):
 
 ```java
-TransactionManager manager = new DataSourceTransactionManager(dataSource);
-SchemaManagerFactory schemaManagerFactory = new SchemaManagerFactory(manager);
+Dialect dialect = DialectRegistry.H2.getDialect();
+PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
 
 SchemaManager schemaManager = null;
 try {
-    schemaManager = schemaManagerFactory.createManager();
+    schemaManager = polyjdbc.schemaManager();
 
     Schema schema = new Schema(configuration.getDialect());
     schema.addRelation("test_one")
@@ -173,7 +168,7 @@ try {
 
     schemaManager.create(schema);
 } finally {
-    TheCloser.close(schemaManager);
+    polyjdbc.close(schemaManager);
 }
 ```
 
