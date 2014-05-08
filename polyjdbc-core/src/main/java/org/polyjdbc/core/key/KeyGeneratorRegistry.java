@@ -37,6 +37,9 @@ public final class KeyGeneratorRegistry {
 
         dialect = DialectRegistry.MYSQL.getDialect();
         addKeyGenerator(dialect, new AutoIncremented());
+
+        dialect = DialectRegistry.ORACLE.getDialect();
+        addKeyGenerator(dialect, new SequenceAllocation(dialect));
     }
 
     private KeyGeneratorRegistry() {
