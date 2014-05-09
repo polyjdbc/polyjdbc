@@ -32,6 +32,7 @@ public enum ColumnType {
     CHAR(Character.class, Types.CHAR),
     BOOLEAN(Boolean.class, Types.BOOLEAN),
     DATE(Date.class, Types.DATE),
+    SQLTIMESTAMP(java.sql.Timestamp.class, Types.DATE),
     TIMESTAMP(Timestamp.class, Types.TIMESTAMP);
 
     private int sqlType;
