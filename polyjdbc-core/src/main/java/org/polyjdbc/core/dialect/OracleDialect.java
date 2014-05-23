@@ -21,11 +21,13 @@ package org.polyjdbc.core.dialect;
  */
 public class OracleDialect extends AbstractDialect {
 
+    @Override
     public String getCode() {
         return "ORACLE";
     }
 
+    @Override
     public String nextFromSequence(String sequenceName) {
-        return "SELECT " + sequenceName + ".nextval";
+        return "SELECT " + sequenceName + ".nextval FROM dual";
     }
 }
