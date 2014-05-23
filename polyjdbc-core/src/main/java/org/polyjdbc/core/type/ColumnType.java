@@ -30,6 +30,7 @@ public enum ColumnType {
     TEXT(String.class, Types.VARCHAR),
     INT(Integer.class, Types.INTEGER),
     LONG(Long.class, Types.BIGINT),
+    FLOAT(Float.class, Types.FLOAT),
     CHAR(Character.class, Types.CHAR),
     BOOLEAN(Boolean.class, Types.BOOLEAN),
     DATE(Date.class, Types.DATE),
