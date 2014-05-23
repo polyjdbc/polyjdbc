@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.type;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.sql.Types;
 import org.polyjdbc.core.exception.UnknownColumnTypeException;
@@ -32,6 +33,7 @@ public enum ColumnType {
     CHAR(Character.class, Types.CHAR),
     BOOLEAN(Boolean.class, Types.BOOLEAN),
     DATE(Date.class, Types.DATE),
+    NUMBER(BigDecimal.class, Types.NUMERIC),
     SQLTIMESTAMP(java.sql.Timestamp.class, Types.DATE),
     TIMESTAMP(Timestamp.class, Types.TIMESTAMP);
 
