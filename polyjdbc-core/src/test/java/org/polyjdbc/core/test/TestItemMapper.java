@@ -25,6 +25,7 @@ import org.polyjdbc.core.query.mapper.ObjectMapper;
  */
 public class TestItemMapper implements ObjectMapper<TestItem> {
 
+    @Override
     public TestItem createObject(ResultSet resultSet) throws SQLException {
         return new TestItem(resultSet.getString("pseudo"), resultSet.getInt("some_count"));
     }

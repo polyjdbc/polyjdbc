@@ -62,6 +62,11 @@ public class DefaultDialectTypes implements DialectTypes {
     }
 
     @Override
+    public String floatType() {
+        return "FLOAT";
+    }
+
+    @Override
     public String bool() {
         return "BOOLEAN";
     }

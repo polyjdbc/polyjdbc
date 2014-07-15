@@ -16,7 +16,6 @@
 package org.polyjdbc.core.integration;
 
 import java.util.Arrays;
-import java.util.List;
 import org.polyjdbc.core.infrastructure.PolyDatabaseTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;

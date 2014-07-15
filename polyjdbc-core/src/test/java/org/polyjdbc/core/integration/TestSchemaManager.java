@@ -57,6 +57,8 @@ public class TestSchemaManager {
                 .withAttribute().longAttr("long_attr").withDefaultValue(0).and()
                 .withAttribute().string("string_attr").withMaxLength(40).and()
                 .withAttribute().integer("integer_attr").withDefaultValue(0).and()
+                .withAttribute().floatAttr("float_attr").withDefaultValue(0).and()
+                .withAttribute().number("number_attr").withIntegerPrecision(5).withDecimalPrecision(2).withDefaultValue(0).and()
                 .withAttribute().booleanAttr("boolean_attr").withDefaultValue(false).and()
                 .withAttribute().character("character_attr").withDefaultValue('0').and()
                 .withAttribute().text("text_attr").and()

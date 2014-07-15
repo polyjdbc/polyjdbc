@@ -16,6 +16,8 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.schema.model.FloatAttribute.FloatAttributeBuilder;
+import org.polyjdbc.core.schema.model.NumberAttribute.NumberAttributeBuilder;
 
 /**
  *
@@ -78,6 +80,14 @@ public final class RelationBuilder {
 
     public IntegerAttributeBuilder integer(String name) {
         return IntegerAttributeBuilder.integer(dialect, name, this);
+    }
+    
+    public FloatAttributeBuilder floatAttr(String name) {
+        return FloatAttributeBuilder.floatAttr(dialect, name, this);
+    }
+    
+    public NumberAttributeBuilder number(String name) {
+        return NumberAttributeBuilder.number(dialect, name, this);
     }
 
     public StringAttributeBuilder string(String name) {

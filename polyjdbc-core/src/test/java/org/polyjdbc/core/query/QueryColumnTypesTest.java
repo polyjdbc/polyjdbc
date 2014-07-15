@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -92,6 +93,46 @@ public class QueryColumnTypesTest extends DatabaseTest {
 
         // then
         assertThat(item.getIntegerAttr()).isEqualTo(persistedInt);
+    }
+    
+    @Test
+    public void shouldPersistAndReadFloatColumn() {
+        // given
+        float persistedFloat = 124.12F;
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("float_attr", persistedFloat);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getFloatAttr()).isEqualTo(persistedFloat);
+    }
+    
+    @Test
+    public void shouldPersistAndReadNumberColumn() {
+        // given
+        BigDecimal persistedNumber = BigDecimal.valueOf(124.12);
+        InsertQuery insert = insert().into("type_test").value("code", "test")
+                .value("number_attr", persistedNumber);
+        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getNumber()).isEqualTo(persistedNumber);
     }
 
     @Test

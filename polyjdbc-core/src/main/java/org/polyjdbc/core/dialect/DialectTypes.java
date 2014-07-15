@@ -36,6 +36,8 @@ public interface DialectTypes {
     String bigint(int integerPrecision);
 
     String number(int integerPrecision, int decimalPrecision);
+    
+    String floatType();
 
     String bool();
 }

@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.test;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -28,6 +29,10 @@ public class TypeTestItem {
     long longAttr;
 
     int integerAttr;
+
+    float floatAttr;
+
+    BigDecimal number;
 
     boolean booleanAttr;
 
@@ -52,6 +57,14 @@ public class TypeTestItem {
 
     public int getIntegerAttr() {
         return integerAttr;
+    }
+
+    public float getFloatAttr() {
+        return floatAttr;
+    }
+
+    public BigDecimal getNumber() {
+        return number;
     }
 
     public boolean getBooleanAttr() {

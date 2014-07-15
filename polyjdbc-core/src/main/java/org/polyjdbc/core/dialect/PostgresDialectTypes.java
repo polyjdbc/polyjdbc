@@ -26,6 +26,8 @@ public class PostgresDialectTypes extends DefaultDialectTypes {
         return "CHAR(1)";
     }
 
-
-
+    @Override
+    public String floatType() {
+        return "REAL";
+    }
 }

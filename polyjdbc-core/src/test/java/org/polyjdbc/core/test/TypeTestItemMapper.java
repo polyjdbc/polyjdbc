@@ -33,6 +33,8 @@ public class TypeTestItemMapper implements ObjectMapper<TypeTestItem> {
         item.string = resultSet.getString("string_attr");
         item.longAttr = resultSet.getLong("long_attr");
         item.integerAttr = resultSet.getInt("integer_attr");
+        item.floatAttr = resultSet.getFloat("float_attr");
+        item.number = resultSet.getBigDecimal("number_attr");
         item.booleanAttr = resultSet.getBoolean("boolean_attr");
         item.character = resultSet.getString("character_attr").charAt(0);
         item.text = resultSet.getString("text_attr");

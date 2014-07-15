@@ -15,4 +15,9 @@ public class OracleDialectTypes extends DefaultDialectTypes {
     public String number(int integerPrecision, int decimalPrecision) {
         return "NUMBER(" + integerPrecision + "," + decimalPrecision + ")";
     }
+
+    @Override
+    public String floatType() {
+        return "REAL";
+    }
 }
