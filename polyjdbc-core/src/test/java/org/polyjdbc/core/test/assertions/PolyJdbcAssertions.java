@@ -15,7 +15,7 @@
  */
 package org.polyjdbc.core.test.assertions;
 
-import org.fest.assertions.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.polyjdbc.core.exception.PolyJdbcException;
 import org.polyjdbc.core.query.QueryRunner;
 

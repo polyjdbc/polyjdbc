@@ -16,8 +16,8 @@
 package org.polyjdbc.core.test.assertions;
 
 import java.util.List;
-import org.fest.assertions.api.AbstractAssert;
-import org.fest.assertions.api.Assertions;
+import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.Assertions;
 import org.polyjdbc.core.query.mapper.EmptyMapper;
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;

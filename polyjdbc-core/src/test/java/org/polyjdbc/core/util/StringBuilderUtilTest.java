@@ -16,7 +16,7 @@
 package org.polyjdbc.core.util;
 
 import org.testng.annotations.Test;
-import static org.fest.assertions.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  *

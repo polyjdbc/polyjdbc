@@ -17,7 +17,9 @@ package org.polyjdbc.core.key;
 
 import org.polyjdbc.core.exception.SequenceLimitReachedException;
 import org.testng.annotations.Test;
-import static org.fest.assertions.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
 
 /**
  *

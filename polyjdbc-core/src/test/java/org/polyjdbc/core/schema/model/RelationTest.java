@@ -18,7 +18,7 @@ package org.polyjdbc.core.schema.model;
 
 import org.junit.Test;
 import org.polyjdbc.core.dialect.H2Dialect;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.polyjdbc.core.schema.model.RelationBuilder.relation;
 
 /**

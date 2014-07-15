@@ -24,7 +24,7 @@ import org.polyjdbc.core.test.TypeTestItemMapper;
 import org.polyjdbc.core.type.Timestamp;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.polyjdbc.core.query.QueryFactory.*;
 
 /**
@@ -171,7 +171,7 @@ public class QueryColumnTypesTest extends DatabaseTest {
         runner.close();
 
         // then
-        assertThat(item.getTimestamp()).isEqualTo(persistedDate);
+        assertThat(item.getTimestamp().getTime()).isEqualTo(persistedDate.getTime());
     }
 
     @Test
