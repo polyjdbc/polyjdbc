@@ -6,7 +6,9 @@ before_script:
 
 script:
   - "mvn test -P integration"
-  - "mvn deploy --settings project-resources/ci-settings.xml"
+
+after_success:
+  - "mvn -Dmaven.test.skip=true deploy --settings project-resources/ci-settings.xml"
 
 branches:
   only:
