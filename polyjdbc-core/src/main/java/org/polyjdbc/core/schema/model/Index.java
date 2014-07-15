@@ -39,7 +39,8 @@ public class Index implements SchemaEntity {
         this.dialect = dialect;
         this.name = name;
     }
-
+    
+    @Override
     public String getName() {
         return name;
     }
@@ -49,6 +50,7 @@ public class Index implements SchemaEntity {
         return ddl();
     }
 
+    @Override
     public String ddl() {
         StringBuilder builder = new StringBuilder(DDL_LENGTH);
         builder.append("CREATE INDEX ").append(name).append(" ON ").append(targetRelation).append("(")
@@ -56,6 +58,7 @@ public class Index implements SchemaEntity {
         return builder.toString();
     }
 
+    @Override
     public String dropDDL() {
         return dialect.constraints().dropIndex(name, targetRelation);
     }

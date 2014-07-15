@@ -52,4 +52,31 @@ public class SchemaInspectorImplTest extends DatabaseTest {
         // then
         assertThat(exists).isFalse();
     }
+    
+    @Test
+    public void shouldReturnTrueWhenIndexExists() {
+        // given
+        SchemaInspector inspector = new SchemaInspectorImpl(transaction());
+
+        // when
+        boolean exists = inspector.indexExists("test", "idx_test_name");
+        inspector.close();
+//        h2DatabaseInterface();
+
+        // then
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    public void shouldReturnFalseWhenAskingForUnexistentIndex() {
+        // given
+        SchemaInspector inspector = new SchemaInspectorImpl(transaction());
+
+        // when
+        boolean exists = inspector.indexExists("test", "unknown");
+        inspector.close();
+
+        // then
+        assertThat(exists).isFalse();
+    }
 }

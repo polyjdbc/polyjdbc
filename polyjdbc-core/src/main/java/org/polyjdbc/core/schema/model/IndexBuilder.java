@@ -41,7 +41,7 @@ public final class IndexBuilder {
     }
 
     public static IndexBuilder index(Schema schema, String name) {
-        return new IndexBuilder(schema.getDialect(), name);
+        return new IndexBuilder(schema, name);
     }
 
     public Index build() {

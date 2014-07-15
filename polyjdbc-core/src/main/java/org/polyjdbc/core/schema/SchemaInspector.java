@@ -28,9 +28,15 @@ public interface SchemaInspector extends Closeable {
      * Return if relation of given name exists in database.
      */
     boolean relationExists(String name);
+    
+    /**
+     * Return if index of given name exists for given relation database.
+     */
+    boolean indexExists(String relationName, String indexName);
 
     /**
      * Close underlying transaction.
      */
+    @Override
     void close();
 }

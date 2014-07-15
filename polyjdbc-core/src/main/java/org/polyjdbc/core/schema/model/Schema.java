@@ -26,11 +26,11 @@ import org.polyjdbc.core.dialect.Dialect;
  */
 public final class Schema {
 
-    private Dialect dialect;
+    private final Dialect dialect;
 
-    private List<SchemaEntity> entities = new ArrayList<SchemaEntity>();
+    private final List<SchemaEntity> entities = new ArrayList<SchemaEntity>();
 
-    private List<Sequence> sequences = new ArrayList<Sequence>();
+    private final List<Sequence> sequences = new ArrayList<Sequence>();
 
     public Schema(Dialect dialect) {
         this.dialect = dialect;

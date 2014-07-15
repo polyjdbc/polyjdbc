@@ -67,6 +67,25 @@ class SchemaInspectorImpl implements SchemaInspector {
         }
     }
 
+    @Override
+    public boolean indexExists(String relationName, String indexName) {
+        try {
+            ResultSet resultSet = metadata.getIndexInfo(catalog, schema, convertCase(relationName), false, true);
+            transaction.registerCursor(resultSet);
+
+            String normalizedIndexName = convertCase(indexName);
+            while(resultSet.next()) {
+                if(resultSet.getString("INDEX_NAME").equals(normalizedIndexName)) {
+                    return true;
+                }
+            }
+            
+            return false;
+        } catch (SQLException exception) {
+            throw new SchemaInspectionException("INDEX_LOOKUP_ERROR", "Failed to obtain relation index list when looking for indexes for relation " + relationName, exception);
+        }
+    }
+    
     private String convertCase(String identifier) throws SQLException {
         if(metadata.storesLowerCaseIdentifiers()) {
             return identifier.toLowerCase(locale);
