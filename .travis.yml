@@ -1,5 +1,12 @@
 language: java
-script: "mvn deploy --settings project-resources/ci-settings.xml"
+
+before_script:
+  - mysql -u root < project-resources/init-mysql.sql
+  - psql -U postgres -f project-resources/init-psql.sql
+
+script:
+  - "mvn test -P integration"
+  - "mvn deploy --settings project-resources/ci-settings.xml"
 
 branches:
   only:

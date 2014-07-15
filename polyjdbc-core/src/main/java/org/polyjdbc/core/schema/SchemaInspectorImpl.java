@@ -85,7 +85,7 @@ class SchemaInspectorImpl implements SchemaInspector {
             throw new SchemaInspectionException("INDEX_LOOKUP_ERROR", "Failed to obtain relation index list when looking for indexes for relation " + relationName, exception);
         }
     }
-    
+
     private String convertCase(String identifier) throws SQLException {
         if(metadata.storesLowerCaseIdentifiers()) {
             return identifier.toLowerCase(locale);
