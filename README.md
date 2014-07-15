@@ -41,6 +41,7 @@ only 75kB, no dependencies except for slf4j logging API.
 * H2
 * PostgreSQL
 * MySQL
+* Oracle (without limit/offset in SELECT)
 
 Thanks to [testng](http://testng.org/) magic PolyJDBC runs integration tests
 on each database. This way i can be sure that all features all supported across
