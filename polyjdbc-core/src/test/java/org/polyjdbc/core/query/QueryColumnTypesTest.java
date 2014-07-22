@@ -26,7 +26,6 @@ import org.polyjdbc.core.type.Timestamp;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.polyjdbc.core.query.QueryFactory.*;
 
 /**
  *
@@ -39,9 +38,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadStringColumn() {
         // given
         String persistedString = "I'm a string";
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("string_attr", persistedString);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -59,9 +58,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadLongColumn() {
         // given
         long persistedLong = 124L;
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("long_attr", persistedLong);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -79,9 +78,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadIntegerColumn() {
         // given
         int persistedInt = 1241;
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("integer_attr", persistedInt);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -94,14 +93,14 @@ public class QueryColumnTypesTest extends DatabaseTest {
         // then
         assertThat(item.getIntegerAttr()).isEqualTo(persistedInt);
     }
-    
+
     @Test
     public void shouldPersistAndReadFloatColumn() {
         // given
         float persistedFloat = 124.12F;
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("float_attr", persistedFloat);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -114,14 +113,14 @@ public class QueryColumnTypesTest extends DatabaseTest {
         // then
         assertThat(item.getFloatAttr()).isEqualTo(persistedFloat);
     }
-    
+
     @Test
     public void shouldPersistAndReadNumberColumn() {
         // given
         BigDecimal persistedNumber = BigDecimal.valueOf(124.12);
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("number_attr", persistedNumber);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -139,9 +138,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadBooleanColumn() {
         // given
         boolean persistedBoolean = true;
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("boolean_attr", persistedBoolean);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -159,9 +158,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadCharacterColumn() {
         // given
         char persistedChar = 'A';
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("character_attr", persistedChar);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -179,9 +178,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadDateColumn() {
         // given
         Date persistedDate = new LocalDate(2013, 5, 2).toDate();
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("date_attr", persistedDate);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -199,9 +198,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadTimestampColumn() {
         // given
         Date persistedDate = new LocalDateTime(2013, 5, 2, 15, 21, 59).toDate();
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("timestamp_attr", Timestamp.from(persistedDate));
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 
@@ -219,9 +218,9 @@ public class QueryColumnTypesTest extends DatabaseTest {
     public void shouldPersistAndReadTextColumn() {
         // given
         String persistedText = "Hello, this is a very very long text";
-        InsertQuery insert = insert().into("type_test").value("code", "test")
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
                 .value("text_attr", persistedText);
-        SelectQuery select = selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
 

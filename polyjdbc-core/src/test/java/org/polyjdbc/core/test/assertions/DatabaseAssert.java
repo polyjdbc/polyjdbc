@@ -18,39 +18,38 @@ package org.polyjdbc.core.test.assertions;
 import java.util.List;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
+import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.query.mapper.EmptyMapper;
-import org.polyjdbc.core.query.QueryFactory;
-import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.SelectQuery;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class DatabaseAssert extends AbstractAssert<DatabaseAssert, QueryRunner> {
+public class DatabaseAssert extends AbstractAssert<DatabaseAssert, PolyJDBC> {
 
-    private DatabaseAssert(QueryRunner actual) {
+    private DatabaseAssert(PolyJDBC actual) {
         super(actual, DatabaseAssert.class);
     }
 
-    public static DatabaseAssert assertThat(QueryRunner actual) {
+    public static DatabaseAssert assertThat(PolyJDBC actual) {
         return new DatabaseAssert(actual);
     }
 
     public DatabaseAssert contains(String name) {
-        boolean exists = actual.queryExistence(QueryFactory.selectAll().from("test").where("name = :name").withArgument("name", name));
+        boolean exists = actual.queryRunner().queryExistence(actual.query().selectAll().from("test").where("name = :name").withArgument("name", name));
         Assertions.assertThat(exists).isTrue();
         return this;
     }
 
     public DatabaseAssert contains(SelectQuery query) {
-        boolean exists = actual.queryExistence(query);
+        boolean exists = actual.queryRunner().queryExistence(query);
         Assertions.assertThat(exists).isTrue();
         return this;
     }
 
     public DatabaseAssert doesNotContain(SelectQuery query) {
-        boolean exists = actual.queryExistence(query);
+        boolean exists = actual.queryRunner().queryExistence(query);
         Assertions.assertThat(exists).isFalse();
         return this;
     }
@@ -68,7 +67,7 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, QueryRunner> 
     }
 
     private List<Object> selectAllItems() {
-        List<Object> items = actual.queryList(QueryFactory.selectAll().from("test"), new EmptyMapper());
+        List<Object> items = actual.queryRunner().queryList(actual.query().selectAll().from("test"), new EmptyMapper());
         return items;
     }
 

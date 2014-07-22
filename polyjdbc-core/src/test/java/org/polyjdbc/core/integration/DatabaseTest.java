@@ -36,7 +36,7 @@ public class DatabaseTest extends PolyDatabaseTest {
     public void setUpDatabase(@Optional("H2") String dialectCode, @Optional("jdbc:h2:mem:test") String url, @Optional("polly") String user, @Optional("polly") String password) throws Exception {
         super.createDatabase(dialectCode, url, user, password);
 
-        this.schemaManager = new TestSchemaManager(dialect(), schemaManagerFactory());
+        this.schemaManager = new TestSchemaManager(polyJDBC());
         schemaManager.createSchema();
     }
 

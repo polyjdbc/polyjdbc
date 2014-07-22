@@ -18,12 +18,12 @@ package org.polyjdbc.core.infrastructure;
 import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
+import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.key.KeyGeneratorRegistry;
+import org.polyjdbc.core.query.DialectQueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.QueryRunnerFactory;
-import org.polyjdbc.core.schema.SchemaManagerFactory;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.transaction.TransactionManager;
@@ -35,44 +35,36 @@ import org.polyjdbc.core.util.TheCloser;
  */
 public abstract class PolyDatabaseTest {
 
-    private Dialect dialect;
-
     private DataSource dataSource;
+
+    private PolyJDBC polyJDBC;
 
     private TransactionManager transactionManager;
 
-    private QueryRunnerFactory queryRunnerFactory;
-
-    private SchemaManagerFactory schemaManagerFactory;
-
     private TheCleaner cleaner;
 
+    protected PolyJDBC polyJDBC() {
+        return polyJDBC;
+    }
+
     protected Dialect dialect() {
-        return dialect;
+        return polyJDBC.dialect();
+    }
+
+    protected DialectQueryFactory query() {
+        return polyJDBC.query();
     }
 
     protected DataSource dataSource() {
         return dataSource;
     }
 
-    protected QueryRunnerFactory queryRunnerFactory() {
-        return queryRunnerFactory;
-    }
-
     protected QueryRunner queryRunner() {
-        return queryRunnerFactory.create();
+        return polyJDBC.queryRunner();
     }
 
     protected Transaction transaction() {
         return transactionManager.openTransaction();
-    }
-
-    protected SchemaManagerFactory schemaManagerFactory() {
-        return schemaManagerFactory;
-    }
-
-    protected TransactionManager transactionManager() {
-        return transactionManager;
     }
 
     protected void h2DatabaseInterface() {
@@ -88,14 +80,13 @@ public abstract class PolyDatabaseTest {
     }
 
     protected DataSource createDatabase(String dialectCode, String jdbcUrl, String user, String password) throws Exception {
-        dialect = DialectRegistry.dialect(dialectCode);
+        Dialect dialect = DialectRegistry.dialect(dialectCode);
 
         this.dataSource = DataSourceFactory.create(dialect, jdbcUrl, user, password);
+        this.polyJDBC = new PolyJDBC(dataSource, dialect);
         this.transactionManager = new DataSourceTransactionManager(dataSource);
-        this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
-        this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
 
-        this.cleaner = new TheCleaner(queryRunnerFactory);
+        this.cleaner = new TheCleaner(polyJDBC);
 
         return dataSource;
     }
@@ -106,7 +97,7 @@ public abstract class PolyDatabaseTest {
 
     protected void dropDatabase() throws Exception {
         dropSchema();
-        KeyGeneratorRegistry.keyGenerator(dialect).reset();
+        KeyGeneratorRegistry.keyGenerator(dialect()).reset();
     }
 
     protected abstract void dropSchema();
