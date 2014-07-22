@@ -35,6 +35,8 @@ import org.polyjdbc.core.util.TheCloser;
  */
 public class PolyJDBC {
 
+    private final Dialect dialect;
+
     private final TransactionManager transactionManager;
 
     private final QueryRunnerFactory queryRunnerFactory;
@@ -46,11 +48,16 @@ public class PolyJDBC {
     private final SchemaManagerFactory schemaManagerFactory;
 
     public PolyJDBC(DataSource dataSource, Dialect dialect) {
+        this.dialect = dialect;
         this.transactionManager = new DataSourceTransactionManager(dataSource);
         this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
         this.transactionRunner = new TransactionRunner(queryRunnerFactory);
         this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
+    }
+
+    public Dialect dialect() {
+        return dialect;
     }
 
     public QueryRunner queryRunner() {
