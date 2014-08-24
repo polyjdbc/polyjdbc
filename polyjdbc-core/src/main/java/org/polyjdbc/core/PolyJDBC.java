@@ -19,7 +19,6 @@ import java.io.Closeable;
 import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.query.DialectQueryFactory;
-import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.QueryRunnerFactory;
 import org.polyjdbc.core.query.SimpleQueryRunner;
@@ -89,6 +88,10 @@ public class PolyJDBC {
         return schemaManagerFactory.createInspector();
     }
 
+    public void rollback(QueryRunner... toRollback) {
+        TheCloser.rollback(toRollback);
+    }
+    
     public void close(Closeable... toClose) {
         TheCloser.close(toClose);
     }

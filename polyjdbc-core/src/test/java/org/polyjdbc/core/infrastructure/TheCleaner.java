@@ -45,6 +45,7 @@ public class TheCleaner {
             for (String table : entities) {
                 runner.delete(QueryFactory.delete().from(table));
             }
+            runner.commit();
         } finally {
             polyJDBC.close(runner);
         }

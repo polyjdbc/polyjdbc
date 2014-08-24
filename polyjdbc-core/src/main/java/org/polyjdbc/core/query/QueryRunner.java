@@ -107,12 +107,18 @@ public interface QueryRunner extends Closeable {
     void rollback();
 
     /**
+     * Commit actions and close transaction.
+     */
+    void commitAndClose();
+    
+    /**
      * Rollback actions and close transaction, freeing all resources.
      */
     void rollbackAndClose();
-
+    
     /**
-     * Commit and close transaction.
+     * Close transaction.
      */
+    @Override
     void close();
 }

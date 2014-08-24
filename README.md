@@ -53,7 +53,7 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -61,7 +61,7 @@ all engines.
 
 ### Querying
 
-Simple usage of low-level query runner:
+Usage of low-level query runner:
 
 ```java
 Dialect dialect = DialectRegistry.H2.getDialect();
@@ -71,9 +71,14 @@ QueryRunner queryRunner = null;
 
 try {
     queryRunner = polyjdbc.queryRunner();
-    SelectQuery query = QueryFactory.selectAll().from("test").where("year = :year")
+    SelectQuery query = polyJdbc.query().selectAll().from("test").where("year = :year")
         .withArgument("year", 2013).limit(10);
     List<Test> tests = queryRunner.selectList(query, new TestMapper());
+    queryRunner.commit()
+}
+catch(Exception exception) {
+    polyjdbc.rollback(queryRunner);
+    throw exception;
 }
 finally {
     polyjdbc.close(queryRunner);
@@ -81,14 +86,14 @@ finally {
 ```
 
 **QueryRunner** is created per transaction and should always be closed.
- **try-finally** is there to make sure that resources are really freed. If you want to
+ **try-catch-finally** is there to make sure that resources are really freed. If you want to
 perform operations without runner create/close boilerplate use reusable **SimpleQueryRunner**:
 
 ```java
 Dialect dialect = DialectRegistry.H2.getDialect();
 PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
 
-SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
+SelectQuery query = polyJdbc.query().selectAll().from("test").where("name = :name")
         .withArgument("name", "test");
 
 Test test = polyjdbc.simpleQueryRunner().queryUnique(query, new TestMapper());
@@ -106,7 +111,7 @@ TransactionRunner transactionRunner = polyjdbc.transactionRunner();
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
     @Override
     public Test perform(QueryRunner queryRunner) {
-        SelectQuery query = QueryFactory.selectAll().from("test").where("name = :name")
+        SelectQuery query = polyJdbc.query().selectAll().from("test").where("name = :name")
             .withArgument("name", "test");
         return queryRunner.queryUnique(query, new TestMapper());
     }
@@ -115,7 +120,7 @@ Test test = transactionRunner.run(new TransactionWrapper<Test>() {
 transactionRunner.run(new VoidTransactionWrapper() {
     @Override
     public void performVoid(QueryRunner queryRunner) {
-        DeleteQuery query = QueryFactory.delete().from("test").where("year < :year")
+        DeleteQuery query = polyJdbc.query().delete().from("test").where("year < :year")
             .withArgument("year", 2012);
         queryRunner.delete(query);
     }
@@ -179,3 +184,12 @@ created using `SchemaManager` as well.
 ## License
 
 PolyJDBC is published under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+## Changelog
+
+* **0.4.0** (24.08.2014)
+    * fixed bug with closing transaction on exception in query runners
+    * [API change] QueryRunner.close() does not commit, use QueryRunner.commit() explicitly
+    * [API change] some queries from QueryFactory.* now need Dialect (better Oracle support in future), use dialect-aware PolyJDBC.query() 
+* **previous versions**
+    * support for PostgreSQL, MySQL, H2 and partial support for Oracle

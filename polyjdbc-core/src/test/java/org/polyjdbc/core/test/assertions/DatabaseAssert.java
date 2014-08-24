@@ -72,6 +72,5 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, PolyJDBC> {
     }
 
     public void close() {
-        actual.close();
     }
 }

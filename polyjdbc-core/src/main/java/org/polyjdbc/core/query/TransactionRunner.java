@@ -15,13 +15,13 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.exception.TransactionInterruptedException;
 import org.polyjdbc.core.util.TheCloser;
 
 /**
- * Run any number of operations in single transaction without the need to wrap
- * code in try-finally block as TransactionRunner takes care of resource freeing
- * even when exception is thrown. TransactionRunner is reusable, creates transaction
- * per {@link #run(org.polyjdbc.core.query.TransactionWrapper) } method usage.
+ * Run any number of operations in single transaction without the need to wrap code in try-finally block as TransactionRunner takes care of
+ * resource freeing even when exception is thrown. TransactionRunner is reusable, creates transaction per {@link #run(org.polyjdbc.core.query.TransactionWrapper)
+ * } method usage.
  *
  * <pre>
  * Test test = transactionRunner.run(new TransactionWrapper<Test>() {
@@ -54,7 +54,13 @@ public class TransactionRunner {
         QueryRunner runner = null;
         try {
             runner = queryRunnerFactory.create();
-            return operation.perform(runner);
+            T result = operation.perform(runner);
+            runner.commit();
+
+            return result;
+        } catch (Throwable throwable) {
+            TheCloser.rollback(runner);
+            throw new TransactionInterruptedException(throwable);
         } finally {
             TheCloser.close(runner);
         }

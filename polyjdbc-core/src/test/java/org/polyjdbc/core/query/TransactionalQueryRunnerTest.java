@@ -43,7 +43,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         long insertedId = queryRunner.insert(insertQuery);
-        queryRunner.close();
+        queryRunner.commitAndClose();
 
         // then
         assertThat(insertedId).isGreaterThanOrEqualTo(1);
@@ -76,7 +76,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         long generatedId = queryRunner.insert(insertQuery);
-        queryRunner.close();
+        queryRunner.commitAndClose();
 
         // then
         assertThat(generatedId).isEqualTo(0);
@@ -91,7 +91,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(items).hasSize(10);
@@ -107,7 +107,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(items).hasSize(2);
@@ -123,7 +123,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<Object> items = runner.queryList(selectQuery, new EmptyMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(items).hasSize(1);
@@ -139,7 +139,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<TestItem> items = runner.queryList(selectQuery, new TestItemMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(items).containsExactly(new TestItem("B", 43), new TestItem("B", 45), new TestItem("A", 10));
@@ -154,7 +154,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<TestItem> items = runner.queryList(selectQuery, new TestItemMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(items).hasSize(5);
@@ -170,7 +170,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         List<TestItem> items = runner.queryList(selectQuery, new TestItemMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(items).containsExactly(new TestItem("B", 45), new TestItem("C", 43));
@@ -185,7 +185,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         Object item = runner.queryUnique(selectQuery, new EmptyMapper());
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(item).isNotNull();
@@ -236,7 +236,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         Object item = runner.queryUnique(selectQuery, new EmptyMapper(), false);
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(item).isNull();
@@ -250,7 +250,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         runner.update(query().update("test").set("pseudo", "goodPseudo").where("name = :name").withArgument("name", "test"));
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(polyJDBC()).contains(query().selectAll().from("test").where("pseudo = :pseudo").withArgument("pseudo", "goodPseudo")).close();
@@ -264,7 +264,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         runner.update(query().update("test").set("pseudo", "goodPseudo").where("pseudo = :pseudo").withArgument("pseudo", "wrongPseudo"));
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(polyJDBC()).contains(query().selectAll().from("test").where("pseudo = :pseudo").withArgument("pseudo", "goodPseudo")).close();
@@ -278,7 +278,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         int changedCount = runner.update(query().update("test").set("pseudo", "the same"));
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(changedCount).isEqualTo(10);
@@ -306,7 +306,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         runner.delete(query().delete().from("test"));
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(polyJDBC()).hasNoItems().close();
@@ -320,7 +320,7 @@ public class TransactionalQueryRunnerTest extends DatabaseTest {
 
         // when
         int deletedCount = runner.delete(query().delete().from("test"));
-        runner.close();
+        runner.commitAndClose();
 
         // then
         assertThat(deletedCount).isEqualTo(10);

@@ -168,8 +168,13 @@ public class TransactionalQueryRunner implements QueryRunner {
     }
 
     @Override
-    public void close() {
+    public void commitAndClose() {
         commit();
+        transaction.close();
+    }
+
+    @Override
+    public void close() {
         transaction.close();
     }
 }
