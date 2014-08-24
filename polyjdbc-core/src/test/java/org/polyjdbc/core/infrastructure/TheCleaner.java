@@ -17,10 +17,9 @@ package org.polyjdbc.core.infrastructure;
 
 import java.util.Arrays;
 import java.util.List;
+import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.QueryRunnerFactory;
-import org.polyjdbc.core.util.TheCloser;
 
 /**
  *
@@ -28,10 +27,10 @@ import org.polyjdbc.core.util.TheCloser;
  */
 public class TheCleaner {
 
-    private final QueryRunnerFactory queryRunnerFactory;
+    private final PolyJDBC polyJDBC;
 
-    public TheCleaner(QueryRunnerFactory queryRunnerFactory) {
-        this.queryRunnerFactory = queryRunnerFactory;
+    public TheCleaner(PolyJDBC polyJDBC) {
+        this.polyJDBC = polyJDBC;
     }
 
     public void cleanDB(String... entities) {
@@ -42,12 +41,13 @@ public class TheCleaner {
         QueryRunner runner = null;
 
         try {
-            runner = queryRunnerFactory.create();
+            runner = polyJDBC.queryRunner();
             for (String table : entities) {
                 runner.delete(QueryFactory.delete().from(table));
             }
+            runner.commit();
         } finally {
-            TheCloser.close(runner);
+            polyJDBC.close(runner);
         }
     }
 }

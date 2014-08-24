@@ -31,11 +31,11 @@ import org.polyjdbc.core.exception.PolyJdbcException;
  */
 public class Transaction implements Closeable {
 
-    private Connection connection;
+    private final Connection connection;
 
-    private List<Statement> statements = new ArrayList<Statement>();
+    private final List<Statement> statements = new ArrayList<Statement>();
 
-    private List<ResultSet> resultSets = new ArrayList<ResultSet>();
+    private final List<ResultSet> resultSets = new ArrayList<ResultSet>();
 
     public Transaction(Connection connection) {
         this.connection = connection;
@@ -125,6 +125,7 @@ public class Transaction implements Closeable {
         }
     }
 
+    @Override
     public void close() {
         try {
             if (connection != null && connection.isClosed()) {

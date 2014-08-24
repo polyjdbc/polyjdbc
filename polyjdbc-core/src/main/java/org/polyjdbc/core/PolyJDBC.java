@@ -18,6 +18,7 @@ package org.polyjdbc.core;
 import java.io.Closeable;
 import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.query.DialectQueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.QueryRunnerFactory;
 import org.polyjdbc.core.query.SimpleQueryRunner;
@@ -36,6 +37,8 @@ import org.polyjdbc.core.util.TheCloser;
 public class PolyJDBC {
 
     private final Dialect dialect;
+    
+    private final DialectQueryFactory queryFactory;
 
     private final TransactionManager transactionManager;
 
@@ -49,6 +52,7 @@ public class PolyJDBC {
 
     public PolyJDBC(DataSource dataSource, Dialect dialect) {
         this.dialect = dialect;
+        this.queryFactory = new DialectQueryFactory(dialect);
         this.transactionManager = new DataSourceTransactionManager(dataSource);
         this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
@@ -58,6 +62,10 @@ public class PolyJDBC {
 
     public Dialect dialect() {
         return dialect;
+    }
+    
+    public DialectQueryFactory query() {
+        return queryFactory;
     }
 
     public QueryRunner queryRunner() {
@@ -80,6 +88,10 @@ public class PolyJDBC {
         return schemaManagerFactory.createInspector();
     }
 
+    public void rollback(QueryRunner... toRollback) {
+        TheCloser.rollback(toRollback);
+    }
+    
     public void close(Closeable... toClose) {
         TheCloser.close(toClose);
     }

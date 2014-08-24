@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
@@ -33,18 +34,21 @@ public class SelectQuery {
 
     private static final int ORDER_BY_LENGTH = 20;
 
-    private Query query;
+    private final Dialect dialect;
+    
+    private final Query query;
 
     private StringBuilder orderBy;
 
     private String limit;
 
-    SelectQuery(String what) {
-        this.query = new Query();
+    SelectQuery(Dialect dialect, String what) {
+        this(dialect);
         this.query.append("SELECT ").append(what).append(" ");
     }
 
-    SelectQuery() {
+    SelectQuery(Dialect dialect) {
+        this.dialect = dialect;
         this.query = new Query();
     }
 

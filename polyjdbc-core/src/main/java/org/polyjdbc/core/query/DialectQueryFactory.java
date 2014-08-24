@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2014 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,21 @@ package org.polyjdbc.core.query;
 import org.polyjdbc.core.dialect.Dialect;
 
 /**
- * Creates query using simple DSL.
  *
  * @author Adam Dubiel
  */
-public final class QueryFactory {
+public class DialectQueryFactory {
 
-    private QueryFactory() {
+    private final Dialect dialect;
+
+    public DialectQueryFactory(Dialect dialect) {
+        this.dialect = dialect;
     }
 
     /**
      * Create insert query.
      */
-    public static InsertQuery insert() {
+    public InsertQuery insert() {
         return new InsertQuery();
     }
 
@@ -38,7 +40,7 @@ public final class QueryFactory {
      * Create select query, specifying the <b>select</b> clause.
      * <pre>QueryFactory.select("columnA, columnB");</pre>
      */
-    public static SelectQuery select(Dialect dialect, String what) {
+    public SelectQuery select(String what) {
         return new SelectQuery(dialect, what);
     }
 
@@ -46,7 +48,7 @@ public final class QueryFactory {
      * Create select query which selects all columns, equivalent to
      * <code>QueryFactory.select("*")</code>.
      */
-    public static SelectQuery selectAll(Dialect dialect) {
+    public SelectQuery selectAll() {
         return new SelectQuery(dialect, "*");
     }
 
@@ -59,21 +61,21 @@ public final class QueryFactory {
      * .withArgument("column", 2);
      * </pre>
      */
-    public static SelectQuery select(Dialect dialect) {
+    public SelectQuery select() {
         return new SelectQuery(dialect);
     }
 
     /**
      * Create update query on given table.
      */
-    public static UpdateQuery update(String what) {
+    public UpdateQuery update(String what) {
         return new UpdateQuery(what);
     }
 
     /**
      * Create delete query.
      */
-    public static DeleteQuery delete() {
+    public DeleteQuery delete() {
         return new DeleteQuery();
     }
 }

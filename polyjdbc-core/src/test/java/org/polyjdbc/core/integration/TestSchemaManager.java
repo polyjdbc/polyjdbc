@@ -15,9 +15,8 @@
  */
 package org.polyjdbc.core.integration;
 
-import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.schema.SchemaManager;
-import org.polyjdbc.core.schema.SchemaManagerFactory;
 import org.polyjdbc.core.schema.model.Schema;
 
 /**
@@ -26,19 +25,16 @@ import org.polyjdbc.core.schema.model.Schema;
  */
 public class TestSchemaManager {
 
-    private final Dialect dialect;
+    private final PolyJDBC polyJDBC;
 
     private Schema schema;
 
-    private final SchemaManagerFactory schemaManagerFactory;
-
-    public TestSchemaManager(Dialect dialect, SchemaManagerFactory schemaManagerFactory) {
-        this.dialect = dialect;
-        this.schemaManagerFactory = schemaManagerFactory;
+    public TestSchemaManager(PolyJDBC polyJDBC) {
+        this.polyJDBC = polyJDBC;
     }
 
     public void createSchema() {
-        schema = new Schema(dialect);
+        schema = new Schema(polyJDBC.dialect());
 
         schema.addRelation("test")
                 .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").and()
@@ -67,14 +63,22 @@ public class TestSchemaManager {
                 .constrainedBy().primaryKey("pk_type_test").using("code").and()
                 .build();
 
-        SchemaManager manager = schemaManagerFactory.createManager();
-        manager.create(schema);
-        manager.close();
+        SchemaManager manager = null;
+        try {
+            manager = polyJDBC.schemaManager();
+            manager.create(schema);
+        } finally {
+            polyJDBC.close(manager);
+        }
     }
 
     public void dropSchema() {
-        SchemaManager manager = schemaManagerFactory.createManager();
-        manager.drop(schema);
-        manager.close();
+        SchemaManager manager = null;
+        try {
+            manager = polyJDBC.schemaManager();
+            manager.drop(schema);
+        } finally {
+            polyJDBC.close(manager);
+        }
     }
 }

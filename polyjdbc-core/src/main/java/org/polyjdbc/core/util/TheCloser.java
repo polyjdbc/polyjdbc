@@ -17,6 +17,7 @@ package org.polyjdbc.core.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import org.polyjdbc.core.query.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,23 @@ public final class TheCloser {
                 }
             }
         } catch (IOException exception) {
-            logger.warn("Failed to close resources!", exception);
+            logger.warn("Failed to close resource", exception);
+        }
+    }
+
+    public static void rollback(QueryRunner... toRollback) {
+        for (QueryRunner closeable : toRollback) {
+            if (closeable != null) {
+                closeable.rollback();
+            }
+        }
+    }
+    
+    public static void commit(QueryRunner... toCommit) {
+        for (QueryRunner closeable : toCommit) {
+            if (closeable != null) {
+                closeable.commit();
+            }
         }
     }
 }
