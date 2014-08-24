@@ -41,6 +41,7 @@
         <url>https://polyjdbc.org/polyjdbc/polyjdbc</url>
         <connection>scm:git:git@github.com:polyjdbc/polyjdbc.git</connection>
         <developerConnection>scm:git:git@github.com:polyjdbc/polyjdbc.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
