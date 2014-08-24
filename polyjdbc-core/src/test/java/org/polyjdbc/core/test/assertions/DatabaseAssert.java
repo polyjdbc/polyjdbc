@@ -37,19 +37,19 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, PolyJDBC> {
     }
 
     public DatabaseAssert contains(String name) {
-        boolean exists = actual.queryRunner().queryExistence(actual.query().selectAll().from("test").where("name = :name").withArgument("name", name));
+        boolean exists = actual.simpleQueryRunner().queryExistence(actual.query().selectAll().from("test").where("name = :name").withArgument("name", name));
         Assertions.assertThat(exists).isTrue();
         return this;
     }
 
     public DatabaseAssert contains(SelectQuery query) {
-        boolean exists = actual.queryRunner().queryExistence(query);
+        boolean exists = actual.simpleQueryRunner().queryExistence(query);
         Assertions.assertThat(exists).isTrue();
         return this;
     }
 
     public DatabaseAssert doesNotContain(SelectQuery query) {
-        boolean exists = actual.queryRunner().queryExistence(query);
+        boolean exists = actual.simpleQueryRunner().queryExistence(query);
         Assertions.assertThat(exists).isFalse();
         return this;
     }
@@ -67,7 +67,7 @@ public class DatabaseAssert extends AbstractAssert<DatabaseAssert, PolyJDBC> {
     }
 
     private List<Object> selectAllItems() {
-        List<Object> items = actual.queryRunner().queryList(actual.query().selectAll().from("test"), new EmptyMapper());
+        List<Object> items = actual.simpleQueryRunner().queryList(actual.query().selectAll().from("test"), new EmptyMapper());
         return items;
     }
 
