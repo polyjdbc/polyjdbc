@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.sql.DataSource;
 import org.polyjdbc.core.PolyJDBC;
+import org.polyjdbc.core.PolyJDBCBuilder;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.key.KeyGeneratorRegistry;
@@ -29,10 +30,6 @@ import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.transaction.TransactionManager;
 import org.polyjdbc.core.util.TheCloser;
 
-/**
- *
- * @author Adam Dubiel
- */
 public abstract class PolyDatabaseTest {
 
     private DataSource dataSource;
@@ -83,7 +80,7 @@ public abstract class PolyDatabaseTest {
         Dialect dialect = DialectRegistry.dialect(dialectCode);
 
         this.dataSource = DataSourceFactory.create(dialect, jdbcUrl, user, password);
-        this.polyJDBC = new PolyJDBC(dataSource, dialect);
+        this.polyJDBC = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
         this.transactionManager = new DataSourceTransactionManager(dataSource);
 
         this.cleaner = new TheCleaner(polyJDBC);

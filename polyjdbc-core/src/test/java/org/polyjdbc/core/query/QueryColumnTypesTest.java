@@ -27,10 +27,6 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- *
- * @author Adam Dubiel
- */
 @Test(groups = "integration")
 public class QueryColumnTypesTest extends DatabaseTest {
 

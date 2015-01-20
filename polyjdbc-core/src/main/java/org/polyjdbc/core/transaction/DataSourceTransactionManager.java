@@ -20,10 +20,6 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.polyjdbc.core.exception.PolyJdbcException;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class DataSourceTransactionManager implements TransactionManager {
 
     private DataSource dataSource;
@@ -43,7 +39,7 @@ public class DataSourceTransactionManager implements TransactionManager {
         try {
             connection = dataSource.getConnection();
             connection.setAutoCommit(autoCommit);
-            return new Transaction(connection);
+            return new Transaction(connection, new ManagedTransactionState(connection));
         } catch (SQLException e) {
             throw new PolyJdbcException("OPEN_CONNECTION_ERROR", "Failed to obtain connection from datasource.", e);
         }

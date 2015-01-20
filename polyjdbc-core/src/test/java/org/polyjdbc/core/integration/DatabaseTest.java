@@ -23,10 +23,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class DatabaseTest extends PolyDatabaseTest {
 
     private TestSchemaManager schemaManager;

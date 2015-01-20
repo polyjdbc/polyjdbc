@@ -16,29 +16,17 @@
 package org.polyjdbc.core.transaction;
 
 import java.io.Closeable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import org.polyjdbc.core.exception.PolyJdbcException;
+import java.sql.*;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class Transaction implements Closeable {
 
     private final Connection connection;
 
-    private final List<Statement> statements = new ArrayList<Statement>();
+    private final TransactionState transactionState;
 
-    private final List<ResultSet> resultSets = new ArrayList<ResultSet>();
-
-    public Transaction(Connection connection) {
+    Transaction(Connection connection, TransactionState transactionState) {
         this.connection = connection;
+        this.transactionState = transactionState;
     }
 
     public Connection getConnection() {
@@ -50,7 +38,7 @@ public class Transaction implements Closeable {
             registerStatement(preparedStatement);
             return preparedStatement.executeUpdate();
         } catch (SQLException exception) {
-            rollback();
+            transactionState.rollback();
             throw exception;
         }
     }
@@ -60,7 +48,7 @@ public class Transaction implements Closeable {
             registerStatement(preparedStatement);
             return preparedStatement.execute();
         } catch (SQLException exception) {
-            rollback();
+            transactionState.rollback();
             throw exception;
         }
     }
@@ -72,7 +60,7 @@ public class Transaction implements Closeable {
             registerCursor(resultSet);
             return resultSet;
         } catch (SQLException exception) {
-            rollback();
+            transactionState.rollback();
             throw exception;
         }
     }
@@ -81,7 +69,7 @@ public class Transaction implements Closeable {
         try {
             return connection.prepareStatement(query);
         } catch (SQLException exception) {
-            rollback();
+            transactionState.rollback();
             throw exception;
         }
     }
@@ -92,57 +80,29 @@ public class Transaction implements Closeable {
             registerStatement(statement);
             return statement;
         } catch (SQLException exception) {
-            rollback();
+            transactionState.rollback();
             throw exception;
         }
     }
 
     public void registerStatement(Statement statement) {
-        statements.add(0, statement);
+        transactionState.registerStatement(statement);
     }
 
     public void registerCursor(ResultSet resultSet) {
-        resultSets.add(0, resultSet);
+        transactionState.registerCursor(resultSet);
     }
 
     public void commit() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.commit();
-            }
-        } catch (SQLException exception) {
-            throw new PolyJdbcException("TRANSACTION_COMMIT_ERROR", "Failed to commit transaction transaction.", exception);
-        }
+        transactionState.commit();
     }
 
     public void rollback() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.rollback();
-            }
-        } catch (SQLException exception) {
-            throw new PolyJdbcException("TRANSACTION_ROLLBACK_ERROR", "Failed to rollback transaction.", exception);
-        }
+        transactionState.rollback();
     }
 
     @Override
     public void close() {
-        try {
-            if (connection != null && connection.isClosed()) {
-                throw new PolyJdbcException("CLOSING_CLOSED_CONNECTION", "Tried to close already closed connection! Check for some unwanted close() in your code.");
-            }
-
-            for (ResultSet resultSet : resultSets) {
-                resultSet.close();
-            }
-            for (Statement statement : statements) {
-                statement.close();
-            }
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException exception) {
-            throw new PolyJdbcException("TRANSACTION_CLOSE_ERROR", "Failed to close transaction.", exception);
-        }
+        transactionState.close();
     }
 }

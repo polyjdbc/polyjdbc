@@ -21,10 +21,6 @@ import org.polyjdbc.core.query.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author Adam Dubiel
- */
 public final class TheCloser {
 
     private static final Logger logger = LoggerFactory.getLogger(TheCloser.class);
