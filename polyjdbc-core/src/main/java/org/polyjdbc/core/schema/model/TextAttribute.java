@@ -16,21 +16,11 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnTypeMapper;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class TextAttribute extends Attribute {
 
     public TextAttribute(Dialect dialect, String name) {
         super(dialect, name);
-    }
-
-    @Override
-    public ColumnTypeMapper getType() {
-        return ColumnTypeMapper.TEXT;
     }
 
     @Override

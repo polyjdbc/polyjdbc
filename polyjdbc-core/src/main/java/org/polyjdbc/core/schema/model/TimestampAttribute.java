@@ -16,21 +16,11 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnTypeMapper;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class TimestampAttribute extends Attribute {
 
     public TimestampAttribute(Dialect dialect, String name) {
         super(dialect, name);
-    }
-
-    @Override
-    public ColumnTypeMapper getType() {
-        return ColumnTypeMapper.TIMESTAMP;
     }
 
     @Override

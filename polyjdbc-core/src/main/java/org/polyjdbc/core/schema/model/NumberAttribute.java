@@ -16,12 +16,7 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnTypeMapper;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class NumberAttribute extends Attribute {
 
     private int integerPrecision;
@@ -30,11 +25,6 @@ public class NumberAttribute extends Attribute {
 
     public NumberAttribute(Dialect dialect, String name) {
         super(dialect, name);
-    }
-
-    @Override
-    public ColumnTypeMapper getType() {
-        return ColumnTypeMapper.NUMBER;
     }
 
     @Override

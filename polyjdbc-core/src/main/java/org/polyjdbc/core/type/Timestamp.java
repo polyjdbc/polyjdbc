@@ -34,6 +34,7 @@ public class Timestamp implements TypeWrapper {
         return new Timestamp(new Date(millis));
     }
 
+    @Override
     public Object value() {
         return timestamp;
     }
