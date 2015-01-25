@@ -16,7 +16,7 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 
 /**
  *
@@ -31,8 +31,8 @@ public class IntegerAttribute extends Attribute {
     }
 
     @Override
-    public ColumnType getType() {
-        return ColumnType.INT;
+    public ColumnTypeMapper getType() {
+        return ColumnTypeMapper.INT;
     }
 
     @Override

@@ -16,7 +16,7 @@
 package org.polyjdbc.core;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.query.DialectQueryFactory;
+import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.SimpleQueryRunner;
 import org.polyjdbc.core.query.TransactionRunner;
@@ -29,7 +29,7 @@ public interface PolyJDBC {
 
     public Dialect dialect();
 
-    public DialectQueryFactory query();
+    public QueryFactory query();
 
     public QueryRunner queryRunner();
 

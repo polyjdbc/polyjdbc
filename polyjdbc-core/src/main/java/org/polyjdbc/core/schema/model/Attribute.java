@@ -17,7 +17,7 @@ package org.polyjdbc.core.schema.model;
 
 import java.util.Arrays;
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.TypeUtil;
 
 /**
@@ -45,7 +45,7 @@ public abstract class Attribute implements SchemaPart {
         this.name = name;
     }
 
-    public abstract ColumnType getType();
+    public abstract ColumnTypeMapper getType();
 
     protected abstract String getTypeDefinition();
 

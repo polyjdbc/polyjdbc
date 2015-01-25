@@ -16,7 +16,7 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 
 /**
  *
@@ -29,8 +29,8 @@ public class BooleanAttribute extends Attribute {
     }
 
     @Override
-    public ColumnType getType() {
-        return ColumnType.BOOLEAN;
+    public ColumnTypeMapper getType() {
+        return ColumnTypeMapper.BOOLEAN;
     }
 
     @Override

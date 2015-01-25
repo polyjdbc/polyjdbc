@@ -6,6 +6,7 @@ import org.polyjdbc.core.schema.SchemaInspector;
 import org.polyjdbc.core.schema.SchemaManager;
 import org.polyjdbc.core.schema.SchemaManagerFactory;
 import org.polyjdbc.core.transaction.TransactionManager;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.TheCloser;
 
 import java.io.Closeable;
@@ -14,7 +15,7 @@ public class DefaultPolyJDBC implements PolyJDBC {
 
     private final Dialect dialect;
 
-    private final DialectQueryFactory queryFactory;
+    private final QueryFactory queryFactory;
 
     private final QueryRunnerFactory queryRunnerFactory;
 
@@ -24,9 +25,9 @@ public class DefaultPolyJDBC implements PolyJDBC {
 
     private final SchemaManagerFactory schemaManagerFactory;
 
-    DefaultPolyJDBC(Dialect dialect, TransactionManager transactionManager) {
+    DefaultPolyJDBC(Dialect dialect, ColumnTypeMapper typeMapper, TransactionManager transactionManager) {
         this.dialect = dialect;
-        this.queryFactory = new DialectQueryFactory(dialect);
+        this.queryFactory = new QueryFactory(dialect, typeMapper);
         this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
         this.transactionRunner = new TransactionRunner(queryRunnerFactory);
@@ -37,7 +38,7 @@ public class DefaultPolyJDBC implements PolyJDBC {
         return dialect;
     }
 
-    public DialectQueryFactory query() {
+    public QueryFactory query() {
         return queryFactory;
     }
 

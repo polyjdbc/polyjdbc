@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
@@ -45,8 +46,8 @@ public class InsertQuery {
 
     private boolean sequenceValueSet;
 
-    InsertQuery() {
-        this.query = new Query();
+    InsertQuery(ColumnTypeMapper typeMapper) {
+        this.query = new Query(typeMapper);
     }
 
     Query build() {
@@ -94,7 +95,7 @@ public class InsertQuery {
      * Insert value into column of given name. Object is automatically translated
      * onto matching JDBC type.
      *
-     * @see org.polyjdbc.core.type.ColumnType
+     * @see org.polyjdbc.core.type.ColumnTypeMapper
      */
     public InsertQuery value(String fieldName, Object value) {
         valueNames.append(fieldName).append(", ");

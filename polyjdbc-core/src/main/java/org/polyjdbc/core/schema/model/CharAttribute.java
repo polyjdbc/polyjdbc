@@ -16,7 +16,7 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 
 /**
  *
@@ -29,8 +29,8 @@ public class CharAttribute extends Attribute {
     }
 
     @Override
-    public ColumnType getType() {
-        return ColumnType.CHAR;
+    public ColumnTypeMapper getType() {
+        return ColumnTypeMapper.CHAR;
     }
 
     @Override

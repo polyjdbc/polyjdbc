@@ -16,10 +16,6 @@
 
 package org.polyjdbc.core.type;
 
-/**
- *
- * @author Adam Dubiel
- */
 public interface TypeWrapper {
 
     Object value();

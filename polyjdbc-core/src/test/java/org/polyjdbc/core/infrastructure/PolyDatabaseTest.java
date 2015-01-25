@@ -23,7 +23,7 @@ import org.polyjdbc.core.PolyJDBCBuilder;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.key.KeyGeneratorRegistry;
-import org.polyjdbc.core.query.DialectQueryFactory;
+import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.Transaction;
@@ -48,7 +48,7 @@ public abstract class PolyDatabaseTest {
         return polyJDBC.dialect();
     }
 
-    protected DialectQueryFactory query() {
+    protected QueryFactory query() {
         return polyJDBC.query();
     }
 
