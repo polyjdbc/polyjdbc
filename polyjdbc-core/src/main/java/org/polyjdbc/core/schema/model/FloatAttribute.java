@@ -16,21 +16,11 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class FloatAttribute extends Attribute {
 
     public FloatAttribute(Dialect dialect, String name) {
         super(dialect, name);
-    }
-
-    @Override
-    public ColumnType getType() {
-        return ColumnType.FLOAT;
     }
 
     @Override

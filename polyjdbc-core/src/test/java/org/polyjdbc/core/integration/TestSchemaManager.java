@@ -19,10 +19,6 @@ import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.schema.SchemaManager;
 import org.polyjdbc.core.schema.model.Schema;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class TestSchemaManager {
 
     private final PolyJDBC polyJDBC;

@@ -16,23 +16,13 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class StringAttribute extends Attribute {
 
     private int maxLength;
 
     public StringAttribute(Dialect dialect, String name) {
         super(dialect, name);
-    }
-
-    @Override
-    public ColumnType getType() {
-        return ColumnType.STRING;
     }
 
     @Override

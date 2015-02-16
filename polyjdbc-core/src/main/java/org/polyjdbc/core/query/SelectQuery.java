@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
@@ -42,14 +43,14 @@ public class SelectQuery {
 
     private String limit;
 
-    SelectQuery(Dialect dialect, String what) {
-        this(dialect);
+    SelectQuery(Dialect dialect, ColumnTypeMapper typeMapper, String what) {
+        this(dialect, typeMapper);
         this.query.append("SELECT ").append(what).append(" ");
     }
 
-    SelectQuery(Dialect dialect) {
+    SelectQuery(Dialect dialect, ColumnTypeMapper typeMapper) {
         this.dialect = dialect;
-        this.query = new Query();
+        this.query = new Query(typeMapper);
     }
 
     Query build() {
@@ -134,7 +135,7 @@ public class SelectQuery {
      * not start with <b>:</b>, it is stripped off. Based on passed object type,
      * appropriate JDBC type is chosen.
      *
-     * @see org.polyjdbc.core.type.ColumnType
+     * @see org.polyjdbc.core.type.ColumnTypeMapper
      *
      */
     public SelectQuery withArgument(String argumentName, Object object) {

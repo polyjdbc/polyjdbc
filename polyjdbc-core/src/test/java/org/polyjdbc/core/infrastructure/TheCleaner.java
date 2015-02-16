@@ -15,16 +15,12 @@
  */
 package org.polyjdbc.core.infrastructure;
 
-import java.util.Arrays;
-import java.util.List;
 import org.polyjdbc.core.PolyJDBC;
-import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 
-/**
- *
- * @author Adam Dubiel
- */
+import java.util.Arrays;
+import java.util.List;
+
 public class TheCleaner {
 
     private final PolyJDBC polyJDBC;
@@ -39,11 +35,10 @@ public class TheCleaner {
 
     public void cleanDB(List<String> entities) {
         QueryRunner runner = null;
-
         try {
             runner = polyJDBC.queryRunner();
             for (String table : entities) {
-                runner.delete(QueryFactory.delete().from(table));
+                runner.delete(polyJDBC.query().delete().from(table));
             }
             runner.commit();
         } finally {

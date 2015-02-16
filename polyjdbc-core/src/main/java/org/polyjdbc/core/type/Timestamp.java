@@ -18,10 +18,6 @@ package org.polyjdbc.core.type;
 
 import java.util.Date;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class Timestamp implements TypeWrapper {
 
     private final Date timestamp;
@@ -38,6 +34,7 @@ public class Timestamp implements TypeWrapper {
         return new Timestamp(new Date(millis));
     }
 
+    @Override
     public Object value() {
         return timestamp;
     }

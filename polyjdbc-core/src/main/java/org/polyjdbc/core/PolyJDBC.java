@@ -15,84 +15,33 @@
  */
 package org.polyjdbc.core;
 
-import java.io.Closeable;
-import javax.sql.DataSource;
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.query.DialectQueryFactory;
+import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
-import org.polyjdbc.core.query.QueryRunnerFactory;
 import org.polyjdbc.core.query.SimpleQueryRunner;
 import org.polyjdbc.core.query.TransactionRunner;
 import org.polyjdbc.core.schema.SchemaInspector;
 import org.polyjdbc.core.schema.SchemaManager;
-import org.polyjdbc.core.schema.SchemaManagerFactory;
-import org.polyjdbc.core.transaction.DataSourceTransactionManager;
-import org.polyjdbc.core.transaction.TransactionManager;
-import org.polyjdbc.core.util.TheCloser;
 
-/**
- *
- * @author Adam Dubiel
- */
-public class PolyJDBC {
+import java.io.Closeable;
 
-    private final Dialect dialect;
-    
-    private final DialectQueryFactory queryFactory;
+public interface PolyJDBC {
 
-    private final TransactionManager transactionManager;
+    public Dialect dialect();
 
-    private final QueryRunnerFactory queryRunnerFactory;
+    public QueryFactory query();
 
-    private final SimpleQueryRunner simpleQueryRunner;
+    public QueryRunner queryRunner();
 
-    private final TransactionRunner transactionRunner;
+    public SimpleQueryRunner simpleQueryRunner();
 
-    private final SchemaManagerFactory schemaManagerFactory;
+    public TransactionRunner transactionRunner();
 
-    public PolyJDBC(DataSource dataSource, Dialect dialect) {
-        this.dialect = dialect;
-        this.queryFactory = new DialectQueryFactory(dialect);
-        this.transactionManager = new DataSourceTransactionManager(dataSource);
-        this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
-        this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
-        this.transactionRunner = new TransactionRunner(queryRunnerFactory);
-        this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
-    }
+    public SchemaManager schemaManager();
 
-    public Dialect dialect() {
-        return dialect;
-    }
-    
-    public DialectQueryFactory query() {
-        return queryFactory;
-    }
+    SchemaInspector schemaInspector();
 
-    public QueryRunner queryRunner() {
-        return queryRunnerFactory.create();
-    }
+    void rollback(QueryRunner... toRollback);
 
-    public SimpleQueryRunner simpleQueryRunner() {
-        return simpleQueryRunner;
-    }
-
-    public TransactionRunner transactionRunner() {
-        return transactionRunner;
-    }
-
-    public SchemaManager schemaManager() {
-        return schemaManagerFactory.createManager();
-    }
-
-    public SchemaInspector schemaInspector() {
-        return schemaManagerFactory.createInspector();
-    }
-
-    public void rollback(QueryRunner... toRollback) {
-        TheCloser.rollback(toRollback);
-    }
-    
-    public void close(Closeable... toClose) {
-        TheCloser.close(toClose);
-    }
+    void close(Closeable... toClose);
 }

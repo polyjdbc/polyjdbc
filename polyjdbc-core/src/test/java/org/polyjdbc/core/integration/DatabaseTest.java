@@ -17,20 +17,17 @@ package org.polyjdbc.core.integration;
 
 import java.util.Arrays;
 import org.polyjdbc.core.infrastructure.PolyDatabaseTest;
+import org.polyjdbc.core.test.DatabaseBuilder;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class DatabaseTest extends PolyDatabaseTest {
 
     private TestSchemaManager schemaManager;
-
+    
     @Parameters({"dialect", "url", "user", "password"})
     @BeforeClass(alwaysRun = true)
     public void setUpDatabase(@Optional("H2") String dialectCode, @Optional("jdbc:h2:mem:test") String url, @Optional("polly") String user, @Optional("polly") String password) throws Exception {
@@ -50,6 +47,10 @@ public class DatabaseTest extends PolyDatabaseTest {
         super.dropDatabase();
     }
 
+    protected DatabaseBuilder database() {
+        return DatabaseBuilder.database(polyJDBC());
+    }
+    
     @Override
     protected void dropSchema() {
         schemaManager.dropSchema();

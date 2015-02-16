@@ -15,30 +15,30 @@
  */
 package org.polyjdbc.core.test;
 
+import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.query.InsertQuery;
-import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class DatabaseBuilder {
 
-    private final QueryRunner queryRunner;
+    private final PolyJDBC polyJDBC;
 
+    private final QueryRunner queryRunner;
+    
     private int insertedItems;
 
-    private DatabaseBuilder(QueryRunner queryRunner) {
-        this.queryRunner = queryRunner;
+    private DatabaseBuilder(PolyJDBC polyJDBC) {
+        this.polyJDBC = polyJDBC;
+        this.queryRunner = polyJDBC.queryRunner();
     }
 
-    public static DatabaseBuilder database(QueryRunner queryRunner) {
-        return new DatabaseBuilder(queryRunner);
+    public static DatabaseBuilder database(PolyJDBC polyJDBC) {
+        return new DatabaseBuilder(polyJDBC);
     }
 
     public void buildAndCloseTransaction() {
-        queryRunner.commitAndClose();
+        queryRunner.commit();
+        polyJDBC.close(queryRunner);
     }
 
     public DatabaseBuilder withItem(String name, int count) {
@@ -46,7 +46,7 @@ public class DatabaseBuilder {
     }
 
     public DatabaseBuilder withItem(String name, String pseudo, int count) {
-        InsertQuery insertQuery = QueryFactory.insert().into("test").sequence("id", "seq_test")
+        InsertQuery insertQuery = polyJDBC.query().insert().into("test").sequence("id", "seq_test")
                 .value("name", name).value("pseudo", pseudo)
                 .value("some_count", count).value("countable", true)
                 .value("separator_char", '|');

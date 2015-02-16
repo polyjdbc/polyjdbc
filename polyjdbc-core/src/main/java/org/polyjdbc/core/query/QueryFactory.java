@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2014 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,40 @@
 package org.polyjdbc.core.query;
 
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.type.ColumnTypeMapper;
 
-/**
- * Creates query using simple DSL.
- *
- * @author Adam Dubiel
- */
-public final class QueryFactory {
+public class QueryFactory {
 
-    private QueryFactory() {
+    private final Dialect dialect;
+
+    private final ColumnTypeMapper typeMapper;
+    
+    public QueryFactory(Dialect dialect, ColumnTypeMapper typeMapper) {
+        this.dialect = dialect;
+        this.typeMapper = typeMapper;
     }
 
     /**
      * Create insert query.
      */
-    public static InsertQuery insert() {
-        return new InsertQuery();
+    public InsertQuery insert() {
+        return new InsertQuery(typeMapper);
     }
 
     /**
      * Create select query, specifying the <b>select</b> clause.
      * <pre>QueryFactory.select("columnA, columnB");</pre>
      */
-    public static SelectQuery select(Dialect dialect, String what) {
-        return new SelectQuery(dialect, what);
+    public SelectQuery select(String what) {
+        return new SelectQuery(dialect, typeMapper, what);
     }
 
     /**
      * Create select query which selects all columns, equivalent to
      * <code>QueryFactory.select("*")</code>.
      */
-    public static SelectQuery selectAll(Dialect dialect) {
-        return new SelectQuery(dialect, "*");
+    public SelectQuery selectAll() {
+        return new SelectQuery(dialect, typeMapper, "*");
     }
 
     /**
@@ -59,21 +61,21 @@ public final class QueryFactory {
      * .withArgument("column", 2);
      * </pre>
      */
-    public static SelectQuery select(Dialect dialect) {
-        return new SelectQuery(dialect);
+    public SelectQuery select() {
+        return new SelectQuery(dialect, typeMapper);
     }
 
     /**
      * Create update query on given table.
      */
-    public static UpdateQuery update(String what) {
-        return new UpdateQuery(what);
+    public UpdateQuery update(String what) {
+        return new UpdateQuery(typeMapper, what);
     }
 
     /**
      * Create delete query.
      */
-    public static DeleteQuery delete() {
-        return new DeleteQuery();
+    public DeleteQuery delete() {
+        return new DeleteQuery(typeMapper);
     }
 }

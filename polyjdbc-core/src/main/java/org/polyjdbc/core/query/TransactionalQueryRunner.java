@@ -30,10 +30,6 @@ import org.polyjdbc.core.query.mapper.EmptyMapper;
 import org.polyjdbc.core.query.mapper.ObjectMapper;
 import org.polyjdbc.core.transaction.Transaction;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class TransactionalQueryRunner implements QueryRunner {
 
     private static final EmptyMapper EMPTY_MAPPER = new EmptyMapper();

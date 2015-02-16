@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 /**
@@ -40,8 +41,8 @@ public class UpdateQuery {
 
     private StringBuilder where = new StringBuilder(VALUES_LENGTH);
 
-    UpdateQuery(String what) {
-        this.query = new Query();
+    UpdateQuery(ColumnTypeMapper typeMapper, String what) {
+        this.query = new Query(typeMapper);
         this.query.append("UPDATE ").append(what).append(" SET ");
     }
 
@@ -57,7 +58,7 @@ public class UpdateQuery {
      * Set column to update. Object is automatically translated
      * onto matching JDBC type.
      *
-     * @see org.polyjdbc.core.type.ColumnType
+     * @see org.polyjdbc.core.type.ColumnTypeMapper
      */
     public UpdateQuery set(String fieldName, Object value) {
         String updatedFieldName = "update_" + fieldName;
@@ -84,7 +85,7 @@ public class UpdateQuery {
      * not start with <b>:</b>, it is stripped off. Based on passed object type,
      * appropriate JDBC type is chosen.
      *
-     * @see org.polyjdbc.core.type.ColumnType
+     * @see org.polyjdbc.core.type.ColumnTypeMapper
      *
      */
     public UpdateQuery withArgument(String argumentName, Object object) {

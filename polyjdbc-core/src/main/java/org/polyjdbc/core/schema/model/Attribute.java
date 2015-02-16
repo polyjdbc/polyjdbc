@@ -15,15 +15,11 @@
  */
 package org.polyjdbc.core.schema.model;
 
-import java.util.Arrays;
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.type.ColumnType;
 import org.polyjdbc.core.util.TypeUtil;
 
-/**
- *
- * @author Adam Dubiel
- */
+import java.util.Arrays;
+
 public abstract class Attribute implements SchemaPart {
 
     static final int TO_STRING_LENGTH = 100;
@@ -44,8 +40,6 @@ public abstract class Attribute implements SchemaPart {
         this.dialect = dialect;
         this.name = name;
     }
-
-    public abstract ColumnType getType();
 
     protected abstract String getTypeDefinition();
 

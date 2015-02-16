@@ -5,8 +5,6 @@
 PolyJDBC is a polyglot, lightweight wrapper around standard JDBC drivers with
 schema inspection/creation capabilities.
 
-See project wiki for changelog.
-
 ## Why?
 
 When developing [SmartParam](http://smartparam.org) JDBC repository i realized
@@ -26,10 +24,11 @@ only 75kB, no dependencies except for slf4j logging API.
 
 ## Features
 
-* polyglot (or better poly-dialect? multiple DB dialect support, including id generation stategies)
+* polyglot (or better poly-dialect? multiple DB dialect support, including id generation strategies)
 * transaction-oriented
 * resources (Statements, ResultSets) are managed inside transaction scope
 * intiutive transaction commit/rollback support
+* option to leave transaction management to external framework (i.e. Spring)
 * DDL operation DSL (CREATE TABLE/INDEX/SEQUENCE with constraints, DROP \*)
 * SQL query DSL (INSERT, SELECT, UPDATE, DELETE)
 * lightweight
@@ -53,59 +52,42 @@ all engines.
 <dependency>
     <groupId>org.polyjdbc</groupId>
     <artifactId>polyjdbc</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
 ## Enough, show me the code
 
+### Instantiation
+
+By default, PolyJDBC takes care of transaction management on it's own:
+
+```java
+Dialect dialect = DialectRegistry.H2.getDialect();
+PolyJDBC polyjdbc = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
+```
+
+But it is possible to leave connection management to any external framework:
+ 
+```java
+Dialect dialect = DialectRegistry.H2.getDialect();
+PolyJDBC polyjdbc = PolyJDBCBuilder.polyJDBC(dialect).usingManagedConnections(() -> frameworkManager::getConnection).build();
+```
+
 ### Querying
 
-Usage of low-level query runner:
+To ask simple questions, use simple tool. `SimpleQueryRunner` performs each query in new transaction:
 
 ```java
-Dialect dialect = DialectRegistry.H2.getDialect();
-PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
-
-QueryRunner queryRunner = null;
-
-try {
-    queryRunner = polyjdbc.queryRunner();
-    SelectQuery query = polyJdbc.query().selectAll().from("test").where("year = :year")
-        .withArgument("year", 2013).limit(10);
-    List<Test> tests = queryRunner.selectList(query, new TestMapper());
-    queryRunner.commit()
-}
-catch(Exception exception) {
-    polyjdbc.rollback(queryRunner);
-    throw exception;
-}
-finally {
-    polyjdbc.close(queryRunner);
-}
-```
-
-**QueryRunner** is created per transaction and should always be closed.
- **try-catch-finally** is there to make sure that resources are really freed. If you want to
-perform operations without runner create/close boilerplate use reusable **SimpleQueryRunner**:
-
-```java
-Dialect dialect = DialectRegistry.H2.getDialect();
-PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
-
 SelectQuery query = polyJdbc.query().selectAll().from("test").where("name = :name")
         .withArgument("name", "test");
-
-Test test = polyjdbc.simpleQueryRunner().queryUnique(query, new TestMapper());
+        
+Test test = polyJdbc.simpleQueryRunner().queryUnique(query, new TestMapper());
 ```
 
-**SimpleQueryRunner** performs each query in new transaction. If you need to perform
-custom (or multiple) operations use reusable **TransactionRunner**:
+You might want to span your transaction across multiple statements, if so use `TransactionRunner`:
 
 ```java
-Dialect dialect = DialectRegistry.H2.getDialect();
-PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
-
 TransactionRunner transactionRunner = polyjdbc.transactionRunner();
 
 Test test = transactionRunner.run(new TransactionWrapper<Test>() {
@@ -127,6 +109,27 @@ transactionRunner.run(new VoidTransactionWrapper() {
 });
 ```
 
+Or if you need to get your hands dirty, see `QueryRunner`, but remember to free the resources:
+
+```java
+QueryRunner queryRunner = null;
+
+try {
+    queryRunner = polyjdbc.queryRunner();
+    SelectQuery query = polyJdbc.query().selectAll().from("test").where("year = :year")
+        .withArgument("year", 2013).limit(10);
+    List<Test> tests = queryRunner.selectList(query, new TestMapper());
+    queryRunner.commit()
+}
+catch(Exception exception) {
+    polyjdbc.rollback(queryRunner);
+    throw exception;
+}
+finally {
+    polyjdbc.close(queryRunner);
+}
+```
+
 ### Schema management
 
 PolyJDBC comes with tools for schema creating and deletion. More options for
@@ -135,9 +138,6 @@ schema inspection are planned, although there is no concrete release date.
 To check if relation exists:
 
 ```java
-Dialect dialect = DialectRegistry.H2.getDialect();
-PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
-
 SchemaInspector schemaInspector = null;
 try {
     schemaInspector = polyjdbc.schemaInspector();
@@ -150,9 +150,6 @@ try {
 To create new schema (group of relations):
 
 ```java
-Dialect dialect = DialectRegistry.H2.getDialect();
-PolyJDBC polyjdbc = new PolyJDBC(dataSource, dialect);
-
 SchemaManager schemaManager = null;
 try {
     schemaManager = polyjdbc.schemaManager();
@@ -187,6 +184,9 @@ PolyJDBC is published under [Apache License 2.0](http://www.apache.org/licenses/
 
 ## Changelog
 
+* **0.5.0**
+    * added possibility to plug in external framework for transaction management
+    * [API change] PolyJDBC is build using PolyJDBCBuilder
 * **0.4.0** (24.08.2014)
     * fixed bug with closing transaction on exception in query runners
     * [API change] QueryRunner.close() does not commit, use QueryRunner.commit() explicitly

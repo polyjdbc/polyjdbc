@@ -20,10 +20,6 @@ import org.polyjdbc.core.key.KeyGenerator;
 import org.polyjdbc.core.key.KeyGeneratorRegistry;
 import org.polyjdbc.core.transaction.TransactionManager;
 
-/**
- *
- * @author Adam Dubiel
- */
 public class QueryRunnerFactory {
 
     private final Dialect dialect;

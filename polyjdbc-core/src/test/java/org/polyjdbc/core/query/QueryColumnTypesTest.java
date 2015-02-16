@@ -27,10 +27,6 @@ import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- *
- * @author Adam Dubiel
- */
 @Test(groups = "integration")
 public class QueryColumnTypesTest extends DatabaseTest {
 
@@ -137,9 +133,8 @@ public class QueryColumnTypesTest extends DatabaseTest {
     @Test
     public void shouldPersistAndReadBooleanColumn() {
         // given
-        boolean persistedBoolean = true;
         InsertQuery insert = query().insert().into("type_test").value("code", "test")
-                .value("boolean_attr", persistedBoolean);
+                .value("boolean_attr", true);
         SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();
@@ -151,7 +146,7 @@ public class QueryColumnTypesTest extends DatabaseTest {
         runner.close();
 
         // then
-        assertThat(item.getBooleanAttr()).isEqualTo(persistedBoolean);
+        assertThat(item.getBooleanAttr()).isTrue();
     }
 
     @Test

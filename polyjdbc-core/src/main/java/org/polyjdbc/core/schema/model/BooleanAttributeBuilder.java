@@ -17,10 +17,6 @@ package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
 
-/**
- *
- * @author Adam Dubiel
- */
 public final class BooleanAttributeBuilder extends AttributeBuilder<BooleanAttributeBuilder, BooleanAttribute> {
 
     private BooleanAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {

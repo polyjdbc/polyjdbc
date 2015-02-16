@@ -15,10 +15,6 @@
  */
 package org.polyjdbc.core.transaction;
 
-/**
- *
- * @author Adam Dubiel
- */
 public interface TransactionManager {
 
     Transaction openTransaction();

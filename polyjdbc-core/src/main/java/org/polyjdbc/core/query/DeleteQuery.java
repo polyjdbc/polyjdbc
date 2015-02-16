@@ -15,6 +15,8 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.type.ColumnTypeMapper;
+
 /**
  * Builds insert query, use {@link QueryFactory#delete() } to create new instance.
  *
@@ -26,9 +28,10 @@ package org.polyjdbc.core.query;
  */
 public class DeleteQuery {
 
-    private final Query query = new Query();
+    private final Query query;
 
-    DeleteQuery() {
+    DeleteQuery(ColumnTypeMapper typeMapper) {
+        query = new Query(typeMapper);
     }
 
     Query build() {
@@ -62,7 +65,7 @@ public class DeleteQuery {
      * not start with <b>:</b>, it is stripped off. Based on passed object type,
      * appropriate JDBC type is chosen.
      *
-     * @see org.polyjdbc.core.type.ColumnType
+     * @see org.polyjdbc.core.type.ColumnTypeMapper
      *
      */
     public DeleteQuery withArgument(String argumentName, Object object) {

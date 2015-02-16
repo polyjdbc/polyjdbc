@@ -15,25 +15,18 @@
  */
 package org.polyjdbc.core.query;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.polyjdbc.core.transaction.Transaction;
-import org.polyjdbc.core.type.ColumnType;
+import org.polyjdbc.core.type.ColumnTypeMapper;
+import org.polyjdbc.core.type.SqlType;
 import org.polyjdbc.core.type.TypeWrapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
-/**
- *
- * @author Adam Dubiel
- */
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Query {
 
     private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z0-9_-]*");
@@ -43,6 +36,8 @@ public class Query {
     private static final int AVERAGE_QUERY_LENGTH = 100;
 
     private static final int ARGUMENT_REPLACEMENT_SIZE = 10;
+
+    private final ColumnTypeMapper typeMapper;
 
     private String originalQuery;
 
@@ -56,7 +51,8 @@ public class Query {
 
     private boolean compiled = false;
 
-    Query() {
+    Query(ColumnTypeMapper typeMapper) {
+        this.typeMapper = typeMapper;
     }
 
     Query append(String string) {
@@ -142,15 +138,15 @@ public class Query {
 
     private void injectValue(PreparedStatement preparedStatement, int argumentNumber, Object value) throws SQLException {
         if (value != null) {
-            ColumnType type = ColumnType.forClass(value.getClass());
+            SqlType type = typeMapper.forClass(value.getClass());
             Object injectedValue = value;
-            if(injectedValue instanceof TypeWrapper) {
+            if (injectedValue instanceof TypeWrapper) {
                 injectedValue = ((TypeWrapper) value).value();
             }
 
-            preparedStatement.setObject(argumentNumber, injectedValue, type.getSqlType());
+            preparedStatement.setObject(argumentNumber, injectedValue, type.code());
         } else {
-            preparedStatement.setObject(argumentNumber, value);
+            preparedStatement.setObject(argumentNumber, null);
         }
     }
 

@@ -13,6 +13,7 @@ after_success:
 branches:
   only:
     - master
+    - development
 
 env:
   global:
