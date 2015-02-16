@@ -48,12 +48,14 @@ all engines.
 
 ## How to get it?
 
-```xml
-<dependency>
-    <groupId>org.polyjdbc</groupId>
-    <artifactId>polyjdbc</artifactId>
-    <version>0.5.0</version>
-</dependency>
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.polyjdbc', name: 'polyjdbc', version: '0.5.0'
+}
 ```
 
 ## Enough, show me the code

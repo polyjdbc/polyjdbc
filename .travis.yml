@@ -1,14 +1,17 @@
 language: java
 
+jdk:
+  - openjdk7
+
 before_script:
   - mysql -u root < project-resources/init-mysql.sql
   - psql -U postgres -f project-resources/init-psql.sql
 
-script:
-  - "mvn test -P integration"
+install:
+  - ./gradlew assemble
 
-after_success:
-  - "mvn -Dmaven.test.skip=true deploy --settings project-resources/ci-settings.xml"
+script:
+  - ./gradlew check -Pintegration
 
 branches:
   only:
