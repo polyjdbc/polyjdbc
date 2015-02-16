@@ -1,11 +1,10 @@
-target/
-nb-configuration.xml
+/build/
 
-# intellij idea
-.idea/
+.gradle/
+
+.nb-gradle/
+.nb-gradle-properties
+
+.idea
 *.iml
-*.iws
 
-/smartparam-repository-transfer/nbproject/private/
-/nbactions.xml
-/polyjdbc-core/nbactions.xml
