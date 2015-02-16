@@ -7,7 +7,6 @@ plugins {
 
 apply from: 'gradle/mavenCentralPublishing.gradle'
 
-
 scmVersion {
     tag {
         prefix = 'polyjdbc'
@@ -16,6 +15,9 @@ scmVersion {
 
 project.group = 'org.polyjdbc'
 project.version = scmVersion.version
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 repositories {
     mavenCentral()
