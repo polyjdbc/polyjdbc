@@ -1,8 +1,12 @@
 package org.polyjdbc.core.query.limit;
 
+import org.polyjdbc.core.query.Query;
+
 public class OracleLimitClauseProvider implements LimitClauseProvider {
     @Override
-    public String limit(int limit, int offset) {
-        return null;
+    public Query limit(Query query, LimitAndOffset offset) {
+
+
+        return query;
     }
 }

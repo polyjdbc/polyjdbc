@@ -1,6 +1,8 @@
 package org.polyjdbc.core.query.limit;
 
+import org.polyjdbc.core.query.Query;
+
 public interface LimitClauseProvider {
 
-    String limit(int limit, int offset);
+    Query limit(Query query, LimitAndOffset offset);
 }

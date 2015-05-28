@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.query.limit.LimitAndOffset;
 import org.polyjdbc.core.query.limit.LimitClauseProvider;
 import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
@@ -43,7 +44,7 @@ public class SelectQuery {
 
     private StringBuilder orderBy;
 
-    private String limit;
+    private LimitAndOffset limit;
 
     SelectQuery(Dialect dialect, ColumnTypeMapper typeMapper, LimitClauseProvider limitClauseProvider, String what) {
         this(dialect, typeMapper, limitClauseProvider);
@@ -62,7 +63,7 @@ public class SelectQuery {
             query.append(orderBy.toString());
         }
         if (limit != null) {
-            query.append(limit);
+            limitClauseProvider.limit(query, limit);
         }
 
         query.compile();
@@ -122,7 +123,7 @@ public class SelectQuery {
      * Create <b>LIMIT</b> clause.
      */
     public SelectQuery limit(int limit, int offset) {
-        this.limit = limitClauseProvider.limit(limit, offset);
+        this.limit = new LimitAndOffset(limit, offset);
         return this;
     }
 
