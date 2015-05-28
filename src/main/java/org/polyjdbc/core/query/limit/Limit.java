@@ -1,11 +1,11 @@
 package org.polyjdbc.core.query.limit;
 
-public class LimitAndOffset {
+public class Limit {
 
     private final int limit;
     private final int offset;
 
-    public LimitAndOffset(int limit, int offset) {
+    public Limit(int limit, int offset) {
         this.limit = limit;
         this.offset = offset;
     }
