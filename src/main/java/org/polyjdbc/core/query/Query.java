@@ -55,7 +55,7 @@ public class Query {
         this.typeMapper = typeMapper;
     }
 
-    Query append(String string) {
+    public Query append(String string) {
         builder.append(string);
         return this;
     }

@@ -2,6 +2,7 @@ package org.polyjdbc.core;
 
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.query.*;
+import org.polyjdbc.core.query.limit.LimitClauseSupplier;
 import org.polyjdbc.core.schema.SchemaInspector;
 import org.polyjdbc.core.schema.SchemaManager;
 import org.polyjdbc.core.schema.SchemaManagerFactory;
@@ -27,7 +28,7 @@ public class DefaultPolyJDBC implements PolyJDBC {
 
     DefaultPolyJDBC(Dialect dialect, ColumnTypeMapper typeMapper, TransactionManager transactionManager) {
         this.dialect = dialect;
-        this.queryFactory = new QueryFactory(dialect, typeMapper);
+        this.queryFactory = new QueryFactory(dialect, typeMapper, new LimitClauseSupplier().supply(dialect));
         this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
         this.transactionRunner = new TransactionRunner(queryRunnerFactory);

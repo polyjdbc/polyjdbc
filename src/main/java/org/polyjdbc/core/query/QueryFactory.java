@@ -16,6 +16,7 @@
 package org.polyjdbc.core.query;
 
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.query.limit.LimitClauseProvider;
 import org.polyjdbc.core.type.ColumnTypeMapper;
 
 public class QueryFactory {
@@ -23,10 +24,12 @@ public class QueryFactory {
     private final Dialect dialect;
 
     private final ColumnTypeMapper typeMapper;
-    
-    public QueryFactory(Dialect dialect, ColumnTypeMapper typeMapper) {
+    private final LimitClauseProvider limitClauseProvider;
+
+    public QueryFactory(Dialect dialect, ColumnTypeMapper typeMapper, LimitClauseProvider limitClauseProvider) {
         this.dialect = dialect;
         this.typeMapper = typeMapper;
+        this.limitClauseProvider = limitClauseProvider;
     }
 
     /**
@@ -41,7 +44,7 @@ public class QueryFactory {
      * <pre>QueryFactory.select("columnA, columnB");</pre>
      */
     public SelectQuery select(String what) {
-        return new SelectQuery(dialect, typeMapper, what);
+        return new SelectQuery(dialect, typeMapper, limitClauseProvider, what);
     }
 
     /**
@@ -49,7 +52,7 @@ public class QueryFactory {
      * <code>QueryFactory.select("*")</code>.
      */
     public SelectQuery selectAll() {
-        return new SelectQuery(dialect, typeMapper, "*");
+        return new SelectQuery(dialect, typeMapper, limitClauseProvider, "*");
     }
 
     /**
@@ -62,7 +65,7 @@ public class QueryFactory {
      * </pre>
      */
     public SelectQuery select() {
-        return new SelectQuery(dialect, typeMapper);
+        return new SelectQuery(dialect, typeMapper, limitClauseProvider);
     }
 
     /**
