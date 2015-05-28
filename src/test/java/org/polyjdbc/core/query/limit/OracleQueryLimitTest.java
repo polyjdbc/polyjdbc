@@ -27,7 +27,8 @@ public class OracleQueryLimitTest {
     @BeforeClass
     public void setup() {
         Dialect dialect = DialectRegistry.ORACLE.getDialect();
-        DataSource dataSource = DataSourceFactory.create(dialect, "jdbc:oracle:thin:@//192.168.59.103:192.168.59.103/orcl", "system", "oracle");
+
+        DataSource dataSource = DataSourceFactory.create(dialect, "jdbc:oracle:thin:@192.168.59.103:49161:xe", "system", "oracle");
         polyJDBC = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
         database = DatabaseBuilder.database(polyJDBC);
     }
