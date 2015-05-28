@@ -66,7 +66,7 @@ public class Query {
         return this;
     }
 
-    Query wrap(String prefix, String sufix) {
+    public Query wrap(String prefix, String sufix) {
         builder.insert(0, prefix).append(sufix);
         return this;
     }

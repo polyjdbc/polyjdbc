@@ -4,7 +4,7 @@ import org.polyjdbc.core.query.Query;
 
 public class DefaultLimitClauseProvider implements LimitClauseProvider {
     @Override
-    public Query limit(Query query, LimitAndOffset limitAndOffset) {
-        return query.append(" LIMIT " + limitAndOffset.getLimit() + " OFFSET " + limitAndOffset.getOffset());
+    public Query limit(Query query, Limit limit) {
+        return query.append(" LIMIT " + limit.getLimit() + " OFFSET " + limit.getOffset());
     }
 }
