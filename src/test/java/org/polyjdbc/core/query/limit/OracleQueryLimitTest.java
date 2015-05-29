@@ -5,6 +5,7 @@ import org.polyjdbc.core.PolyJDBCBuilder;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.infrastructure.DataSourceFactory;
+import org.polyjdbc.core.integration.TestSchemaManager;
 import org.polyjdbc.core.query.Order;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.SelectQuery;
@@ -31,9 +32,10 @@ public class OracleQueryLimitTest {
         DataSource dataSource = DataSourceFactory.create(dialect, "jdbc:oracle:thin:@192.168.59.103:49161:xe", "system", "oracle");
         polyJDBC = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
         database = DatabaseBuilder.database(polyJDBC);
+
+        TestSchemaManager schemaManager = new TestSchemaManager(polyJDBC);
+        schemaManager.createSchema();
     }
-
-
 
     @Test
     public void shouldReturnLimitedListOfItems() {
