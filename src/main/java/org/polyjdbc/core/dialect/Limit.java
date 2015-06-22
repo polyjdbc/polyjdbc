@@ -1,4 +1,4 @@
-package org.polyjdbc.core.query.limit;
+package org.polyjdbc.core.dialect;
 
 public class Limit {
 

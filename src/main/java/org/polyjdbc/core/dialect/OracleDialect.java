@@ -21,6 +21,10 @@ package org.polyjdbc.core.dialect;
  */
 public class OracleDialect extends AbstractDialect {
 
+    OracleDialectTypes types = new OracleDialectTypes();
+
+    OracleDialectQueries queries = new OracleDialectQueries();
+
     @Override
     public String getCode() {
         return "ORACLE";
@@ -29,5 +33,15 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public String nextFromSequence(String sequenceName) {
         return "SELECT " + sequenceName + ".nextval FROM dual";
+    }
+
+    @Override
+    public DialectTypes types() {
+        return types;
+    }
+
+    @Override
+    public DialectQueries queries() {
+        return queries;
     }
 }

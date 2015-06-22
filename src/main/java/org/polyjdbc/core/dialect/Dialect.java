@@ -27,6 +27,8 @@ public interface Dialect {
 
     DialectConstraints constraints();
 
+    DialectQueries queries();
+
     boolean supportsSequences();
 
     String nextFromSequence(String sequenceName);

@@ -7,6 +7,21 @@ package org.polyjdbc.core.dialect;
 public class OracleDialectTypes extends DefaultDialectTypes {
 
     @Override
+    public String bool() {
+        return "NUMBER(1)";
+    }
+
+    @Override
+    public String bigint(int integerPrecision) {
+        return "NUMBER";
+    }
+
+    @Override
+    public String integer(int integerPrecision) {
+        return "NUMBER";
+    }
+
+    @Override
     public String string(int characters) {
         return "VARCHAR2(" + characters + ")";
     }
