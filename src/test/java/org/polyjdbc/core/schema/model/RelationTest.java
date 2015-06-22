@@ -40,11 +40,13 @@ public class RelationTest {
         String ddl = relation.toString();
 
         // then
-        assertThat(ddl).isEqualTo("CREATE TABLE test (\n"
+        String expected = "CREATE TABLE test (\n"
                 + "id BIGINT,\n"
                 + "name VARCHAR(255) UNIQUE NOT NULL,\n"
                 + "CONSTRAINT pk PRIMARY KEY(id)\n"
-                + ")");
+                + ")";
+
+        assertThat(ddl.trim()).isEqualTo(expected);
     }
 
 }
