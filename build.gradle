@@ -39,6 +39,8 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.3.175'
     testCompile group: 'org.postgresql', name: 'postgresql', version: '9.2-1003-jdbc4'
     testCompile group: 'mysql', name: 'mysql-connector-java', version: '5.1.26'
+
+    testCompile files('libs/ojdbc6.jar')
 }
 
 task wrapper(type: Wrapper) {
@@ -51,6 +53,12 @@ test {
     if(project.hasProperty('integration')) {
         options {
             suiteXmlFiles = [ project.file('src/test/resources/testng.xml'), project.file('src/test/resources/testng-integration.xml') ]
+        }
+    }
+
+    if(project.hasProperty('integration-oracle')) {
+        options {
+            suiteXmlFiles = [ project.file('src/test/resources/testng-integration-oracle.xml') ]
         }
     }
 
