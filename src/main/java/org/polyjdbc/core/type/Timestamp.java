@@ -20,18 +20,10 @@ import java.util.Date;
 
 public class Timestamp implements TypeWrapper {
 
-    private final Date timestamp;
+    private final java.sql.Timestamp timestamp;
 
-    private Timestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public static Timestamp from(Date date) {
-        return new Timestamp(date);
-    }
-
-    public static Timestamp from(long millis) {
-        return new Timestamp(new Date(millis));
+    public Timestamp(Date timestamp) {
+        this.timestamp = new java.sql.Timestamp(timestamp.getTime());
     }
 
     @Override

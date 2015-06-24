@@ -194,7 +194,7 @@ public class QueryColumnTypesTest extends DatabaseTest {
         // given
         Date persistedDate = new LocalDateTime(2013, 5, 2, 15, 21, 59).toDate();
         InsertQuery insert = query().insert().into("type_test").value("code", "test")
-                .value("timestamp_attr", Timestamp.from(persistedDate));
+                .value("timestamp_attr", new Timestamp(persistedDate));
         SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();

@@ -7,6 +7,11 @@ package org.polyjdbc.core.dialect;
 public class OracleDialectTypes extends DefaultDialectTypes {
 
     @Override
+    public String character() {
+        return "VARCHAR2(1)";
+    }
+
+    @Override
     public String text() {
         return "CLOB";
     }
