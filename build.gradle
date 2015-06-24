@@ -57,7 +57,7 @@ test {
     //gradlew clean test -Pintegration-oracle
     if(project.hasProperty('integration-oracle')) {
         dependencies{
-            testCompile files('libs/ojdbc6.jar') //.gitingore
+            testCompile files('ojdbc6.jar') //ojdbc6.jar should be manually copied to project root dir and .gitingored
         }
         options {
             suiteXmlFiles = [ project.file('src/test/resources/testng-integration-oracle.xml') ]

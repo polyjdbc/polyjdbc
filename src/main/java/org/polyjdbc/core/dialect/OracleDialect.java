@@ -21,9 +21,11 @@ package org.polyjdbc.core.dialect;
  */
 public class OracleDialect extends AbstractDialect {
 
-    OracleDialectTypes types = new OracleDialectTypes();
+    private OracleDialectTypes types = new OracleDialectTypes();
 
-    OracleDialectQueries queries = new OracleDialectQueries();
+    private OracleDialectQueries queries = new OracleDialectQueries();
+
+    private OracleDialectConstraints constraints = new OracleDialectConstraints();
 
     @Override
     public String getCode() {
@@ -43,5 +45,10 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public DialectQueries queries() {
         return queries;
+    }
+
+    @Override
+    public DialectConstraints constraints() {
+        return constraints;
     }
 }

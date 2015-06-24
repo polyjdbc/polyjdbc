@@ -26,4 +26,6 @@ public interface DialectConstraints {
     String foreignKey(String name, String targetAttribute, String targetRelation, String targetRelationAttribute);
 
     String dropIndex(String name, String targetRelationName);
+
+    String attributeModifiers(boolean unique, boolean notNull, Object defaultValue);
 }

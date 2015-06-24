@@ -125,4 +125,14 @@ public final class RelationBuilder {
     public ForeignKeyConstraintBuilder foreignKey(String name) {
         return ForeignKeyConstraintBuilder.foreignKey(dialect, name, this);
     }
+
+    Attribute getAttribute(String name){
+        for (Attribute a : heading.getAttributes()){
+            if (a.getName().equals(name)){
+                return a;
+            }
+        }
+        return null;
+    }
+
 }

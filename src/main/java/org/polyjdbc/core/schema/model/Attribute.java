@@ -56,15 +56,9 @@ public abstract class Attribute implements SchemaPart {
     public String ddl() {
         StringBuilder builder = new StringBuilder(TO_STRING_LENGTH);
         builder.append(name).append(" ").append(getTypeDefinition()).append(" ");
-        if (unique) {
-            builder.append("UNIQUE ");
-        }
-        if (notNull) {
-            builder.append("NOT NULL ");
-        }
-        if (defaultValue != null) {
-            appendDefaultValue(builder);
-        }
+
+        builder.append(dialect.constraints().attributeModifiers(unique, notNull, defaultValue)).append(" ");
+
         if (additionalModifiers != null) {
             for (String additionalModifier : additionalModifiers) {
                 if (dialect.supportsAttributeModifier(additionalModifier)) {
@@ -73,20 +67,6 @@ public abstract class Attribute implements SchemaPart {
             }
         }
         return builder.toString().trim();
-    }
-
-    private void appendDefaultValue(StringBuilder builder) {
-        boolean primitive = TypeUtil.isNonQuotablePrimitive(defaultValue);
-
-        builder.append("DEFAULT ");
-        if (!primitive) {
-            builder.append("'");
-        }
-        builder.append(defaultValue);
-        if (!primitive) {
-            builder.append("'");
-        }
-        builder.append(" ");
     }
 
     @Override
@@ -100,6 +80,10 @@ public abstract class Attribute implements SchemaPart {
 
     void unique() {
         this.unique = true;
+    }
+
+    void clearUniqueConstraint(){
+        this.unique = false;
     }
 
     public boolean isNotNull() {

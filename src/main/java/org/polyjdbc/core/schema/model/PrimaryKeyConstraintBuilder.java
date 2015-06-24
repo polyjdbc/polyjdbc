@@ -37,6 +37,13 @@ public final class PrimaryKeyConstraintBuilder {
     }
 
     public RelationBuilder and() {
+
+        if (constraint.hasOneAttribute()){
+            //prevents Oracle error: ORA-02261: such unique or primary key already exists in the table
+            Attribute attr = parent.getAttribute(constraint.getFirstAttributeName());
+            attr.clearUniqueConstraint();
+        }
+
         parent.with(constraint);
         return parent;
     }

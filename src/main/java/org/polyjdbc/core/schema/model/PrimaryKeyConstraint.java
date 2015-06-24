@@ -40,4 +40,12 @@ public class PrimaryKeyConstraint extends Constraint {
             this.targetAttributes = Arrays.copyOf(targetAttributes, targetAttributes.length);
         }
     }
+
+    String getFirstAttributeName(){
+        return targetAttributes[0];
+    }
+
+    boolean hasOneAttribute(){
+        return targetAttributes != null && targetAttributes.length == 1;
+    }
 }
