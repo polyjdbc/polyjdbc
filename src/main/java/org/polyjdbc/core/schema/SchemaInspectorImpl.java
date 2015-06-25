@@ -15,13 +15,14 @@
  */
 package org.polyjdbc.core.schema;
 
+import org.polyjdbc.core.exception.SchemaInspectionException;
+import org.polyjdbc.core.transaction.Transaction;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
-import org.polyjdbc.core.exception.SchemaInspectionException;
-import org.polyjdbc.core.transaction.Transaction;
 
 class SchemaInspectorImpl implements SchemaInspector {
 
@@ -75,7 +76,8 @@ class SchemaInspectorImpl implements SchemaInspector {
 
             String normalizedIndexName = convertCase(indexName);
             while(resultSet.next()) {
-                if(resultSet.getString("INDEX_NAME").equals(normalizedIndexName)) {
+                String rsetIndexName = resultSet.getString("INDEX_NAME");
+                if(rsetIndexName !=null && rsetIndexName.equals(normalizedIndexName)) {
                     return true;
                 }
             }

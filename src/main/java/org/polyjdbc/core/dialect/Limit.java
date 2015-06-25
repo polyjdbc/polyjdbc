@@ -17,4 +17,8 @@ public class Limit {
     public int getOffset() {
         return offset;
     }
+
+    public boolean isEmpty(){
+        return limit == 0 && offset == 0;
+    }
 }
