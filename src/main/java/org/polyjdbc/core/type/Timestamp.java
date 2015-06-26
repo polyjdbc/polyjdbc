@@ -26,6 +26,13 @@ public class Timestamp implements TypeWrapper {
         this.timestamp = new java.sql.Timestamp(timestamp.getTime());
     }
 
+    /**
+     * @deprecated
+     */
+    public static Timestamp from (Date timestamp) {
+        return new Timestamp(timestamp);
+    }
+
     @Override
     public Object value() {
         return timestamp;

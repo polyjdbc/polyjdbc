@@ -82,10 +82,8 @@ public class TransactionalQueryRunner implements QueryRunner {
     }
 
     private <T, C extends Collection<T>> C queryCollection(Query query, ObjectMapper<T> mapper, C collection) {
-        try {
-            PreparedStatement statement = query.createStatementWithValues(transaction);
-            ResultSet resultSet = transaction.executeQuery(statement);
-
+        try(PreparedStatement statement = query.createStatementWithValues(transaction);
+            ResultSet resultSet = transaction.executeQuery(statement)){
             while (resultSet.next()) {
                 collection.add(mapper.createObject(resultSet));
             }
@@ -112,8 +110,9 @@ public class TransactionalQueryRunner implements QueryRunner {
             }
 
             Query rawQuery = insertQuery.build();
-            PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
-            transaction.executeUpdate(statement);
+            try(PreparedStatement statement = rawQuery.createStatementWithValues(transaction)) {
+                transaction.executeUpdate(statement);
+            }
 
             return useSequence ? keyGenerator.getKeyFromLastInsert(transaction) : 0;
         } catch (SQLException exception) {
@@ -126,8 +125,7 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public int update(UpdateQuery updateQuery) {
         Query rawQuery = updateQuery.build();
-        try {
-            PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
+        try (PreparedStatement statement = rawQuery.createStatementWithValues(transaction)){
             return transaction.executeUpdate(statement);
         } catch (SQLException exception) {
             transaction.rollback();
@@ -138,8 +136,7 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public int delete(DeleteQuery deleteQuery) {
         Query rawQuery = deleteQuery.build();
-        try {
-            PreparedStatement statement = rawQuery.createStatementWithValues(transaction);
+        try(PreparedStatement statement = rawQuery.createStatementWithValues(transaction)){
             return transaction.executeUpdate(statement);
         } catch (SQLException exception) {
             transaction.rollback();
