@@ -24,6 +24,7 @@ public enum DialectRegistry {
     H2(new H2Dialect()),
     POSTGRES(new PostgresDialect()),
     MYSQL(new MysqlDialect()),
+    MSSQL(new MsSqlDialect()),
     ORACLE(new OracleDialect());
 
     private final Dialect dialect;

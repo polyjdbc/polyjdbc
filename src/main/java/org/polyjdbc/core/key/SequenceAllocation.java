@@ -68,6 +68,7 @@ public class SequenceAllocation implements KeyGenerator {
 
     private long fetchSequenceValue(String sequenceName, Transaction transaction) throws SQLException {
         PreparedStatement statement = transaction.prepareStatement(dialect.nextFromSequence(sequenceName));
+
         ResultSet resultSet = statement.executeQuery();
         transaction.registerCursor(resultSet);
 

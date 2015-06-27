@@ -23,6 +23,12 @@ import org.polyjdbc.core.util.TypeUtil;
  * @author Adam Dubiel
  */
 public class DefaultDialectConstraints implements DialectConstraints {
+
+    @Override
+    public String createSequence(String name) {
+        return "CREATE SEQUENCE " + name;
+    }
+
     @Override
     public String primaryKey(String name, String[] targetAttributes) {
         return "CONSTRAINT " + name + " PRIMARY KEY(" + StringUtils.concatenate(", ", (Object[]) targetAttributes) + ")";
@@ -71,5 +77,14 @@ public class DefaultDialectConstraints implements DialectConstraints {
 
     String encodeDefaultValue(Object defaultValue){
         return defaultValue.toString();
+    }
+
+    String encodeBooleanToBit(Boolean bool){
+        if (bool){
+            return "1";
+        }
+        else{
+            return "0";
+        }
     }
 }

@@ -62,7 +62,15 @@ test {
         options {
             suiteXmlFiles = [ project.file('src/test/resources/testng-integration-oracle.xml') ]
         }
-
+    }
+    //gradlew clean test -Pintegration-mssql
+    if(project.hasProperty('integration-mssql')) {
+        dependencies{
+            testCompile files('libs/sqljdbc4.jar') //sqljdbc4.jar should be manually copied to project /libs and .gitingored
+        }
+        options {
+            suiteXmlFiles = [ project.file('src/test/resources/testng-integration-mssql.xml') ]
+        }
     }
 
     testLogging {

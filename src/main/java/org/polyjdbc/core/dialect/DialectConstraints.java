@@ -21,6 +21,8 @@ package org.polyjdbc.core.dialect;
  */
 public interface DialectConstraints {
 
+    String createSequence(String name);
+
     String primaryKey(String name, String[] targetAttributes);
 
     String foreignKey(String name, String targetAttribute, String targetRelation, String targetRelationAttribute);

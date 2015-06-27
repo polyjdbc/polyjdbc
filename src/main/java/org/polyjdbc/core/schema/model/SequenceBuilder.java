@@ -21,21 +21,13 @@ package org.polyjdbc.core.schema.model;
  */
 public final class SequenceBuilder {
 
-    private Sequence sequence;
+    private final Sequence sequence;
 
-    private Schema schema;
-
-    private SequenceBuilder(String name) {
-        this.sequence = new Sequence(name);
-    }
+    private final Schema schema;
 
     private SequenceBuilder(Schema schema, String name) {
-        this(name);
         this.schema = schema;
-    }
-
-    public static SequenceBuilder sequence(String name) {
-        return new SequenceBuilder(name);
+        this.sequence = new Sequence(schema.getDialect(), name);
     }
 
     public static SequenceBuilder sequence(Schema schema, String name) {

@@ -23,7 +23,7 @@ public class H2Dialect extends AbstractDialect {
 
     @Override
     public String getCode() {
-        return "H2";
+        return DialectRegistry.H2.name();
     }
 
     @Override

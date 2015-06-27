@@ -40,6 +40,9 @@ public final class KeyGeneratorRegistry {
 
         dialect = DialectRegistry.ORACLE.getDialect();
         addKeyGenerator(dialect, new SequenceAllocation(dialect));
+
+        dialect = DialectRegistry.MSSQL.getDialect();
+        addKeyGenerator(dialect, new SequenceAllocation(dialect));
     }
 
     private KeyGeneratorRegistry() {

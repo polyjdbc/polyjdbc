@@ -25,13 +25,7 @@ public class OracleDialectConstraints extends DefaultDialectConstraints {
     @Override
     String encodeDefaultValue(Object defaultValue) {
         if (defaultValue instanceof Boolean){
-            Boolean defaultBoolean = (Boolean)defaultValue;
-            if (defaultBoolean){
-                return "1";
-            }
-            else{
-                return "0";
-            }
+            return encodeBooleanToBit( (Boolean)defaultValue );
         }
         return super.encodeDefaultValue(defaultValue);
     }
