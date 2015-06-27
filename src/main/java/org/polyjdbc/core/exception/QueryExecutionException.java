@@ -26,4 +26,7 @@ public class QueryExecutionException extends PolyJdbcException {
         super(code, message, cause);
     }
 
+    public QueryExecutionException(String code, String message) {
+        super(code, message);
+    }
 }

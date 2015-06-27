@@ -60,7 +60,7 @@ public class SelectQuery {
             query.append(orderBy.toString());
         }
         if (limit != null) {
-            dialect.queries().limit(query, limit);
+            dialect.queries().limit(query, limit, orderBy != null);
         }
 
         query.compile();
