@@ -13,42 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.schema.model;
-
-import org.polyjdbc.core.dialect.Dialect;
+package org.polyjdbc.core.dialect;
 
 /**
  *
  * @author Adam Dubiel
  */
-public class Sequence implements SchemaEntity {
+public class MsSqlDialectTypes extends DefaultDialectTypes {
 
-    private final String name;
-
-    private final Dialect dialect;
-
-    public Sequence(Dialect dialect, String name) {
-        this.name = name;
-        this.dialect = dialect;
+    @Override
+    public String bool() {
+        return "BIT";
     }
 
     @Override
-    public String toString() {
-        return ddl();
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String ddl() {
-        return dialect.constraints().createSequence(name);
-    }
-
-    @Override
-    public String dropDDL() {
-        return "DROP SEQUENCE " + name;
+    public String timestamp() {
+        return "DATETIME";
     }
 }

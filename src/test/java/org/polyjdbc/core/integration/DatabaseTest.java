@@ -15,22 +15,27 @@
  */
 package org.polyjdbc.core.integration;
 
-import java.util.Arrays;
 import org.polyjdbc.core.infrastructure.PolyDatabaseTest;
 import org.polyjdbc.core.test.DatabaseBuilder;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.slf4j.LoggerFactory;
+import org.testng.annotations.*;
+
+import java.util.Arrays;
 
 public class DatabaseTest extends PolyDatabaseTest {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DatabaseTest.class);
 
     private TestSchemaManager schemaManager;
     
     @Parameters({"dialect", "url", "user", "password"})
     @BeforeClass(alwaysRun = true)
-    public void setUpDatabase(@Optional("H2") String dialectCode, @Optional("jdbc:h2:mem:test") String url, @Optional("polly") String user, @Optional("polly") String password) throws Exception {
+    public void setUpDatabase(@Optional("H2") String dialectCode,
+                              @Optional("jdbc:h2:mem:test") String url,
+                              @Optional("polly") String user,
+                              @Optional("polly") String password) throws Exception
+    {
+        logger.info("staring tests with "+dialectCode+" database ...");
+
         super.createDatabase(dialectCode, url, user, password);
 
         this.schemaManager = new TestSchemaManager(polyJDBC());

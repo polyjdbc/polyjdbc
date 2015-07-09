@@ -13,42 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.schema.model;
-
-import org.polyjdbc.core.dialect.Dialect;
+package org.polyjdbc.core.dialect;
 
 /**
  *
- * @author Adam Dubiel
+ * @author bartosz.walacik
  */
-public class Sequence implements SchemaEntity {
+public class MsSqlDialect extends AbstractDialect {
 
-    private final String name;
+    private DialectTypes types = new MsSqlDialectTypes();
 
-    private final Dialect dialect;
+    private DialectQueries queries = new MsSqlDialectQueries();
 
-    public Sequence(Dialect dialect, String name) {
-        this.name = name;
-        this.dialect = dialect;
+    private DialectConstraints constraints = new MsSqlDialectConstraints();
+
+    public String getCode() {
+        return DialectRegistry.MSSQL.name();
     }
 
     @Override
-    public String toString() {
-        return ddl();
+    public DialectTypes types() {
+        return types;
     }
 
     @Override
-    public String getName() {
-        return name;
+    public DialectQueries queries() {
+        return queries;
     }
 
     @Override
-    public String ddl() {
-        return dialect.constraints().createSequence(name);
+    public DialectConstraints constraints() {
+        return constraints;
     }
 
     @Override
-    public String dropDDL() {
-        return "DROP SEQUENCE " + name;
+    public String nextFromSequence(String sequenceName) {
+        return "SELECT NEXT VALUE FOR "+sequenceName;
     }
+
 }

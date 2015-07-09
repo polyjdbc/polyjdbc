@@ -1,0 +1,22 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="integration-oracle">
+
+    <test name="oracle">
+        <groups>
+            <run>
+                <include name="integration"/>
+            </run>
+        </groups>
+
+        <parameter name="dialect" value="ORACLE"/>
+        <parameter name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <parameter name="user" value="polly"/>
+        <parameter name="password" value="polly"/>
+
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
+
+</suite>

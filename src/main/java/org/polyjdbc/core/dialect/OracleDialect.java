@@ -21,13 +21,33 @@ package org.polyjdbc.core.dialect;
  */
 public class OracleDialect extends AbstractDialect {
 
-    @Override
+    private DialectTypes types = new OracleDialectTypes();
+
+    private DialectQueries queries = new OracleDialectQueries();
+
+    private DialectConstraints constraints = new OracleDialectConstraints();
+
     public String getCode() {
-        return "ORACLE";
+        return DialectRegistry.ORACLE.name();
     }
 
     @Override
     public String nextFromSequence(String sequenceName) {
         return "SELECT " + sequenceName + ".nextval FROM dual";
+    }
+
+    @Override
+    public DialectTypes types() {
+        return types;
+    }
+
+    @Override
+    public DialectQueries queries() {
+        return queries;
+    }
+
+    @Override
+    public DialectConstraints constraints() {
+        return constraints;
     }
 }

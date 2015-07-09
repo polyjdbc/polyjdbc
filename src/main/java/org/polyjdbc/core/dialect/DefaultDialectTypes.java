@@ -33,7 +33,7 @@ public class DefaultDialectTypes implements DialectTypes {
 
     @Override
     public String character() {
-        return "CHAR";
+        return "CHAR(1)";
     }
 
     @Override

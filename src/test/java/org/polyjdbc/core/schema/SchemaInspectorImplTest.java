@@ -59,7 +59,7 @@ public class SchemaInspectorImplTest extends DatabaseTest {
         SchemaInspector inspector = new SchemaInspectorImpl(transaction());
 
         // when
-        boolean exists = inspector.indexExists("test", "idx_test_name");
+        boolean exists = inspector.indexExists("test", "idx_test_pseudo");
         inspector.close();
 //        h2DatabaseInterface();
 

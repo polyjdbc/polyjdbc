@@ -41,7 +41,7 @@ public class TestSchemaManager {
                 .withAttribute().character("separator_char").withDefaultValue(';').notNull().and()
                 .constrainedBy().primaryKey("pk_test").using("id").and()
                 .build();
-        schema.addIndex("idx_test_name").on("test").indexing("name").build();
+        schema.addIndex("idx_test_pseudo").on("test").indexing("pseudo").build();
         schema.addSequence("seq_test").build();
 
         schema.addRelation("type_test")

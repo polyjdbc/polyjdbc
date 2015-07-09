@@ -23,7 +23,7 @@ public class QueryFactory {
     private final Dialect dialect;
 
     private final ColumnTypeMapper typeMapper;
-    
+
     public QueryFactory(Dialect dialect, ColumnTypeMapper typeMapper) {
         this.dialect = dialect;
         this.typeMapper = typeMapper;

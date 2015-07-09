@@ -21,12 +21,12 @@ package org.polyjdbc.core.dialect;
  */
 public class MysqlDialect extends AbstractDialect {
 
-    private MysqlDialectTypes types = new MysqlDialectTypes();
+    private DialectTypes types = new MysqlDialectTypes();
 
-    private MysqlDialectConstraints constraints = new MysqlDialectConstraints();
+    private DialectConstraints constraints = new MysqlDialectConstraints();
 
     public String getCode() {
-        return "MYSQL";
+        return DialectRegistry.MYSQL.name();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class MysqlDialect extends AbstractDialect {
     }
 
     public String nextFromSequence(String sequenceName) {
-        throw new UnsupportedOperationException("MySQL dialect does not support sequences, check Dialce.supportsSequence() before trying to reach sequence!");
+        throw new UnsupportedOperationException("MySQL dialect does not support sequences, check Dialect.supportsSequence() before trying to reach sequence!");
     }
 
     @Override

@@ -15,11 +15,12 @@
  */
 package org.polyjdbc.core.infrastructure;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.polyjdbc.core.dialect.Dialect;
+
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -33,6 +34,7 @@ public final class DataSourceFactory {
         DIALECT_DRIVER_CLASS.put("H2", "org.h2.Driver");
         DIALECT_DRIVER_CLASS.put("POSTGRESQL", "org.postgresql.Driver");
         DIALECT_DRIVER_CLASS.put("MYSQL", "com.mysql.jdbc.Driver");
+        DIALECT_DRIVER_CLASS.put("ORACLE", "oracle.jdbc.driver.OracleDriver");
     }
 
     private DataSourceFactory() {

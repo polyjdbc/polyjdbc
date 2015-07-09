@@ -1,0 +1,22 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="integration-mssql">
+
+    <test name="mssql">
+        <groups>
+            <run>
+                <include name="integration"/>
+            </run>
+        </groups>
+
+        <parameter name="dialect" value="MSSQL"/>
+        <parameter name="url" value="jdbc:sqlserver://localhost:1433;DatabaseName=polly"/>
+        <parameter name="user" value="polly"/>
+        <parameter name="password" value="polly"/>
+
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
+
+</suite>

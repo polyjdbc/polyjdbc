@@ -20,12 +20,4 @@ package org.polyjdbc.core.dialect;
  * @author Adam Dubiel
  */
 public class MysqlDialectTypes extends DefaultDialectTypes {
-
-    @Override
-    public String character() {
-        return "CHAR(1)";
-    }
-
-
-
 }

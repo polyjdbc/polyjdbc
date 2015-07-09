@@ -25,6 +25,8 @@ public abstract class AbstractDialect implements Dialect {
 
     private DialectConstraints constraints = new DefaultDialectConstraints();
 
+    private DefaultDialectQueries queries = new DefaultDialectQueries();
+
     @Override
     public boolean supportsSequences() {
         return true;
@@ -43,6 +45,11 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public DialectConstraints constraints() {
         return constraints;
+    }
+
+    @Override
+    public DialectQueries queries() {
+        return queries;
     }
 
     @Override

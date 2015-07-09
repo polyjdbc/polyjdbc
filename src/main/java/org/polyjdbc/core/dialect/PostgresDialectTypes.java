@@ -22,11 +22,6 @@ package org.polyjdbc.core.dialect;
 public class PostgresDialectTypes extends DefaultDialectTypes {
 
     @Override
-    public String character() {
-        return "CHAR(1)";
-    }
-
-    @Override
     public String floatType() {
         return "REAL";
     }

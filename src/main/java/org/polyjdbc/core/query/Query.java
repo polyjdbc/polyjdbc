@@ -55,7 +55,7 @@ public class Query {
         this.typeMapper = typeMapper;
     }
 
-    Query append(String string) {
+    public Query append(String string) {
         builder.append(string);
         return this;
     }
@@ -66,7 +66,7 @@ public class Query {
         return this;
     }
 
-    Query wrap(String prefix, String sufix) {
+    public Query wrap(String prefix, String sufix) {
         builder.insert(0, prefix).append(sufix);
         return this;
     }
@@ -140,8 +140,23 @@ public class Query {
         if (value != null) {
             SqlType type = typeMapper.forClass(value.getClass());
             Object injectedValue = value;
-            if (injectedValue instanceof TypeWrapper) {
+            if (value instanceof TypeWrapper) {
                 injectedValue = ((TypeWrapper) value).value();
+            } else
+            if (value instanceof java.util.Date) {
+                //Oracle is unhappy with java.util.Date and insists on java.sql.Date
+                injectedValue = new java.sql.Date(((java.util.Date)value).getTime());
+            } else
+            if (value instanceof Character){
+                //Oracle really dislike Java char type
+                injectedValue = String.valueOf(value);
+            } else
+            if (value instanceof Boolean){
+               //Oracle. Why U No Boolean?
+               //surprisingly preparedStatement.setBoolean(,) works with Oracle and translates boolean to 0/1
+               //but preparedStatement.setObject(,,BOOLEAN) doesn't
+               preparedStatement.setBoolean(argumentNumber, (Boolean)value);
+               return;
             }
 
             preparedStatement.setObject(argumentNumber, injectedValue, type.code());

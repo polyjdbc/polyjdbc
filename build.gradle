@@ -16,8 +16,8 @@ scmVersion {
 project.group = 'org.polyjdbc'
 project.version = scmVersion.version
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 repositories {
     mavenCentral()
@@ -51,6 +51,25 @@ test {
     if(project.hasProperty('integration')) {
         options {
             suiteXmlFiles = [ project.file('src/test/resources/testng.xml'), project.file('src/test/resources/testng-integration.xml') ]
+        }
+    }
+
+    //gradlew clean test -Pintegration-oracle
+    if(project.hasProperty('integration-oracle')) {
+        dependencies{
+            testCompile files('libs/ojdbc6.jar') //ojdbc6.jar should be manually copied to project /libs and .gitingored
+        }
+        options {
+            suiteXmlFiles = [ project.file('src/test/resources/testng-integration-oracle.xml') ]
+        }
+    }
+    //gradlew clean test -Pintegration-mssql
+    if(project.hasProperty('integration-mssql')) {
+        dependencies{
+            testCompile files('libs/sqljdbc4.jar') //sqljdbc4.jar should be manually copied to project /libs and .gitingored
+        }
+        options {
+            suiteXmlFiles = [ project.file('src/test/resources/testng-integration-mssql.xml') ]
         }
     }
 
