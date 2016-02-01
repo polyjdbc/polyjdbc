@@ -2,7 +2,7 @@
 plugins {
     id 'java'
     id 'maven'
-    id 'pl.allegro.tech.build.axion-release' version '1.2.0'
+    id 'pl.allegro.tech.build.axion-release' version '1.3.4'
 }
 
 apply from: 'gradle/mavenCentralPublishing.gradle'
@@ -11,6 +11,7 @@ scmVersion {
     tag {
         prefix = 'polyjdbc'
     }
+    versionCreator 'versionWithBranch'
 }
 
 project.group = 'org.polyjdbc'
@@ -42,7 +43,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.10'
 }
 
 test {

@@ -15,24 +15,21 @@
  */
 package org.polyjdbc.core.query;
 
-import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.key.KeyGenerator;
-import org.polyjdbc.core.key.KeyGeneratorRegistry;
 import org.polyjdbc.core.transaction.TransactionManager;
 
 public class QueryRunnerFactory {
 
-    private final Dialect dialect;
-
     private final TransactionManager transactionManager;
 
-    public QueryRunnerFactory(Dialect dialect, TransactionManager transactionManager) {
-        this.dialect = dialect;
+    private final KeyGenerator keyGenerator;
+
+    public QueryRunnerFactory(TransactionManager transactionManager, KeyGenerator keyGenerator) {
         this.transactionManager = transactionManager;
+        this.keyGenerator = keyGenerator;
     }
 
     public QueryRunner create() {
-        KeyGenerator keyGenerator = KeyGeneratorRegistry.keyGenerator(dialect);
         return new TransactionalQueryRunner(transactionManager.openTransaction(), keyGenerator);
     }
 }

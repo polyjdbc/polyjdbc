@@ -15,20 +15,20 @@
  */
 package org.polyjdbc.core.infrastructure;
 
-import java.sql.SQLException;
-import java.util.List;
-import javax.sql.DataSource;
 import org.polyjdbc.core.PolyJDBC;
 import org.polyjdbc.core.PolyJDBCBuilder;
 import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
-import org.polyjdbc.core.key.KeyGeneratorRegistry;
 import org.polyjdbc.core.query.QueryFactory;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.transaction.TransactionManager;
 import org.polyjdbc.core.util.TheCloser;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.List;
 
 public abstract class PolyDatabaseTest {
 
@@ -94,7 +94,6 @@ public abstract class PolyDatabaseTest {
 
     protected void dropDatabase() throws Exception {
         dropSchema();
-        KeyGeneratorRegistry.keyGenerator(dialect()).reset();
     }
 
     protected abstract void dropSchema();

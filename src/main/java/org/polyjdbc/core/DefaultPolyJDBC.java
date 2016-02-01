@@ -1,6 +1,7 @@
 package org.polyjdbc.core;
 
 import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.key.KeyGeneratorFactory;
 import org.polyjdbc.core.query.*;
 import org.polyjdbc.core.schema.SchemaInspector;
 import org.polyjdbc.core.schema.SchemaManager;
@@ -28,7 +29,7 @@ public class DefaultPolyJDBC implements PolyJDBC {
     DefaultPolyJDBC(Dialect dialect, ColumnTypeMapper typeMapper, TransactionManager transactionManager) {
         this.dialect = dialect;
         this.queryFactory = new QueryFactory(dialect, typeMapper);
-        this.queryRunnerFactory = new QueryRunnerFactory(dialect, transactionManager);
+        this.queryRunnerFactory = new QueryRunnerFactory(transactionManager, KeyGeneratorFactory.create(dialect));
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
         this.transactionRunner = new TransactionRunner(queryRunnerFactory);
         this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
