@@ -6,7 +6,7 @@ import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.dialect.DialectRegistry;
 import org.polyjdbc.core.infrastructure.DataSourceFactory;
 import org.polyjdbc.core.integration.TestSchemaManager;
-import org.polyjdbc.core.key.KeyGeneratorRegistry;
+import org.polyjdbc.core.key.KeyGeneratorFactory;
 import org.polyjdbc.core.query.InsertQuery;
 import org.polyjdbc.core.query.QueryRunner;
 import org.polyjdbc.core.query.TransactionalQueryRunner;
@@ -45,7 +45,7 @@ public class UnmanagedTransactionTest {
     public void setUp() throws SQLException {
         connection = dataSource.getConnection();
         this.transaction = new Transaction(connection, new ExternalTransactionState());
-        this.queryRunner = new TransactionalQueryRunner(transaction, KeyGeneratorRegistry.keyGenerator(dialect));
+        this.queryRunner = new TransactionalQueryRunner(transaction, KeyGeneratorFactory.create(dialect));
     }
 
     @Test

@@ -27,17 +27,17 @@ import java.io.Closeable;
 
 public interface PolyJDBC {
 
-    public Dialect dialect();
+    Dialect dialect();
 
-    public QueryFactory query();
+    QueryFactory query();
 
-    public QueryRunner queryRunner();
+    QueryRunner queryRunner();
 
-    public SimpleQueryRunner simpleQueryRunner();
+    SimpleQueryRunner simpleQueryRunner();
 
-    public TransactionRunner transactionRunner();
+    TransactionRunner transactionRunner();
 
-    public SchemaManager schemaManager();
+    SchemaManager schemaManager();
 
     SchemaInspector schemaInspector();
 
