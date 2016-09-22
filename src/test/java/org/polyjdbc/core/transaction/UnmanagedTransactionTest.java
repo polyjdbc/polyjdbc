@@ -38,7 +38,7 @@ public class UnmanagedTransactionTest {
     public void setUpDatabase() {
         dataSource = DataSourceFactory.create(dialect, "jdbc:h2:mem:unmanaged_test", "polly", "polly");
         polyJDBC = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
-        new TestSchemaManager(polyJDBC).createSchema();
+        new TestSchemaManager(polyJDBC, null).createSchema();
     }
 
     @BeforeMethod

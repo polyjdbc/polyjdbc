@@ -34,16 +34,25 @@ class SchemaInspectorImpl implements SchemaInspector {
 
     private String catalog;
 
-    private String schema;
+    private String schemaName;
 
     SchemaInspectorImpl(Transaction transaction) {
         this(transaction, Locale.ENGLISH);
-        extractMetadata(transaction);
     }
 
     SchemaInspectorImpl(Transaction transaction, Locale locale) {
+        this(transaction, locale, null);
+    }
+
+    SchemaInspectorImpl(Transaction transaction, String schemaName) {
+        this(transaction, Locale.ENGLISH, schemaName);
+    }
+
+    SchemaInspectorImpl(Transaction transaction, Locale locale, String schemaName) {
         this.transaction = transaction;
         this.locale = locale;
+        this.schemaName = schemaName;
+        extractMetadata(transaction);
     }
 
     private void extractMetadata(Transaction transaction) {
@@ -59,7 +68,7 @@ class SchemaInspectorImpl implements SchemaInspector {
     @Override
     public boolean relationExists(String name) {
         try {
-            ResultSet resultSet = metadata.getTables(catalog, schema, convertCase(name), new String[]{"TABLE"});
+            ResultSet resultSet = metadata.getTables(catalog, schemaName, convertCase(name), new String[]{"TABLE"});
             transaction.registerCursor(resultSet);
 
             return resultSet.next();
@@ -71,7 +80,7 @@ class SchemaInspectorImpl implements SchemaInspector {
     @Override
     public boolean indexExists(String relationName, String indexName) {
         try {
-            ResultSet resultSet = metadata.getIndexInfo(catalog, schema, convertCase(relationName), false, true);
+            ResultSet resultSet = metadata.getIndexInfo(catalog, schemaName, convertCase(relationName), false, true);
             transaction.registerCursor(resultSet);
 
             String normalizedIndexName = convertCase(indexName);

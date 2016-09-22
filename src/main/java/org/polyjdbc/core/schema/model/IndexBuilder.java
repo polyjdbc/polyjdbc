@@ -36,12 +36,29 @@ public final class IndexBuilder {
         this.schema = schema;
     }
 
+    private IndexBuilder(Dialect dialect, String name, String schemaName) {
+        this.index = new Index(dialect, name, schemaName);
+    }
+
+    private IndexBuilder(Schema schema, String name, String schemaName) {
+        this(schema.getDialect(), name, schemaName);
+        this.schema = schema;
+    }
+
     public static IndexBuilder index(Dialect dialect, String name) {
         return new IndexBuilder(dialect, name);
     }
 
     public static IndexBuilder index(Schema schema, String name) {
         return new IndexBuilder(schema, name);
+    }
+
+    public static IndexBuilder index(Dialect dialect, String name, String schemaName) {
+        return new IndexBuilder(dialect, name, schemaName);
+    }
+
+    public static IndexBuilder index(Schema schema, String name, String schemaName) {
+        return new IndexBuilder(schema, name, schemaName);
     }
 
     public Index build() {

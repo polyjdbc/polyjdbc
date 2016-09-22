@@ -30,8 +30,17 @@ public final class SequenceBuilder {
         this.sequence = new Sequence(schema.getDialect(), name);
     }
 
+    private SequenceBuilder(Schema schema, String name, String schemaName) {
+        this.schema = schema;
+        this.sequence = new Sequence(schema.getDialect(), name, schemaName);
+    }
+
     public static SequenceBuilder sequence(Schema schema, String name) {
         return new SequenceBuilder(schema, name);
+    }
+
+    public static SequenceBuilder sequence(Schema schema, String name, String schemaName) {
+        return new SequenceBuilder(schema, name, schemaName);
     }
 
     public Sequence build() {

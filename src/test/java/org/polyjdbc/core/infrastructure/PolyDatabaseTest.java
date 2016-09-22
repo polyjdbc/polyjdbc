@@ -64,6 +64,26 @@ public abstract class PolyDatabaseTest {
         return transactionManager.openTransaction();
     }
 
+    protected void setDataSource(DataSource dataSource)
+    {
+        this.dataSource = dataSource;
+    }
+
+    protected void setPolyJDBC(PolyJDBC polyJDBC)
+    {
+        this.polyJDBC = polyJDBC;
+    }
+
+    protected void setTransactionManager(TransactionManager transactionManager)
+    {
+        this.transactionManager = transactionManager;
+    }
+
+    protected void setCleaner(TheCleaner cleaner)
+    {
+        this.cleaner = cleaner;
+    }
+
     protected void h2DatabaseInterface() {
         Transaction transaction = null;
         try {
@@ -76,11 +96,11 @@ public abstract class PolyDatabaseTest {
         }
     }
 
-    protected DataSource createDatabase(String dialectCode, String jdbcUrl, String user, String password) throws Exception {
+    protected DataSource createDatabase(String dialectCode, String jdbcUrl, String user, String password, String schemaName) throws Exception {
         Dialect dialect = DialectRegistry.dialect(dialectCode);
 
         this.dataSource = DataSourceFactory.create(dialect, jdbcUrl, user, password);
-        this.polyJDBC = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
+        this.polyJDBC = PolyJDBCBuilder.polyJDBC(dialect, schemaName).connectingToDataSource(dataSource).build();
         this.transactionManager = new DataSourceTransactionManager(dataSource);
 
         this.cleaner = new TheCleaner(polyJDBC);

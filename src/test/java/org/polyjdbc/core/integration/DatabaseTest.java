@@ -25,20 +25,21 @@ import java.util.Arrays;
 public class DatabaseTest extends PolyDatabaseTest {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DatabaseTest.class);
 
-    private TestSchemaManager schemaManager;
+    protected TestSchemaManager schemaManager;
     
-    @Parameters({"dialect", "url", "user", "password"})
+    @Parameters({"dialect", "url", "user", "password", "schemaName"})
     @BeforeClass(alwaysRun = true)
     public void setUpDatabase(@Optional("H2") String dialectCode,
                               @Optional("jdbc:h2:mem:test") String url,
                               @Optional("polly") String user,
-                              @Optional("polly") String password) throws Exception
+                              @Optional("polly") String password,
+                              @Optional String schemaName) throws Exception
     {
         logger.info("staring tests with "+dialectCode+" database ...");
 
-        super.createDatabase(dialectCode, url, user, password);
+        super.createDatabase(dialectCode, url, user, password, schemaName);
 
-        this.schemaManager = new TestSchemaManager(polyJDBC());
+        this.schemaManager = new TestSchemaManager(polyJDBC(), schemaName);
         schemaManager.createSchema();
     }
 

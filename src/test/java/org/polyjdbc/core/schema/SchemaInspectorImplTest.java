@@ -29,6 +29,7 @@ public class SchemaInspectorImplTest extends DatabaseTest {
 
     @Test
     public void shouldReturnTrueWhenRelationExists() {
+
         // given
         SchemaInspector inspector = new SchemaInspectorImpl(transaction());
 

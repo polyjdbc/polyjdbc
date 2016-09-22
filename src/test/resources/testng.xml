@@ -6,4 +6,18 @@
             <package name="org.polyjdbc.core.*"/>
         </packages>
     </test>
+
+    <test name="h2-with-schema">
+        <groups>
+            <run>
+                <include name="integration"/>
+            </run>
+        </groups>
+
+        <parameter name="schemaName" value="public"/>
+
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
 </suite>

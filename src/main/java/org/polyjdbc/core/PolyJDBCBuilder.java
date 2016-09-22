@@ -16,6 +16,8 @@ public final class PolyJDBCBuilder {
 
     private final Dialect dialect;
 
+    private String schemaName;
+
     private final Map<Class<?>, SqlType> customMappings = new HashMap<Class<?>, SqlType>();
     
     private DataSource dataSource;
@@ -23,7 +25,12 @@ public final class PolyJDBCBuilder {
     private ConnectionProvider connectionProvider;
 
     private PolyJDBCBuilder(Dialect dialect) {
+        this(dialect, null);
+    }
+
+    private PolyJDBCBuilder(Dialect dialect, String schemaName) {
         this.dialect = dialect;
+        this.schemaName = schemaName;
     }
 
     /**
@@ -31,6 +38,13 @@ public final class PolyJDBCBuilder {
      */
     public static PolyJDBCBuilder polyJDBC(Dialect dialect) {
         return new PolyJDBCBuilder(dialect);
+    }
+
+    /**
+     * Create new PolyJDBC instance with a given dialect and schema.
+     */
+    public static PolyJDBCBuilder polyJDBC(Dialect dialect, String schemaName) {
+        return new PolyJDBCBuilder(dialect, schemaName);
     }
 
     /**
@@ -43,7 +57,7 @@ public final class PolyJDBCBuilder {
         } else {
             manager = new ExternalTransactionManager(connectionProvider);
         }
-        return new DefaultPolyJDBC(dialect, new ColumnTypeMapper(customMappings), manager);
+        return new DefaultPolyJDBC(dialect, schemaName, new ColumnTypeMapper(customMappings), manager);
     }
 
     /**
