@@ -33,8 +33,7 @@ public class DatabaseTest extends PolyDatabaseTest {
                               @Optional("jdbc:h2:mem:test") String url,
                               @Optional("polly") String user,
                               @Optional("polly") String password,
-                              @Optional String schemaName) throws Exception
-    {
+                              @Optional String schemaName) throws Exception {
         logger.info("staring tests with "+dialectCode+" database ...");
 
         super.createDatabase(dialectCode, url, user, password, schemaName);

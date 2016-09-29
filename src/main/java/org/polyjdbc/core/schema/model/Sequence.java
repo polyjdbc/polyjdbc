@@ -36,8 +36,7 @@ public class Sequence implements SchemaEntity {
     public Sequence(Dialect dialect, String name, String schemaName) {
         this.name = name;
         this.dialect = dialect;
-        if ((schemaName == null) || (schemaName.isEmpty()))
-        {
+        if ((schemaName == null) || (schemaName.isEmpty())) {
             this.schemaNameWithSeperator = "";
         } else {
             this.schemaNameWithSeperator = schemaName + ".";

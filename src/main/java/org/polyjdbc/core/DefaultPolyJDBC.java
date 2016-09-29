@@ -38,8 +38,7 @@ public class DefaultPolyJDBC implements PolyJDBC {
         this.schemaManagerFactory = new SchemaManagerFactory(transactionManager, schemaName());
     }
 
-    public String schemaName()
-    {
+    public String schemaName() {
         return schemaName;
     }
 

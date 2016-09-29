@@ -84,13 +84,11 @@ public final class Schema {
             return SequenceBuilder.sequence(this, name, getSchemaName());
     }
 
-    public String getSchemaName()
-    {
+    public String getSchemaName() {
         return schemaName;
     }
 
-    public void setSchemaName(String schemaName)
-    {
+    public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
 }

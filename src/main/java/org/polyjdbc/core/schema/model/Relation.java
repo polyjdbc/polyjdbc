@@ -46,8 +46,7 @@ public class Relation implements SchemaEntity {
     Relation(Dialect dialect, String name, String schemaName) {
         this.dialect = dialect;
         this.name = name;
-        if ((schemaName == null) || (schemaName.isEmpty()))
-        {
+        if ((schemaName == null) || (schemaName.isEmpty())) {
             this.schemaNameWithSeperator = "";
         } else {
             this.schemaNameWithSeperator = schemaName + ".";
