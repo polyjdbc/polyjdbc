@@ -20,6 +20,7 @@ branches:
     - master
     - development
     - 20
+    
 
 env:
   global:
