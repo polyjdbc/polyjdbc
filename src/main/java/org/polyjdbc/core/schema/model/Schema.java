@@ -64,24 +64,15 @@ public final class Schema {
     }
 
     public RelationBuilder addRelation(String name) {
-        if ((schemaName == null) || (schemaName.isEmpty()))
-            return RelationBuilder.relation(this, name);
-        else
-            return RelationBuilder.relation(this, name, getSchemaName());
+        return RelationBuilder.relation(this, name, getSchemaName());
     }
 
     public IndexBuilder addIndex(String name) {
-        if ((schemaName == null) || (schemaName.isEmpty()))
-            return IndexBuilder.index(this, name);
-        else
-            return IndexBuilder.index(this, name, getSchemaName());
+        return IndexBuilder.index(this, name, getSchemaName());
     }
 
     public SequenceBuilder addSequence(String name) {
-        if ((schemaName == null) || (schemaName.isEmpty()))
-            return SequenceBuilder.sequence(this, name);
-        else
-            return SequenceBuilder.sequence(this, name, getSchemaName());
+        return SequenceBuilder.sequence(this, name, getSchemaName());
     }
 
     public String getSchemaName() {

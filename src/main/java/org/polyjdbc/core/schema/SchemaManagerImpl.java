@@ -32,17 +32,10 @@ class SchemaManagerImpl implements SchemaManager {
 
     private static final Logger logger = LoggerFactory.getLogger(SchemaManagerImpl.class);
 
-    private String schemaName;
-
     private final Transaction transaction;
 
     SchemaManagerImpl(Transaction transaction) {
-        this(transaction, null);
-    }
-
-    SchemaManagerImpl(Transaction transaction, String schemaName) {
         this.transaction = transaction;
-        this.schemaName = schemaName;
     }
 
     @Override
