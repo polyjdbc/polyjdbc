@@ -15,12 +15,6 @@ install:
 script:
   - ./gradlew check -Pintegration
 
-branches:
-  only:
-    - master
-    - development
-    - 20
-    
 
 env:
   global:
