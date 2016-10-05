@@ -27,9 +27,20 @@ public class Sequence implements SchemaEntity {
 
     private final Dialect dialect;
 
+    private String schemaNameWithSeparator;
+
     public Sequence(Dialect dialect, String name) {
+        this(dialect, name, "");
+    }
+
+    public Sequence(Dialect dialect, String name, String schemaName) {
         this.name = name;
         this.dialect = dialect;
+        if (schemaName == null || schemaName.isEmpty()) {
+            this.schemaNameWithSeparator = "";
+        } else {
+            this.schemaNameWithSeparator = schemaName + ".";
+        }
     }
 
     @Override
@@ -44,11 +55,11 @@ public class Sequence implements SchemaEntity {
 
     @Override
     public String ddl() {
-        return dialect.constraints().createSequence(name);
+        return dialect.constraints().createSequence(schemaNameWithSeparator+name);
     }
 
     @Override
     public String dropDDL() {
-        return "DROP SEQUENCE " + name;
+        return "DROP SEQUENCE " + schemaNameWithSeparator+name;
     }
 }

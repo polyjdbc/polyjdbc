@@ -32,8 +32,15 @@ public final class Schema {
 
     private final List<Sequence> sequences = new ArrayList<Sequence>();
 
+    private String schemaName;
+
     public Schema(Dialect dialect) {
+        this(dialect, null);
+    }
+
+    public Schema(Dialect dialect, String schemaName) {
         this.dialect = dialect;
+        this.schemaName = schemaName;
     }
 
     public Dialect getDialect() {
@@ -57,14 +64,22 @@ public final class Schema {
     }
 
     public RelationBuilder addRelation(String name) {
-        return RelationBuilder.relation(this, name);
+        return RelationBuilder.relation(this, name, getSchemaName());
     }
 
     public IndexBuilder addIndex(String name) {
-        return IndexBuilder.index(this, name);
+        return IndexBuilder.index(this, name, getSchemaName());
     }
 
     public SequenceBuilder addSequence(String name) {
-        return SequenceBuilder.sequence(this, name);
+        return SequenceBuilder.sequence(this, name, getSchemaName());
+    }
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
     }
 }

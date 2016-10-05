@@ -27,6 +27,8 @@ import java.io.Closeable;
 
 public interface PolyJDBC {
 
+    String schemaName();
+
     Dialect dialect();
 
     QueryFactory query();

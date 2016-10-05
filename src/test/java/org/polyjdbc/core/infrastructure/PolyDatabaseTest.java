@@ -76,11 +76,11 @@ public abstract class PolyDatabaseTest {
         }
     }
 
-    protected DataSource createDatabase(String dialectCode, String jdbcUrl, String user, String password) throws Exception {
+    protected DataSource createDatabase(String dialectCode, String jdbcUrl, String user, String password, String schemaName) throws Exception {
         Dialect dialect = DialectRegistry.dialect(dialectCode);
 
         this.dataSource = DataSourceFactory.create(dialect, jdbcUrl, user, password);
-        this.polyJDBC = PolyJDBCBuilder.polyJDBC(dialect).connectingToDataSource(dataSource).build();
+        this.polyJDBC = PolyJDBCBuilder.polyJDBC(dialect, schemaName).connectingToDataSource(dataSource).build();
         this.transactionManager = new DataSourceTransactionManager(dataSource);
 
         this.cleaner = new TheCleaner(polyJDBC);

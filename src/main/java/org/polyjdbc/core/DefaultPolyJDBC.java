@@ -26,13 +26,20 @@ public class DefaultPolyJDBC implements PolyJDBC {
 
     private final SchemaManagerFactory schemaManagerFactory;
 
-    DefaultPolyJDBC(Dialect dialect, ColumnTypeMapper typeMapper, TransactionManager transactionManager) {
+    private final String schemaName;
+
+    DefaultPolyJDBC(Dialect dialect, String schemaName, ColumnTypeMapper typeMapper, TransactionManager transactionManager) {
         this.dialect = dialect;
+        this.schemaName = schemaName;
         this.queryFactory = new QueryFactory(dialect, typeMapper);
         this.queryRunnerFactory = new QueryRunnerFactory(transactionManager, KeyGeneratorFactory.create(dialect));
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
         this.transactionRunner = new TransactionRunner(queryRunnerFactory);
-        this.schemaManagerFactory = new SchemaManagerFactory(transactionManager);
+        this.schemaManagerFactory = new SchemaManagerFactory(transactionManager, schemaName());
+    }
+
+    public String schemaName() {
+        return schemaName;
     }
 
     public Dialect dialect() {
@@ -70,4 +77,5 @@ public class DefaultPolyJDBC implements PolyJDBC {
     public void close(Closeable... toClose) {
         TheCloser.close(toClose);
     }
+
 }

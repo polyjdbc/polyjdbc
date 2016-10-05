@@ -49,6 +49,10 @@ task wrapper(type: Wrapper) {
 test {
     useTestNG()
 
+    options {
+        suiteXmlFiles = [ project.file('src/test/resources/testng.xml') ]
+    }
+
     if(project.hasProperty('integration')) {
         options {
             suiteXmlFiles = [ project.file('src/test/resources/testng.xml'), project.file('src/test/resources/testng-integration.xml') ]

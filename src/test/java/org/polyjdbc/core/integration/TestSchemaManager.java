@@ -25,12 +25,16 @@ public class TestSchemaManager {
 
     private Schema schema;
 
-    public TestSchemaManager(PolyJDBC polyJDBC) {
+    private String schemaName;
+
+    public TestSchemaManager(PolyJDBC polyJDBC, String schemaName) {
         this.polyJDBC = polyJDBC;
+        this.schemaName = schemaName;
     }
 
     public void createSchema() {
-        schema = new Schema(polyJDBC.dialect());
+        schema = new Schema(polyJDBC.dialect(), schemaName);
+
 
         schema.addRelation("test")
                 .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").and()

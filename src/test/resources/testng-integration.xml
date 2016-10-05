@@ -19,6 +19,24 @@
         </packages>
     </test>
 
+    <test name="postgres-with-schema">
+        <groups>
+            <run>
+                <include name="integration"/>
+            </run>
+        </groups>
+
+        <parameter name="dialect" value="POSTGRES"/>
+        <parameter name="url" value="jdbc:postgresql://localhost:5432/polly"/>
+        <parameter name="user" value="polly"/>
+        <parameter name="password" value="polly"/>
+        <parameter name="schemaName" value="public"/>
+
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
+
     <test name="mysql">
         <groups>
             <run>
@@ -30,6 +48,24 @@
         <parameter name="url" value="jdbc:mysql://localhost/polly"/>
         <parameter name="user" value="polly"/>
         <parameter name="password" value="polly"/>
+
+        <packages>
+            <package name="org.polyjdbc.core.*"/>
+        </packages>
+    </test>
+
+    <test name="mysql-with-schema">
+        <groups>
+            <run>
+                <include name="integration"/>
+            </run>
+        </groups>
+
+        <parameter name="dialect" value="MYSQL"/>
+        <parameter name="url" value="jdbc:mysql://localhost/polly"/>
+        <parameter name="user" value="polly"/>
+        <parameter name="password" value="polly"/>
+        <parameter name="schemaName" value="polly"/>
 
         <packages>
             <package name="org.polyjdbc.core.*"/>

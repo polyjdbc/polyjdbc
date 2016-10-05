@@ -25,12 +25,19 @@ public class SchemaManagerFactory {
 
     private final TransactionManager transactionManager;
 
-    public SchemaManagerFactory(TransactionManager transactionManager) {
+    private String schemaName;
+
+    public SchemaManagerFactory(TransactionManager transactionManager, String schemaName) {
         this.transactionManager = transactionManager;
+        if (schemaName == null || schemaName.isEmpty()) {
+            this.schemaName = null;
+        } else {
+            this.schemaName = schemaName;
+        }
     }
 
     public SchemaInspector createInspector() {
-        return new SchemaInspectorImpl(transactionManager.openTransaction());
+        return new SchemaInspectorImpl(transactionManager.openTransaction(), schemaName);
     }
 
     public SchemaManager createManager() {

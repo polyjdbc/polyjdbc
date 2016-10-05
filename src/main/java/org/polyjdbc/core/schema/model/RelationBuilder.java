@@ -39,8 +39,19 @@ public final class RelationBuilder {
         heading = new Heading(dialect);
     }
 
+    private RelationBuilder(Dialect dialect, String name, String schemaName) {
+        this.dialect = dialect;
+        relation = new Relation(dialect, name, schemaName);
+        heading = new Heading(dialect);
+    }
+
     private RelationBuilder(Schema schema, String name) {
         this(schema.getDialect(), name);
+        this.schema = schema;
+    }
+
+    private RelationBuilder(Schema schema, String name, String schemaName) {
+        this(schema.getDialect(), name, schemaName);
         this.schema = schema;
     }
 
@@ -50,6 +61,14 @@ public final class RelationBuilder {
 
     public static RelationBuilder relation(Schema schema, String name) {
         return new RelationBuilder(schema, name);
+    }
+
+    public static RelationBuilder relation(Dialect dialect, String name, String schemaName) {
+        return new RelationBuilder(dialect, name, schemaName);
+    }
+
+    public static RelationBuilder relation(Schema schema, String name, String schemaName) {
+        return new RelationBuilder(schema, name, schemaName);
     }
 
     public Relation build() {

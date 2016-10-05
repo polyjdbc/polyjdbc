@@ -35,9 +35,20 @@ public class Index implements SchemaEntity {
 
     private String[] targetAttributes;
 
+    private String schemaNameWithSeparator;
+
     Index(Dialect dialect, String name) {
+        this(dialect, name, "");
+    }
+
+    Index(Dialect dialect, String name, String schemaName) {
         this.dialect = dialect;
         this.name = name;
+        if ((schemaName == null) || (schemaName.isEmpty())) {
+            this.schemaNameWithSeparator = "";
+        } else {
+            this.schemaNameWithSeparator = schemaName + ".";
+        }
     }
     
     @Override
@@ -53,14 +64,14 @@ public class Index implements SchemaEntity {
     @Override
     public String ddl() {
         StringBuilder builder = new StringBuilder(DDL_LENGTH);
-        builder.append("CREATE INDEX ").append(name).append(" ON ").append(targetRelation).append("(")
+        builder.append("CREATE INDEX ").append(name).append(" ON ").append(schemaNameWithSeparator).append(targetRelation).append("(")
                 .append(StringUtils.concatenate(",", (Object[]) targetAttributes)).append(")");
         return builder.toString();
     }
 
     @Override
     public String dropDDL() {
-        return dialect.constraints().dropIndex(name, targetRelation);
+        return dialect.constraints().dropIndex(name, schemaNameWithSeparator+targetRelation);
     }
 
     public String getTargetRelation() {
