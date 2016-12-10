@@ -15,13 +15,12 @@
  */
 package org.polyjdbc.core.key;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.transaction.Transaction;
+
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.transaction.Transaction;
 
 /**
  *
@@ -33,47 +32,39 @@ public class SequenceAllocation implements KeyGenerator {
 
     private final Object lock = new Object();
 
-    private final Dialect dialect;
+    private final SequenceNextValQuery sequenceNextValQuery;
 
     private Map<String, Sequence> sequences = new ConcurrentHashMap<String, Sequence>();
 
     private ThreadLocal<Long> lastKey = new ThreadLocal<Long>();
 
     public SequenceAllocation(Dialect dialect) {
-        this.dialect = dialect;
+        this.sequenceNextValQuery = new SequenceNextValQuery(dialect);
+    }
+
+    SequenceAllocation(SequenceNextValQuery sequenceNextValQuery) {
+        this.sequenceNextValQuery = sequenceNextValQuery;
     }
 
     @Override
     public long generateKey(String sequenceName, Transaction transaction) throws SQLException {
-        Sequence sequence = findSequence(sequenceName);
-        if (sequence.recalculationNeeded()) {
-            synchronized (lock) {
-                long currentSequenceValue = fetchSequenceValue(sequenceName, transaction);
-                sequence.recalculate(currentSequenceValue);
-            }
-        }
-        lastKey.set(sequence.nextValue());
-        return lastKey.get();
+        long nextVal = findSequence(sequenceName).nextValue(sequenceNextValQuery, transaction);
+        lastKey.set(nextVal);
+        return nextVal;
     }
 
     private Sequence findSequence(String sequenceName) {
-        if (sequences.containsKey(sequenceName)) {
-            return sequences.get(sequenceName);
-        } else {
-            Sequence sequence = new Sequence(sequenceName, SEQUENCE_ALLOCATION_SIZE);
-            sequences.put(sequenceName, sequence);
-            return sequence;
+        if (!sequences.containsKey(sequenceName)) {
+            synchronized (lock) {
+                //double check, condition could change while obtaining the lock
+                if (!sequences.containsKey(sequenceName)) {
+                    Sequence sequence = new Sequence(sequenceName, SEQUENCE_ALLOCATION_SIZE);
+                    sequences.put(sequenceName, sequence);
+                }
+            }
         }
-    }
 
-    private long fetchSequenceValue(String sequenceName, Transaction transaction) throws SQLException {
-        try(PreparedStatement statement = transaction.prepareStatement(dialect.nextFromSequence(sequenceName));
-            ResultSet resultSet = statement.executeQuery())
-        {
-            transaction.registerCursor(resultSet);
-            resultSet.next();
-            return resultSet.getLong(1);
-        }
+        return sequences.get(sequenceName);
     }
 
     @Override
