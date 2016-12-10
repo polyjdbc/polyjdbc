@@ -29,7 +29,7 @@ public class SchemaManagerFactory {
 
     public SchemaManagerFactory(TransactionManager transactionManager, String schemaName) {
         this.transactionManager = transactionManager;
-        if ((schemaName == null) || (schemaName.isEmpty())) {
+        if (schemaName == null || schemaName.isEmpty()) {
             this.schemaName = null;
         } else {
             this.schemaName = schemaName;
@@ -41,6 +41,6 @@ public class SchemaManagerFactory {
     }
 
     public SchemaManager createManager() {
-        return new SchemaManagerImpl(transactionManager.openTransaction(), schemaName);
+        return new SchemaManagerImpl(transactionManager.openTransaction());
     }
 }

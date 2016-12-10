@@ -33,11 +33,8 @@ public class TestSchemaManager {
     }
 
     public void createSchema() {
-        if (schemaName == null) {
-            schema = new Schema(polyJDBC.dialect());
-        } else {
-            schema = new Schema(polyJDBC.dialect(), schemaName);
-        }
+        schema = new Schema(polyJDBC.dialect(), schemaName);
+
 
         schema.addRelation("test")
                 .withAttribute().longAttr("id").withAdditionalModifiers("AUTO_INCREMENT").and()

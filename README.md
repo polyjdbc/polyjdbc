@@ -187,6 +187,8 @@ PolyJDBC is published under [Apache License 2.0](http://www.apache.org/licenses/
 
 ## Changelog
 
+* **0.6.3** (05.10.2016)
+    * added the possibility to create relations in given schema (pr by @ianagius)
 * **0.5.0**
     * added possibility to plug in external framework for transaction management
     * [API change] PolyJDBC is build using PolyJDBCBuilder

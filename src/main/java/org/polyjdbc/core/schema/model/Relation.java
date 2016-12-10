@@ -35,7 +35,7 @@ public class Relation implements SchemaEntity {
 
     private Heading heading;
 
-    private String schemaNameWithSeperator;
+    private String schemaNameWithSeparator;
 
     private Collection<Constraint> constraints = new LinkedList<Constraint>();
 
@@ -47,9 +47,9 @@ public class Relation implements SchemaEntity {
         this.dialect = dialect;
         this.name = name;
         if ((schemaName == null) || (schemaName.isEmpty())) {
-            this.schemaNameWithSeperator = "";
+            this.schemaNameWithSeparator = "";
         } else {
-            this.schemaNameWithSeperator = schemaName + ".";
+            this.schemaNameWithSeparator = schemaName + ".";
         }
     }
 
@@ -64,7 +64,7 @@ public class Relation implements SchemaEntity {
         String constraintsDDL = StringUtils.concatenate(",\n", constraints.toArray());
         StringBuilder builder = new StringBuilder(TO_STRING_LENGTH_BASE + headingDDL.length() + constraintsDDL.length());
 
-        builder.append("CREATE TABLE ").append(schemaNameWithSeperator+name).append(" (\n")
+        builder.append("CREATE TABLE ").append(schemaNameWithSeparator+name).append(" (\n")
                 .append(headingDDL);
         if (constraintsDDL.length() > 0) {
             builder.append(",\n");
@@ -77,7 +77,7 @@ public class Relation implements SchemaEntity {
 
     @Override
     public String dropDDL() {
-        return "DROP TABLE " + schemaNameWithSeperator+name;
+        return "DROP TABLE " + schemaNameWithSeparator+name;
     }
 
     public Dialect getDialect() {
