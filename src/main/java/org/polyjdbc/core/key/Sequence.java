@@ -16,9 +16,11 @@
 package org.polyjdbc.core.key;
 
 import org.polyjdbc.core.exception.SequenceLimitReachedException;
+import org.polyjdbc.core.transaction.Transaction;
+
+import java.sql.SQLException;
 
 /**
- *
  * @author Adam Dubiel
  */
 final class Sequence {
@@ -36,22 +38,29 @@ final class Sequence {
         this.sequenceName = sequenceName;
     }
 
-    final synchronized void recalculate(long currentSequenceValue) {
-        currentValue = allocationSize * currentSequenceValue;
+    synchronized long nextValue(SequenceNextValQuery sequenceNextValQuery, Transaction transaction) throws SQLException{
+        if (recalculationNeeded()) {
+            long currentSequenceValue = sequenceNextValQuery.queryForNextVal(sequenceName, transaction);
+            recalculate(currentSequenceValue);
+        }
+        return nextLocalValue();
+    }
+
+    long nextLocalValue() {
+        if(recalculationNeeded()) {
+            throw new SequenceLimitReachedException("Sequence " + sequenceName + " has reached its limit of " + currentLimit + ". "
+                    + "Before fetching value, check if recalculation is needed using recalculationNeeded() method.");
+        }
+        currentValue++;
+        return currentValue - 1;
+    }
+
+    void recalculate(long currentSequenceValue) {
+        currentValue = allocationSize * currentSequenceValue ;
         currentLimit = allocationSize * (currentSequenceValue + 1) - 1;
     }
 
     boolean recalculationNeeded() {
         return currentValue > currentLimit;
-    }
-
-    synchronized long nextValue() {
-        if(recalculationNeeded()) {
-            throw new SequenceLimitReachedException("Sequence " + sequenceName + " has reached its limit of " + currentLimit + ". "
-                    + "Before fetching value, check if recalculation is needed using recalculationNeeded() method.");
-        }
-        long nextValue = currentValue;
-        currentValue++;
-        return nextValue;
     }
 }
