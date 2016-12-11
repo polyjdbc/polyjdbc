@@ -59,7 +59,7 @@ public class SequenceTest {
         sequence.recalculate(1);
 
         // when
-        long sequenceValue = sequence.nextValue();
+        long sequenceValue = sequence.nextLocalValue();
 
         // then
         assertThat(sequenceValue).isEqualTo(1);
@@ -72,7 +72,7 @@ public class SequenceTest {
         sequence.recalculate(1);
 
         // when
-        sequence.nextValue();
+        sequence.nextLocalValue();
 
         // then
         assertThat(sequence.recalculationNeeded()).isTrue();
@@ -85,7 +85,7 @@ public class SequenceTest {
 
         // when
         try {
-            sequence.nextValue();
+            sequence.nextLocalValue();
             fail("expected SequenceLimitReachedException!");
         } catch (Exception exception) {
             // then
