@@ -64,6 +64,22 @@ public abstract class PolyDatabaseTest {
         return transactionManager.openTransaction();
     }
 
+    protected void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    protected void setPolyJDBC(PolyJDBC polyJDBC) {
+        this.polyJDBC = polyJDBC;
+    }
+
+    protected void setTransactionManager(TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
+    protected void setCleaner(TheCleaner cleaner) {
+        this.cleaner = cleaner;
+    }
+
     protected void h2DatabaseInterface() {
         Transaction transaction = null;
         try {
