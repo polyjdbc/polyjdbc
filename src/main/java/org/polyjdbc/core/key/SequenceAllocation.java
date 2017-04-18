@@ -72,6 +72,7 @@ public class SequenceAllocation implements KeyGenerator {
         return lastKey.get();
     }
 
+    @Override
     public void reset() {
         synchronized (lock) {
             sequences.clear();

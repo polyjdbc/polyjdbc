@@ -26,6 +26,26 @@ class SequenceAllocationTest extends Specification {
         }
     }
 
+    def "should allocate new sequences after sequence cache eviction"(){
+        given:
+        def sequenceNextValQueryStub = Stub(SequenceNextValQuery) {
+            queryForNextVal(_,_) >>> (1..100).collect{it}
+        }
+        def transactionStub = Stub(Transaction)
+
+        def sequenceAllocation = new SequenceAllocation(sequenceNextValQueryStub)
+
+        expect:
+        sequenceAllocation.generateKey("seq1", transactionStub) == 100
+        sequenceAllocation.generateKey("seq1", transactionStub) == 101
+
+        when:
+        sequenceAllocation.reset()
+
+        then:
+        sequenceAllocation.generateKey("seq1", transactionStub) == 200
+    }
+
     def "should generate keys thread safely "(){
         given:
         def sequenceNextValQueryStub = Stub(SequenceNextValQuery) {
