@@ -46,4 +46,6 @@ public interface PolyJDBC {
     void rollback(QueryRunner... toRollback);
 
     void close(Closeable... toClose);
+
+    void resetKeyGeneratorCache();
 }
