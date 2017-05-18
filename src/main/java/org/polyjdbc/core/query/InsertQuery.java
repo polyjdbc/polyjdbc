@@ -61,6 +61,24 @@ public class InsertQuery {
         return query;
     }
 
+    Query build(boolean removeSeq) {
+        if(removeSeq) {
+            String s = valueNames.toString()
+                    .replaceAll("," + sequenceField, " ")
+                    .replaceAll(sequenceField + ",", " ")
+                    .replaceAll(", " + sequenceField, " ");
+            valueNames.setLength(0);
+            valueNames.append(s);
+            String s2 = values.toString()
+                    .replaceAll(",:" + sequenceField, " ")
+                    .replaceAll(":" + sequenceField + ",", " ")
+                    .replaceAll(", :" + sequenceField, " ");
+            values.setLength(0);
+            values.append(s2);
+        }
+        return build();
+    }
+
     /**
      * Creates <b>INSERT INTO</b> clause for given table name.
      */
