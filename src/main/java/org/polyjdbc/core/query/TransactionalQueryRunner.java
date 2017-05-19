@@ -104,12 +104,18 @@ public class TransactionalQueryRunner implements QueryRunner {
         try {
             boolean useSequence = insertQuery.sequenceSet();
 
+            boolean removeSeq = false;
+
             if (useSequence) {
                 long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
-                insertQuery.sequenceValue(key);
+                if(key == -1){
+                    removeSeq = true;
+                } else {
+                    insertQuery.sequenceValue(key);
+                }
             }
 
-            Query rawQuery = insertQuery.build();
+            Query rawQuery = insertQuery.build(removeSeq);
             try(PreparedStatement statement = rawQuery.createStatementWithValues(transaction)) {
                 transaction.executeUpdate(statement);
             }
