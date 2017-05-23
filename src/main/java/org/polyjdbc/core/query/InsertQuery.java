@@ -73,7 +73,7 @@ public abstract class InsertQuery {
      */
     public abstract InsertQuery sequence(String sequenceField, String sequenceName);
 
-    abstract boolean isSequenceUsed();
+    abstract boolean isIdInserted();
 
     abstract long generateSequenceValue(KeyGenerator keyGenerator, Transaction transaction) throws SQLException;
 

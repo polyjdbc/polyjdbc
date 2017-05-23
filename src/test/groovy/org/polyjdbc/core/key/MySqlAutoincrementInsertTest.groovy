@@ -21,14 +21,6 @@ class MySqlAutoincrementInsertTest extends Specification {
         PolyFactory.newPolyForMySql()
     }
 
-    def "should not use sequence for MySql "(){
-        given:
-        def insertQuery = createPoly().query().insert().into("test").sequence("id", "seq_test")
-
-        expect:
-        !insertQuery.sequenceUsed
-    }
-
     def "should insert records with autoincremented id"(){
         given:
         def recordsToInsert = 100

@@ -104,7 +104,7 @@ public class TransactionalQueryRunner implements QueryRunner {
         try {
             long key = 0;
 
-            if (insertQuery.isSequenceUsed()) {
+            if (insertQuery.isIdInserted() && insertQuery instanceof InsertWithSequence) {
                 key = insertQuery.generateSequenceValue(keyGenerator, transaction);
             }
 
@@ -113,7 +113,7 @@ public class TransactionalQueryRunner implements QueryRunner {
                 transaction.executeUpdate(statement);
             }
 
-            if (insertQuery instanceof InsertWithAutoincrement) {
+            if (insertQuery.isIdInserted() && insertQuery instanceof InsertWithAutoincrement) {
                 key = keyGenerator.getKeyFromLastInsert(transaction);
             }
 

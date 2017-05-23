@@ -22,7 +22,7 @@ class InsertWithSequence extends InsertQuery {
     }
 
     @Override
-    boolean isSequenceUsed() {
+    boolean isIdInserted() {
         return sequenceName != null;
     }
 
