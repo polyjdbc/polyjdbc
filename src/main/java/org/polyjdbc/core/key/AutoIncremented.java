@@ -25,12 +25,9 @@ import org.polyjdbc.core.transaction.Transaction;
  * @author Adam Dubiel
  */
 public class AutoIncremented implements KeyGenerator {
-
-    private static final long DEFAULT_VALUE = 0;
-
     @Override
     public long generateKey(String sequenceName, Transaction transaction) throws SQLException {
-        return DEFAULT_VALUE;
+        throw new RuntimeException("not implemented");
     }
 
     @Override

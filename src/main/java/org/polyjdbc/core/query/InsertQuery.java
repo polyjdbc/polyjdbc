@@ -15,8 +15,12 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.key.KeyGenerator;
+import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnTypeMapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
+
+import java.sql.SQLException;
 
 /**
  * Builds insert query, use {@link QueryFactory#insert() } to create new instance.
@@ -30,7 +34,7 @@ import org.polyjdbc.core.util.StringBuilderUtil;
  *
  * @author Adam Dubiel
  */
-public class InsertQuery {
+public abstract class InsertQuery {
 
     private static final int VALUES_LENGTH = 50;
 
@@ -39,12 +43,6 @@ public class InsertQuery {
     private final StringBuilder valueNames = new StringBuilder(VALUES_LENGTH);
 
     private final StringBuilder values = new StringBuilder(VALUES_LENGTH);
-
-    private String sequenceField;
-
-    private String sequenceName;
-
-    private boolean sequenceValueSet;
 
     InsertQuery(ColumnTypeMapper typeMapper) {
         this.query = new Query(typeMapper);
@@ -73,23 +71,11 @@ public class InsertQuery {
      * Insert next sequence value into column of given name. Only one sequenced
      * column per table is supported so far.
      */
-    public InsertQuery sequence(String sequenceField, String sequenceName) {
-        this.sequenceField = sequenceField;
-        this.sequenceName = sequenceName;
-        return value(sequenceField, sequenceField);
-    }
+    public abstract InsertQuery sequence(String sequenceField, String sequenceName);
 
-    boolean sequenceSet() {
-        return sequenceName != null;
-    }
+    abstract boolean isSequenceUsed();
 
-    String getSequenceName() {
-        return sequenceName;
-    }
-
-    String getSequenceField() {
-        return sequenceField;
-    }
+    abstract long generateSequenceValue(KeyGenerator keyGenerator, Transaction transaction) throws SQLException;
 
     /**
      * Insert value into column of given name. Object is automatically translated
@@ -100,24 +86,11 @@ public class InsertQuery {
     public InsertQuery value(String fieldName, Object value) {
         valueNames.append(fieldName).append(", ");
         values.append(":").append(fieldName).append(", ");
+        setArgument(fieldName, value);
+        return this;
+    }
+
+    void setArgument(String fieldName, Object value) {
         query.setArgument(fieldName, value);
-        return this;
-    }
-
-    /**
-     * Manually set sequenced field value.
-     */
-    public InsertQuery sequenceValue(long value) {
-        query.setArgument(sequenceField, value);
-        sequenceValueSet = true;
-        return this;
-    }
-
-    /**
-     * Returns true if sequenced field value was set manually and there is no
-     * need to use sequence generator.
-     */
-    public boolean isSequenceValueSet() {
-        return sequenceValueSet;
     }
 }
