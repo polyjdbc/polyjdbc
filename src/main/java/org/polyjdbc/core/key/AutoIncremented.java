@@ -27,7 +27,7 @@ import org.polyjdbc.core.transaction.Transaction;
 public class AutoIncremented implements KeyGenerator {
     @Override
     public long generateKey(String sequenceName, Transaction transaction) throws SQLException {
-        throw new RuntimeException("not implemented");
+        throw new RuntimeException("Not implemented. Can't generate key on AutoIncremented");
     }
 
     @Override
