@@ -33,7 +33,10 @@ public class QueryFactory {
      * Create insert query.
      */
     public InsertQuery insert() {
-        return new InsertQuery(typeMapper);
+        if (dialect.supportsSequences()) {
+            return new InsertWithSequence(typeMapper);
+        }
+        return new InsertWithAutoincrement(typeMapper);
     }
 
     /**

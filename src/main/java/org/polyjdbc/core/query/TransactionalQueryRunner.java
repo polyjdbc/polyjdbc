@@ -102,11 +102,10 @@ public class TransactionalQueryRunner implements QueryRunner {
     @Override
     public long insert(InsertQuery insertQuery) {
         try {
-            boolean useSequence = insertQuery.sequenceSet();
+            long key = 0;
 
-            if (useSequence) {
-                long key = keyGenerator.generateKey(insertQuery.getSequenceName(), transaction);
-                insertQuery.sequenceValue(key);
+            if (insertQuery.isIdInserted() && insertQuery instanceof InsertWithSequence) {
+                key = insertQuery.generateSequenceValue(keyGenerator, transaction);
             }
 
             Query rawQuery = insertQuery.build();
@@ -114,7 +113,11 @@ public class TransactionalQueryRunner implements QueryRunner {
                 transaction.executeUpdate(statement);
             }
 
-            return useSequence ? keyGenerator.getKeyFromLastInsert(transaction) : 0;
+            if (insertQuery.isIdInserted() && insertQuery instanceof InsertWithAutoincrement) {
+                key = keyGenerator.getKeyFromLastInsert(transaction);
+            }
+
+            return key;
         } catch (SQLException exception) {
             transaction.rollback();
             Query rawQuery = insertQuery.build();
