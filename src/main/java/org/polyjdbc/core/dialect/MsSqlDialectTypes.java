@@ -30,4 +30,9 @@ public class MsSqlDialectTypes extends DefaultDialectTypes {
     public String timestamp() {
         return "DATETIME";
     }
+
+    @Override
+    public String text() {
+        return "VARCHAR(MAX)";
+    }
 }
