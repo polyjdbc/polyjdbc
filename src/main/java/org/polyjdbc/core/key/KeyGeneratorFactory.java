@@ -17,6 +17,10 @@ public class KeyGeneratorFactory {
                 return new SequenceAllocation(dialect);
             case MSSQL:
                 return new SequenceAllocation(dialect);
+            case DB2400:
+                return new SequenceAllocation(dialect);
+            case DB2:
+                return new SequenceAllocation(dialect);
             default:
                 throw new IllegalStateException("Cannot create key generator for unknown dialect: " + dialect.getCode());
         }
