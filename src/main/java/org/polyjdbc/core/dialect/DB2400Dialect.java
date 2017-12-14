@@ -10,7 +10,7 @@ public class DB2400Dialect extends DB2Dialect {
 
     @Override
     public String getCode() {
-        return DialectRegistry.DB2.name();
+        return DialectRegistry.DB2400.name();
     }
 
     @Override

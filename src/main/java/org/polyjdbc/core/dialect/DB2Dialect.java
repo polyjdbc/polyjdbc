@@ -6,7 +6,7 @@ package org.polyjdbc.core.dialect;
  */
 public class DB2Dialect extends AbstractDialect {
 
-    private DialectConstraints constraints = new DefaultDialectConstraints();
+    private DialectTypes types = new DB2DialectTypes();
 
     @Override
     public String getCode() {
@@ -19,8 +19,7 @@ public class DB2Dialect extends AbstractDialect {
     }
 
     @Override
-    public DialectConstraints constraints() {
-        return constraints;
+    public DialectTypes types() {
+        return types;
     }
-
 }
