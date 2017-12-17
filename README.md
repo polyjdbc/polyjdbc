@@ -42,6 +42,7 @@ only 75kB, no dependencies except for slf4j logging API.
 * MySQL
 * Oracle 
 * Microsoft SQL Server
+* DB2 and DB2400 (beta)
 
 Thanks to [testng](http://testng.org/) magic PolyJDBC runs integration tests
 on each database. This way i can be sure that all features all supported across
