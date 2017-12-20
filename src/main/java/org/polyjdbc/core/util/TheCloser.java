@@ -29,14 +29,14 @@ public final class TheCloser {
     }
 
     public static void close(Closeable... toClose) {
-        try {
-            for (Closeable closeable : toClose) {
-                if (closeable != null) {
+        for (Closeable closeable : toClose) {
+            if (closeable != null) {
+                try {
                     closeable.close();
+                } catch (IOException exception) {
+                    logger.warn("Failed to close resource", exception);
                 }
             }
-        } catch (IOException exception) {
-            logger.warn("Failed to close resource", exception);
         }
     }
 
