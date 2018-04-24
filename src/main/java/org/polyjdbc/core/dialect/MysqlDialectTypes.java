@@ -16,8 +16,12 @@
 package org.polyjdbc.core.dialect;
 
 /**
- *
  * @author Adam Dubiel
  */
 public class MysqlDialectTypes extends DefaultDialectTypes {
+
+    @Override
+    public String timestamp() {
+        return "TIMESTAMP(3)";
+    }
 }
