@@ -20,15 +20,8 @@ package org.polyjdbc.core.dialect;
  */
 public class MysqlDialectTypes extends DefaultDialectTypes {
 
-    public String timestamp(int fractionalDigits) {
-        return "TIMESTAMP(" + fractionalDigits + ")";
-    }
-
-    public String timestampWithMilliseconds() {
-        return timestamp(3);
-    }
-
-    public String timestampWithMicroseconds() {
-        return timestamp(6);
+    @Override
+    public String timestamp() {
+        return "TIMESTAMP(3)";
     }
 }
