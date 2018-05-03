@@ -133,6 +133,10 @@ public final class RelationBuilder {
         return TimestampAttributeBuilder.timestamp(dialect, name, this);
     }
 
+    public BinaryAttributeBuilder binary(String name) {
+        return BinaryAttributeBuilder.binaryAttr(dialect, name, this);
+    }
+
     public RelationBuilder constrainedBy() {
         return this;
     }
