@@ -62,4 +62,38 @@ public class Sequence implements SchemaEntity {
     public String dropDDL() {
         return "DROP SEQUENCE " + schemaNameWithSeparator+name;
     }
+
+    public static final class Builder {
+
+        private final Sequence sequence;
+
+        private final Schema schema;
+
+        private Builder(Schema schema, String name) {
+            this.schema = schema;
+            this.sequence = new Sequence(schema.getDialect(), name);
+        }
+
+        private Builder(Schema schema, String name, String schemaName) {
+            this.schema = schema;
+            this.sequence = new Sequence(schema.getDialect(), name, schemaName);
+        }
+
+        public static Builder sequence(Schema schema, String name) {
+            return new Builder(schema, name);
+        }
+
+        public static Builder sequence(Schema schema, String name, String schemaName) {
+            return new Builder(schema, name, schemaName);
+        }
+
+        public Sequence build() {
+            if (schema != null) {
+                schema.add(sequence);
+            }
+            return sequence;
+        }
+
+    }
+
 }

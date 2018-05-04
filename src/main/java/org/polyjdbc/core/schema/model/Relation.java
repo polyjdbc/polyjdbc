@@ -104,4 +104,138 @@ public class Relation implements SchemaEntity {
     void addConstraint(Constraint constraint) {
         constraints.add(constraint);
     }
+
+    public static final class Builder {
+
+        private Relation relation;
+
+        private Schema schema;
+
+        private Heading heading;
+
+        private Dialect dialect;
+
+        private Builder(Dialect dialect, String name) {
+            this.dialect = dialect;
+            relation = new Relation(dialect, name);
+            heading = new Heading(dialect);
+        }
+
+        private Builder(Dialect dialect, String name, String schemaName) {
+            this.dialect = dialect;
+            relation = new Relation(dialect, name, schemaName);
+            heading = new Heading(dialect);
+        }
+
+        private Builder(Schema schema, String name) {
+            this(schema.getDialect(), name);
+            this.schema = schema;
+        }
+
+        private Builder(Schema schema, String name, String schemaName) {
+            this(schema.getDialect(), name, schemaName);
+            this.schema = schema;
+        }
+
+        public static Builder relation(Dialect dialect, String name) {
+            return new Builder(dialect, name);
+        }
+
+        public static Builder relation(Schema schema, String name) {
+            return new Builder(schema, name);
+        }
+
+        public static Builder relation(Dialect dialect, String name, String schemaName) {
+            return new Builder(dialect, name, schemaName);
+        }
+
+        public static Builder relation(Schema schema, String name, String schemaName) {
+            return new Builder(schema, name, schemaName);
+        }
+
+        public Relation build() {
+            relation.withHeading(heading);
+            if (schema != null) {
+                schema.add(relation);
+            }
+            return relation;
+        }
+
+        Builder with(Attribute attribute) {
+            heading.addAttribute(attribute);
+            return this;
+        }
+
+        Builder with(Constraint constraint) {
+            relation.addConstraint(constraint);
+            return this;
+        }
+
+        public Builder withAttribute() {
+            return this;
+        }
+
+        public LongAttribute.Builder longAttr(String name) {
+            return LongAttribute.Builder.longAttr(dialect, name, this);
+        }
+
+        public IntegerAttribute.Builder integer(String name) {
+            return IntegerAttribute.Builder.integer(dialect, name, this);
+        }
+
+        public FloatAttribute.Builder floatAttr(String name) {
+            return FloatAttribute.Builder.floatAttr(dialect, name, this);
+        }
+
+        public NumberAttribute.Builder number(String name) {
+            return NumberAttribute.Builder.number(dialect, name, this);
+        }
+
+        public StringAttribute.Builder string(String name) {
+            return StringAttribute.Builder.string(dialect, name, this);
+        }
+
+        public TextAttribute.Builder text(String name) {
+            return TextAttribute.Builder.text(dialect, name, this);
+        }
+
+        public CharAttribute.Builder character(String name) {
+            return CharAttribute.Builder.character(dialect, name, this);
+        }
+
+        public BooleanAttribute.Builder booleanAttr(String name) {
+            return BooleanAttribute.Builder.booleanAttr(dialect, name, this);
+        }
+
+        public DateAttribute.Builder date(String name) {
+            return DateAttribute.Builder.date(dialect, name, this);
+        }
+
+        public TimestampAttribute.Builder timestamp(String name) {
+            return TimestampAttribute.Builder.timestamp(dialect, name, this);
+        }
+
+        public Builder constrainedBy() {
+            return this;
+        }
+
+        public PrimaryKeyConstraint.Builder primaryKey(String name) {
+            return PrimaryKeyConstraint.Builder.primaryKey(dialect, name, this);
+        }
+
+        public ForeignKeyConstraint.Builder foreignKey(String name) {
+            return ForeignKeyConstraint.Builder.foreignKey(dialect, name, this);
+        }
+
+        Attribute getAttribute(String name){
+            for (Attribute a : heading.getAttributes()){
+                if (a.getName().equals(name)){
+                    return a;
+                }
+            }
+            return null;
+        }
+
+    }
+
 }

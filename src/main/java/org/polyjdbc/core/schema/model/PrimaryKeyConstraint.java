@@ -48,4 +48,39 @@ public class PrimaryKeyConstraint extends Constraint {
     boolean hasOneAttribute(){
         return targetAttributes != null && targetAttributes.length == 1;
     }
+
+    public static final class Builder {
+
+        private Relation.Builder parent;
+
+        private PrimaryKeyConstraint constraint;
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            this.constraint = new PrimaryKeyConstraint(dialect, name);
+            this.parent = parent;
+        }
+
+        public static Builder primaryKey(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        public Relation.Builder and() {
+            if (constraint.hasOneAttribute()){
+                Attribute attr = parent.getAttribute(constraint.getFirstAttributeName());
+                if (attr != null) {
+                    attr.clearUniqueConstraint();
+                }
+            }
+
+            parent.with(constraint);
+            return parent;
+        }
+
+        public Builder using(String... attributes) {
+            constraint.withTargetAttributes(attributes);
+            return this;
+        }
+
+    }
+
 }

@@ -40,29 +40,31 @@ public class NumberAttribute extends Attribute {
         this.decimalPrecision = decimalPrecision;
     }
 
-    public static class NumberAttributeBuilder extends AttributeBuilder<NumberAttributeBuilder, NumberAttribute> {
+    public static class Builder extends Attribute.Builder<Builder, NumberAttribute> {
 
-        private NumberAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
             super(new NumberAttribute(dialect, name), parent);
         }
 
-        public static NumberAttributeBuilder number(Dialect dialect, String name, RelationBuilder parent) {
-            return new NumberAttributeBuilder(dialect, name, parent);
+        public static Builder number(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
         }
 
         @Override
-        protected NumberAttributeBuilder self() {
+        protected Builder self() {
             return this;
         }
 
-        public NumberAttributeBuilder withIntegerPrecision(int integerPrecision) {
+        public Builder withIntegerPrecision(int integerPrecision) {
             attribute().withIntegerPrecision(integerPrecision);
-            return self();
+            return this;
         }
         
-        public NumberAttributeBuilder withDecimalPrecision(int decimalPrecision) {
+        public Builder withDecimalPrecision(int decimalPrecision) {
             attribute().withDecimalPrecision(decimalPrecision);
-            return self();
+            return this;
         }
+
     }
+
 }

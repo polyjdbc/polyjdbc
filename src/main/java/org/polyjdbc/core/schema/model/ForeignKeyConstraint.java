@@ -49,4 +49,38 @@ public class ForeignKeyConstraint extends Constraint {
     void withTargetRelationAttribute(String targetRelationAttribute) {
         this.targetRelationAttribute = targetRelationAttribute;
     }
+
+    public static final class Builder {
+
+        private Relation.Builder parent;
+
+        private ForeignKeyConstraint constraint;
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            this.constraint = new ForeignKeyConstraint(dialect, name);
+            this.parent = parent;
+        }
+
+        public static Builder foreignKey(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        public Relation.Builder and() {
+            parent.with(constraint);
+            return parent;
+        }
+
+        public Builder on(String attribute) {
+            constraint.withTargetAttribute(attribute);
+            return this;
+        }
+
+        public Builder references(String relation, String attribute) {
+            constraint.withTargetRelation(relation);
+            constraint.withTargetRelationAttribute(attribute);
+            return this;
+        }
+
+    }
+
 }

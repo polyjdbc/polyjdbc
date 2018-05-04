@@ -89,4 +89,64 @@ public class Index implements SchemaEntity {
     void withTargetAttributes(String[] targetAttributes) {
         this.targetAttributes = Arrays.copyOf(targetAttributes, targetAttributes.length);
     }
+
+    public static final class Builder {
+
+        private Index index;
+
+        private Schema schema;
+
+        private Builder(Dialect dialect, String name) {
+            this.index = new Index(dialect, name);
+        }
+
+        private Builder(Schema schema, String name) {
+            this(schema.getDialect(), name);
+            this.schema = schema;
+        }
+
+        private Builder(Dialect dialect, String name, String schemaName) {
+            this.index = new Index(dialect, name, schemaName);
+        }
+
+        private Builder(Schema schema, String name, String schemaName) {
+            this(schema.getDialect(), name, schemaName);
+            this.schema = schema;
+        }
+
+        public static Builder index(Dialect dialect, String name) {
+            return new Builder(dialect, name);
+        }
+
+        public static Builder index(Schema schema, String name) {
+            return new Builder(schema, name);
+        }
+
+        public static Builder index(Dialect dialect, String name, String schemaName) {
+            return new Builder(dialect, name, schemaName);
+        }
+
+        public static Builder index(Schema schema, String name, String schemaName) {
+            return new Builder(schema, name, schemaName);
+        }
+
+        public Index build() {
+            if (schema != null) {
+                schema.add(index);
+            }
+            return index;
+        }
+
+        public Builder on(String relation) {
+            index.withTargetRelation(relation);
+            return this;
+        }
+
+        public Builder indexing(String... attributes) {
+            index.withTargetAttributes(attributes);
+            return this;
+        }
+
+    }
+
 }
