@@ -33,4 +33,27 @@ public class StringAttribute extends Attribute {
     void withMaxLength(int maxLength) {
         this.maxLength = maxLength;
     }
+
+    public static final class Builder extends Attribute.Builder<Builder, StringAttribute> {
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            super(new StringAttribute(dialect, name), parent);
+        }
+
+        public static Builder string(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        public Builder withMaxLength(int maxLength) {
+            attribute().withMaxLength(maxLength);
+            return this;
+        }
+
+    }
+
 }

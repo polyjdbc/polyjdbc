@@ -16,7 +16,6 @@
 package org.polyjdbc.core.schema.model;
 
 import org.polyjdbc.core.dialect.Dialect;
-import org.polyjdbc.core.util.TypeUtil;
 
 import java.util.Arrays;
 
@@ -109,4 +108,53 @@ public abstract class Attribute implements SchemaPart {
     void withDefaultValue(Object defaultValue) {
         this.defaultValue = defaultValue;
     }
+
+    public static abstract class Builder<T, A extends Attribute> {
+
+        private A attribute;
+
+        private Relation.Builder parent;
+
+        protected Builder(A attribute) {
+            this.attribute = attribute;
+        }
+
+        protected Builder(A attribute, Relation.Builder parent) {
+            this.attribute = attribute;
+            this.parent = parent;
+        }
+
+        protected A attribute() {
+            return attribute;
+        }
+
+        protected abstract T self();
+
+        public Relation.Builder and() {
+            parent.with(attribute);
+            return parent;
+        }
+
+        public T unique() {
+            attribute.unique();
+            return self();
+        }
+
+        public T notNull() {
+            attribute.notNull();
+            return self();
+        }
+
+        public T withAdditionalModifiers(String... additionalModifiers) {
+            attribute.withAdditionalModifiers(additionalModifiers);
+            return self();
+        }
+
+        public T withDefaultValue(Object defaultValue) {
+            attribute.withDefaultValue(defaultValue);
+            return self();
+        }
+
+    }
+
 }

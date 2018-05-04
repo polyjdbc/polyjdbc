@@ -33,4 +33,27 @@ public class LongAttribute extends Attribute {
     void withIntegerPrecision(int integerPrecision) {
         this.integerPrecision = integerPrecision;
     }
+
+    public static final class Builder extends Attribute.Builder<Builder, LongAttribute> {
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            super(new LongAttribute(dialect, name), parent);
+        }
+
+        public static Builder longAttr(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        public Builder withIntegerPrecision(int integerPrecision) {
+            attribute().withIntegerPrecision(integerPrecision);
+            return this;
+        }
+
+    }
+
 }

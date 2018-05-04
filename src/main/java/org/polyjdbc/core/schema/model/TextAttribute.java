@@ -27,4 +27,22 @@ public class TextAttribute extends Attribute {
     protected String getTypeDefinition() {
         return dialect().types().text();
     }
+
+    public static final class Builder extends Attribute.Builder<Builder, TextAttribute> {
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            super(new TextAttribute(dialect, name), parent);
+        }
+
+        public static Builder text(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+    }
+
 }

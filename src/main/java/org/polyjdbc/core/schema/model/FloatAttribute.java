@@ -28,19 +28,21 @@ public class FloatAttribute extends Attribute {
         return dialect().types().floatType();
     }
 
-    public static class FloatAttributeBuilder extends AttributeBuilder<FloatAttributeBuilder, FloatAttribute> {
+    public static final class Builder extends Attribute.Builder<Builder, FloatAttribute> {
 
-        private FloatAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
             super(new FloatAttribute(dialect, name), parent);
         }
 
-        public static FloatAttributeBuilder floatAttr(Dialect dialect, String name, RelationBuilder parent) {
-            return new FloatAttributeBuilder(dialect, name, parent);
+        public static Builder floatAttr(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
         }
 
         @Override
-        protected FloatAttributeBuilder self() {
+        protected Builder self() {
             return this;
         }
+
     }
+
 }

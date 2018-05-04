@@ -28,5 +28,21 @@ public class BooleanAttribute extends Attribute {
         return dialect().types().bool();
     }
 
+    public static final class Builder extends Attribute.Builder<Builder, BooleanAttribute> {
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            super(new BooleanAttribute(dialect, name), parent);
+        }
+
+        public static Builder booleanAttr(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+    }
 
 }

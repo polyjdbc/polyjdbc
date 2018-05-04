@@ -63,16 +63,16 @@ public final class Schema {
         sequences.add(sequence);
     }
 
-    public RelationBuilder addRelation(String name) {
-        return RelationBuilder.relation(this, name, getSchemaName());
+    public Relation.Builder addRelation(String name) {
+        return Relation.Builder.relation(this, name, getSchemaName());
     }
 
-    public IndexBuilder addIndex(String name) {
-        return IndexBuilder.index(this, name, getSchemaName());
+    public Index.Builder addIndex(String name) {
+        return Index.Builder.index(this, name, getSchemaName());
     }
 
-    public SequenceBuilder addSequence(String name) {
-        return SequenceBuilder.sequence(this, name, getSchemaName());
+    public Sequence.Builder addSequence(String name) {
+        return Sequence.Builder.sequence(this, name, getSchemaName());
     }
 
     public String getSchemaName() {
@@ -82,4 +82,5 @@ public final class Schema {
     public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
+
 }

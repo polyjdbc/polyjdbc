@@ -28,5 +28,21 @@ public class CharAttribute extends Attribute {
         return dialect().types().character();
     }
 
+    public static final class Builder extends Attribute.Builder<Builder, CharAttribute> {
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            super(new CharAttribute(dialect, name), parent);
+        }
+
+        public static Builder character(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+    }
 
 }

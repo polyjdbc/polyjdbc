@@ -28,4 +28,21 @@ public class TimestampAttribute extends Attribute {
         return dialect().types().timestamp();
     }
 
+    public static final class Builder extends Attribute.Builder<Builder, TimestampAttribute> {
+
+        private Builder(Dialect dialect, String name, Relation.Builder parent) {
+            super(new TimestampAttribute(dialect, name), parent);
+        }
+
+        public static Builder timestamp(Dialect dialect, String name, Relation.Builder parent) {
+            return new Builder(dialect, name, parent);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+    }
+
 }
