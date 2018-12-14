@@ -76,7 +76,7 @@ class SchemaInspectorImpl implements SchemaInspector {
             } else {
                 while (resultSet.next()) {
                     String tableSchemaName = resultSet.getString("TABLE_SCHEM");
-                    return tableSchemaName.equals("public") ||
+                    return tableSchemaName.equalsIgnoreCase("public") ||
                            tableSchemaName.equals("") ||
                            tableSchemaName == null;
                 }
