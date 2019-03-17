@@ -15,6 +15,8 @@
  */
 package org.polyjdbc.core.schema;
 
+import org.polyjdbc.core.dialect.Dialect;
+import org.polyjdbc.core.dialect.MsSqlDialect;
 import org.polyjdbc.core.exception.SchemaInspectionException;
 import org.polyjdbc.core.transaction.Transaction;
 
@@ -36,22 +38,25 @@ class SchemaInspectorImpl implements SchemaInspector {
 
     private String schemaName;
 
+    private final Dialect dialect;
+
     SchemaInspectorImpl(Transaction transaction) {
         this(transaction, Locale.ENGLISH);
     }
 
     SchemaInspectorImpl(Transaction transaction, Locale locale) {
-        this(transaction, locale, null);
+        this(transaction, locale, null, null);
     }
 
-    SchemaInspectorImpl(Transaction transaction, String schemaName) {
-        this(transaction, Locale.ENGLISH, schemaName);
+    SchemaInspectorImpl(Transaction transaction, String schemaName, Dialect dialect) {
+        this(transaction, Locale.ENGLISH, schemaName, dialect);
     }
 
-    SchemaInspectorImpl(Transaction transaction, Locale locale, String schemaName) {
+    SchemaInspectorImpl(Transaction transaction, Locale locale, String schemaName, Dialect dialect) {
         this.transaction = transaction;
         this.locale = locale;
         this.schemaName = schemaName;
+        this.dialect = dialect;
         extractMetadata(transaction);
     }
 
@@ -77,8 +82,10 @@ class SchemaInspectorImpl implements SchemaInspector {
                 while (resultSet.next()) {
                     String tableSchemaName = resultSet.getString("TABLE_SCHEM");
                     if ( tableSchemaName == null ||
-                            tableSchemaName.equalsIgnoreCase("public") ||
-                            tableSchemaName.equals("") ) {
+                         tableSchemaName.equalsIgnoreCase("public") ||
+                         tableSchemaName.equals("") ||
+                        (dialect instanceof MsSqlDialect && tableSchemaName.equalsIgnoreCase("dbo"))
+                    ) {
                         return true;
                     }
                 }

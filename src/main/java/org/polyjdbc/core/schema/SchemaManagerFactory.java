@@ -15,6 +15,7 @@
  */
 package org.polyjdbc.core.schema;
 
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.transaction.TransactionManager;
 
 /**
@@ -27,8 +28,11 @@ public class SchemaManagerFactory {
 
     private String schemaName;
 
-    public SchemaManagerFactory(TransactionManager transactionManager, String schemaName) {
+    private final Dialect dialect;
+
+    public SchemaManagerFactory(TransactionManager transactionManager, String schemaName, Dialect dialect) {
         this.transactionManager = transactionManager;
+        this.dialect = dialect;
         if (schemaName == null || schemaName.isEmpty()) {
             this.schemaName = null;
         } else {
@@ -37,7 +41,7 @@ public class SchemaManagerFactory {
     }
 
     public SchemaInspector createInspector() {
-        return new SchemaInspectorImpl(transactionManager.openTransaction(), schemaName);
+        return new SchemaInspectorImpl(transactionManager.openTransaction(), schemaName, dialect);
     }
 
     public SchemaManager createManager() {
