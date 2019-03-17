@@ -43,7 +43,7 @@ public class DefaultPolyJDBC implements PolyJDBC {
         this.queryRunnerFactory = new QueryRunnerFactory(transactionManager, keyGenerator);
         this.simpleQueryRunner = new SimpleQueryRunner(queryRunnerFactory);
         this.transactionRunner = new TransactionRunner(queryRunnerFactory);
-        this.schemaManagerFactory = new SchemaManagerFactory(transactionManager, schemaName());
+        this.schemaManagerFactory = new SchemaManagerFactory(transactionManager, schemaName(), dialect);
     }
 
     public String schemaName() {
