@@ -13,34 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema.model;
 
-/**
- *
- * @author Adam Dubiel
- */
-public interface DialectTypes {
+import org.polyjdbc.core.dialect.Dialect;
 
-    String string(int characters);
+public final class BinaryAttributeBuilder extends AttributeBuilder<BinaryAttributeBuilder, BinaryAttribute> {
 
-    String text();
+    private BinaryAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        super(new BinaryAttribute(dialect, name), parent);
+    }
 
-    String character();
+    public static BinaryAttributeBuilder binaryAttr(Dialect dialect, String name, RelationBuilder parent) {
+        return new BinaryAttributeBuilder(dialect, name, parent);
+    }
 
-    String date();
-
-    String timestamp();
-
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-    
-    String floatType();
-
-    String bool();
-
-    String binary(Object value);
+    @Override
+    protected BinaryAttributeBuilder self() {
+        return this;
+    }
 
 }
