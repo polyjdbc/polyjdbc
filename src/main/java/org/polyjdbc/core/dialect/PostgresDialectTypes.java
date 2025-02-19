@@ -25,4 +25,9 @@ public class PostgresDialectTypes extends DefaultDialectTypes {
     public String floatType() {
         return "REAL";
     }
+
+    @Override
+    public String json() {
+        return "JSONB";
+    }
 }

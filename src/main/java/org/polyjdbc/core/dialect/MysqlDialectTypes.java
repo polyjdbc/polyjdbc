@@ -24,4 +24,10 @@ public class MysqlDialectTypes extends DefaultDialectTypes {
     public String timestamp() {
         return "TIMESTAMP(3)";
     }
+
+    @Override
+    public String json() {
+        return "JSON";
+    }
+
 }

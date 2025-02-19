@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2013 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema.model;
 
-/**
- *
- * @author Adam Dubiel
- */
-public interface DialectTypes {
+import org.polyjdbc.core.dialect.Dialect;
 
-    String string(int characters);
+public class JsonAttribute extends Attribute {
 
-    String text();
+    public JsonAttribute(Dialect dialect, String name) {
+        super(dialect, name);
+    }
 
-    String character();
-
-    String date();
-
-    String timestamp();
-
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-    
-    String floatType();
-
-    String bool();
-
-    String json();
+    @Override
+    protected String getTypeDefinition() {
+        return dialect().types().json();
+    }
 }

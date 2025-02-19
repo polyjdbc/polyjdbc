@@ -228,4 +228,24 @@ public class QueryColumnTypesTest extends DatabaseTest {
         // then
         assertThat(item.getText()).isEqualTo(persistedText);
     }
+
+    @Test
+    public void shouldPersistAndReadJsonColumn() {
+        // given
+        String persistedJson = "{ \"message\": \"this is a valid json\" }";
+        InsertQuery insert = query().insert().into("type_test").value("code", "test")
+                .value("json_attr", persistedJson);
+        SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
+
+        QueryRunner runner = queryRunner();
+
+        // when
+        runner.insert(insert);
+        runner.commit();
+        TypeTestItem item = runner.queryUnique(select, new TypeTestItemMapper());
+        runner.close();
+
+        // then
+        assertThat(item.getJson()).isEqualTo(persistedJson);
+    }
 }

@@ -45,4 +45,9 @@ public class OracleDialectTypes extends DefaultDialectTypes {
     public String floatType() {
         return "REAL";
     }
+
+    @Override
+    public String json() {
+        return "JSON";
+    }
 }

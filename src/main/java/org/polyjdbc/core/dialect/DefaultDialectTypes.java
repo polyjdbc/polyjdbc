@@ -71,4 +71,7 @@ public class DefaultDialectTypes implements DialectTypes {
         return "BOOLEAN";
     }
 
+    @Override
+    public String json() { return "TEXT"; }
+
 }

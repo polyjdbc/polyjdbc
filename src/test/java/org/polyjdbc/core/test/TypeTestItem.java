@@ -44,6 +44,8 @@ public class TypeTestItem {
 
     String text;
 
+    String json;
+
     public TypeTestItem() {
     }
 
@@ -86,5 +88,7 @@ public class TypeTestItem {
     public String getText() {
         return text;
     }
+
+    public String getJson() { return json; }
 
 }
