@@ -40,6 +40,7 @@ public class TypeTestItemMapper implements ObjectMapper<TypeTestItem> {
         item.text = resultSet.getString("text_attr");
         item.date = resultSet.getDate("date_attr");
         item.timestamp = resultSet.getTimestamp("timestamp_attr");
+        item.json = resultSet.getString("json_attr");
 
         return item;
     }

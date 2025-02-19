@@ -117,6 +117,10 @@ public final class RelationBuilder {
         return TextAttributeBuilder.text(dialect, name, this);
     }
 
+    public JsonAttributeBuilder json(String name) {
+        return JsonAttributeBuilder.json(dialect, name, this);
+    }
+
     public CharAttributeBuilder character(String name) {
         return CharAttributeBuilder.character(dialect, name, this);
     }

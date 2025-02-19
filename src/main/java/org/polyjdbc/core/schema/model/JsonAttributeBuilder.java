@@ -13,33 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
+package org.polyjdbc.core.schema.model;
 
-/**
- *
- * @author Adam Dubiel
- */
-public interface DialectTypes {
+import org.polyjdbc.core.dialect.Dialect;
 
-    String string(int characters);
+public final class JsonAttributeBuilder extends AttributeBuilder<JsonAttributeBuilder, JsonAttribute> {
 
-    String text();
+    private JsonAttributeBuilder(Dialect dialect, String name, RelationBuilder parent) {
+        super(new JsonAttribute(dialect, name), parent);
+    }
 
-    String character();
+    public static JsonAttributeBuilder json(Dialect dialect, String name, RelationBuilder parent) {
+        return new JsonAttributeBuilder(dialect, name, parent);
+    }
 
-    String date();
-
-    String timestamp();
-
-    String integer(int integerPrecision);
-
-    String bigint(int integerPrecision);
-
-    String number(int integerPrecision, int decimalPrecision);
-    
-    String floatType();
-
-    String bool();
-
-    String json();
+    @Override
+    protected JsonAttributeBuilder self() {
+        return this;
+    }
 }

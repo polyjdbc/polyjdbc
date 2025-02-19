@@ -60,6 +60,7 @@ public class TestSchemaManager {
                 .withAttribute().text("text_attr").and()
                 .withAttribute().date("date_attr").and()
                 .withAttribute().timestamp("timestamp_attr").and()
+                .withAttribute().json("json_attr").and()
                 .constrainedBy().primaryKey("pk_type_test").using("code").and()
                 .build();
 
