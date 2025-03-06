@@ -34,9 +34,9 @@ public class QueryFactory {
      */
     public InsertQuery insert() {
         if (dialect.supportsSequences()) {
-            return new InsertWithSequence(typeMapper);
+            return new InsertWithSequence(dialect, typeMapper);
         }
-        return new InsertWithAutoincrement(typeMapper);
+        return new InsertWithAutoincrement(dialect, typeMapper);
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.key.KeyGenerator;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnTypeMapper;
@@ -10,8 +11,8 @@ class InsertWithSequence extends InsertQuery {
     private String sequenceField;
     private String sequenceName;
 
-    InsertWithSequence(ColumnTypeMapper typeMapper) {
-        super(typeMapper);
+    InsertWithSequence(Dialect dialect, ColumnTypeMapper typeMapper) {
+        super(dialect, typeMapper);
     }
 
     @Override

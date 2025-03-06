@@ -1,5 +1,6 @@
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.key.KeyGenerator;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnTypeMapper;
@@ -8,8 +9,8 @@ import java.sql.SQLException;
 
 public class InsertWithAutoincrement extends InsertQuery {
 
-    public InsertWithAutoincrement(ColumnTypeMapper typeMapper) {
-        super(typeMapper);
+    public InsertWithAutoincrement(Dialect dialect, ColumnTypeMapper typeMapper) {
+        super(dialect, typeMapper);
     }
     private boolean isIdInserted = false;
 

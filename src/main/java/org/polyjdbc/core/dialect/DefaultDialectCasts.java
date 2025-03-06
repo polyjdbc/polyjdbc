@@ -15,31 +15,9 @@
  */
 package org.polyjdbc.core.dialect;
 
-/**
- *
- * @author Adam Dubiel
- */
-public class PostgresDialect extends AbstractDialect {
-
-    private PostgresDialectTypes types = new PostgresDialectTypes();
-
-    private PostgresDialectCasts casts = new PostgresDialectCasts();
+public class DefaultDialectCasts implements DialectCasts {
 
     @Override
-    public String getCode() {
-        return "POSTGRES";
-    }
+    public String json(String name) { return name; }
 
-    @Override
-    public String nextFromSequence(String sequenceName) {
-        return "SELECT nextval('" + sequenceName + "')";
-    }
-
-    @Override
-    public DialectTypes types() {
-        return types;
-    }
-
-    @Override
-    public DialectCasts casts() { return casts; }
 }

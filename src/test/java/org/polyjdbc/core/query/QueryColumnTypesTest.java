@@ -232,9 +232,10 @@ public class QueryColumnTypesTest extends DatabaseTest {
     @Test
     public void shouldPersistAndReadJsonColumn() {
         // given
-        String persistedJson = "{ \"message\": \"this is a valid json\" }";
+        String persistedJson = "{\"message\": \"this is a valid json\"}";
         InsertQuery insert = query().insert().into("type_test").value("code", "test")
-                .value("json_attr", persistedJson);
+                .jsonValue("json_attr", persistedJson);
+        System.out.println("QUERY::: " + insert.toString());
         SelectQuery select = query().selectAll().from("type_test").where("code = :code").withArgument("code", "test");
 
         QueryRunner runner = queryRunner();

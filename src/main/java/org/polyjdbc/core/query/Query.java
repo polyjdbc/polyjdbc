@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 public class Query {
 
-    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z0-9_-]*");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[:A-Za-z0-9_-]*");
 
     private static final String QUERY_PLACEHOLDER = "?";
 
