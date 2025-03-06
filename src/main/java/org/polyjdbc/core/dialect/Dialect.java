@@ -38,4 +38,6 @@ public interface Dialect {
     boolean supportsAttributeModifier(String modifier);
 
     String createRelationDefaultOptions();
+
+    boolean supportsNativeJsonColumnType();
 }

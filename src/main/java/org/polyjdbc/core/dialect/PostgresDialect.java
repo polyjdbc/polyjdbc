@@ -42,4 +42,9 @@ public class PostgresDialect extends AbstractDialect {
 
     @Override
     public DialectCasts casts() { return casts; }
+
+    @Override
+    public boolean supportsNativeJsonColumnType() {
+        return true;
+    }
 }

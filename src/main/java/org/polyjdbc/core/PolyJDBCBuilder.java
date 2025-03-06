@@ -6,9 +6,11 @@ import org.polyjdbc.core.transaction.DataSourceTransactionManager;
 import org.polyjdbc.core.transaction.ExternalTransactionManager;
 import org.polyjdbc.core.transaction.TransactionManager;
 import org.polyjdbc.core.type.ColumnTypeMapper;
+import org.polyjdbc.core.type.Json;
 import org.polyjdbc.core.type.SqlType;
 
 import javax.sql.DataSource;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +59,16 @@ public final class PolyJDBCBuilder {
         } else {
             manager = new ExternalTransactionManager(connectionProvider);
         }
+        setupJsonMapping(customMappings);
         return new DefaultPolyJDBC(dialect, schemaName, new ColumnTypeMapper(customMappings), manager);
+    }
+
+    private void setupJsonMapping(Map<Class<?>, SqlType> customMappings) {
+        if (dialect.supportsNativeJsonColumnType()) {
+            customMappings.put(Json.class, new SqlType(Types.OTHER));
+        } else {
+            customMappings.put(Json.class, new SqlType(Types.VARCHAR));
+        }
     }
 
     /**

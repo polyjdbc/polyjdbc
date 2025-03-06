@@ -63,4 +63,9 @@ public abstract class AbstractDialect implements Dialect {
     public String createRelationDefaultOptions() {
         return "";
     }
+
+    @Override
+    public boolean supportsNativeJsonColumnType() {
+        return false;
+    }
 }
