@@ -47,6 +47,7 @@ public class ColumnTypeMapper {
         mappings.put(BigDecimal.class, new SqlType(Types.NUMERIC));
         mappings.put(java.sql.Timestamp.class, new SqlType(Types.DATE));
         mappings.put(Timestamp.class, new SqlType(Types.TIMESTAMP));
+        mappings.put(Json.class, new SqlType(Types.OTHER));
     }
     
     public SqlType forClass(Class<?> objectClass) {

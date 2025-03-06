@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2013 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
 
-/**
- *
- * @author Adam Dubiel
- */
-public interface Dialect {
+package org.polyjdbc.core.type;
 
-    String getCode();
+public class Json implements TypeWrapper {
 
-    DialectTypes types();
+    private final String value;
 
-    DialectCasts casts();
+    public Json(String value) {
+        this.value = value;
+    }
 
-    DialectConstraints constraints();
+    @Override
+    public Object value() {
+        return value;
+    }
 
-    DialectQueries queries();
-
-    boolean supportsSequences();
-
-    String nextFromSequence(String sequenceName);
-
-    boolean supportsAttributeModifier(String modifier);
-
-    String createRelationDefaultOptions();
 }

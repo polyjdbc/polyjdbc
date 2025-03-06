@@ -27,6 +27,8 @@ public abstract class AbstractDialect implements Dialect {
 
     private DefaultDialectQueries queries = new DefaultDialectQueries();
 
+    private DefaultDialectCasts casts = new DefaultDialectCasts();
+
     @Override
     public boolean supportsSequences() {
         return true;
@@ -40,6 +42,11 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public DialectTypes types() {
         return types;
+    }
+
+    @Override
+    public DialectCasts casts() {
+        return casts;
     }
 
     @Override

@@ -15,9 +15,11 @@
  */
 package org.polyjdbc.core.query;
 
+import org.polyjdbc.core.dialect.Dialect;
 import org.polyjdbc.core.key.KeyGenerator;
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnTypeMapper;
+import org.polyjdbc.core.type.Json;
 import org.polyjdbc.core.util.StringBuilderUtil;
 
 import java.sql.SQLException;
@@ -40,12 +42,15 @@ public abstract class InsertQuery {
 
     private final Query query;
 
+    private final Dialect dialect;
+
     private final StringBuilder valueNames = new StringBuilder(VALUES_LENGTH);
 
     private final StringBuilder values = new StringBuilder(VALUES_LENGTH);
 
-    InsertQuery(ColumnTypeMapper typeMapper) {
+    InsertQuery(Dialect dialect, ColumnTypeMapper typeMapper) {
         this.query = new Query(typeMapper);
+        this.dialect = dialect;
     }
 
     Query build() {
@@ -87,6 +92,21 @@ public abstract class InsertQuery {
         valueNames.append(fieldName).append(", ");
         values.append(":").append(fieldName).append(", ");
         setArgument(fieldName, value);
+        return this;
+    }
+
+    /**
+     * Insert JSON value into column of given name and json type. In case json type is not supported,
+     * regular (TEXT) insert is performed. Object is automatically translated
+     * onto matching JDBC type.
+     *
+     * @see org.polyjdbc.core.type.ColumnTypeMapper
+     */
+    public InsertQuery jsonValue(String fieldName, String json) {
+        String placeholderName = dialect.casts().json(fieldName);
+        valueNames.append(fieldName).append(", ");
+        values.append(":").append(placeholderName).append(", ");
+        setArgument(placeholderName, new Json(json));
         return this;
     }
 
