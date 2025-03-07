@@ -17,6 +17,7 @@ package org.polyjdbc.core.query;
 
 import org.polyjdbc.core.transaction.Transaction;
 import org.polyjdbc.core.type.ColumnTypeMapper;
+import org.polyjdbc.core.type.Json;
 import org.polyjdbc.core.type.SqlType;
 import org.polyjdbc.core.type.TypeWrapper;
 import org.polyjdbc.core.util.StringBuilderUtil;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
 
 public class Query {
 
-    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[:A-Za-z0-9_-]*");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("\\:[A-Za-z0-9_-]*");
 
     private static final String QUERY_PLACEHOLDER = "?";
 
@@ -116,6 +117,9 @@ public class Query {
 
             StringBuilderUtil.deleteLastCharacters(replacementBuilder, 2);
             return replacementBuilder.toString();
+        }
+        if (argument instanceof Json) {
+            return ((Json) argument).cast(QUERY_PLACEHOLDER);
         }
         return QUERY_PLACEHOLDER;
     }

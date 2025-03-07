@@ -103,10 +103,9 @@ public abstract class InsertQuery {
      * @see org.polyjdbc.core.type.ColumnTypeMapper
      */
     public InsertQuery jsonValue(String fieldName, String json) {
-        String placeholderName = dialect.casts().json(fieldName);
         valueNames.append(fieldName).append(", ");
-        values.append(":").append(placeholderName).append(", ");
-        setArgument(placeholderName, new Json(json));
+        values.append(":").append(fieldName).append(", ");
+        setArgument(fieldName, new Json(json, dialect.casts()));
         return this;
     }
 
