@@ -60,4 +60,9 @@ public class MysqlDialect extends AbstractDialect {
     public String createRelationDefaultOptions() {
         return "ENGINE = InnoDB";
     }
+
+    @Override
+    public boolean supportsNativeJsonColumnType() {
+        return true;
+    }
 }

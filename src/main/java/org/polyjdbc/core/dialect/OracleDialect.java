@@ -50,4 +50,9 @@ public class OracleDialect extends AbstractDialect {
     public DialectConstraints constraints() {
         return constraints;
     }
+
+    @Override
+    public boolean supportsNativeJsonColumnType() {
+        return true;
+    }
 }
