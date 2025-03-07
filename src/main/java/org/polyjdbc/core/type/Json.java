@@ -16,17 +16,26 @@
 
 package org.polyjdbc.core.type;
 
+import org.polyjdbc.core.dialect.DialectCasts;
+
 public class Json implements TypeWrapper {
 
     private final String value;
 
-    public Json(String value) {
+    private DialectCasts dialectCasts;
+
+    public Json(String value, DialectCasts casts) {
         this.value = value;
+        this.dialectCasts = casts;
     }
 
     @Override
     public Object value() {
         return value;
+    }
+
+    public String cast(String placeholder) {
+        return this.dialectCasts.json(placeholder);
     }
 
 }

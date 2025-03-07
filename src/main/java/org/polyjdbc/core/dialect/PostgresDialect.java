@@ -21,9 +21,9 @@ package org.polyjdbc.core.dialect;
  */
 public class PostgresDialect extends AbstractDialect {
 
-    private PostgresDialectTypes types = new PostgresDialectTypes();
+    private final PostgresDialectTypes types = new PostgresDialectTypes();
 
-    private PostgresDialectCasts casts = new PostgresDialectCasts();
+    private final PostgresDialectCasts casts = new PostgresDialectCasts();
 
     @Override
     public String getCode() {
