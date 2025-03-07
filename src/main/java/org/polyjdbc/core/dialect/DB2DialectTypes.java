@@ -26,9 +26,4 @@ public class DB2DialectTypes extends DefaultDialectTypes {
         return "CHAR(1)";
     }
 
-    @Override
-    public String json() {
-        return "BLOB";
-    }
-
 }
