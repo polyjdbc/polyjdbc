@@ -15,6 +15,8 @@
  */
 package org.polyjdbc.core.dialect;
 
+import org.polyjdbc.core.type.Json;
+
 /**
  *
  * @author Adam Dubiel
@@ -24,8 +26,6 @@ public interface Dialect {
     String getCode();
 
     DialectTypes types();
-
-    DialectCasts casts();
 
     DialectConstraints constraints();
 
@@ -40,4 +40,6 @@ public interface Dialect {
     String createRelationDefaultOptions();
 
     boolean supportsNativeJsonColumnType();
+
+    Json json(String json);
 }

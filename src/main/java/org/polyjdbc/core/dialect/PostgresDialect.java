@@ -15,6 +15,9 @@
  */
 package org.polyjdbc.core.dialect;
 
+import org.polyjdbc.core.type.Json;
+import org.polyjdbc.core.type.PostgresJson;
+
 /**
  *
  * @author Adam Dubiel
@@ -22,8 +25,6 @@ package org.polyjdbc.core.dialect;
 public class PostgresDialect extends AbstractDialect {
 
     private final PostgresDialectTypes types = new PostgresDialectTypes();
-
-    private final PostgresDialectCasts casts = new PostgresDialectCasts();
 
     @Override
     public String getCode() {
@@ -41,10 +42,12 @@ public class PostgresDialect extends AbstractDialect {
     }
 
     @Override
-    public DialectCasts casts() { return casts; }
-
-    @Override
     public boolean supportsNativeJsonColumnType() {
         return true;
+    }
+
+    @Override
+    public Json json(String json) {
+        return new PostgresJson(json);
     }
 }

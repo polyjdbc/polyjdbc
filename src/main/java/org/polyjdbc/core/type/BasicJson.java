@@ -16,8 +16,22 @@
 
 package org.polyjdbc.core.type;
 
-public interface Json extends TypeWrapper {
 
-    String cast(String placeholder);
+public class BasicJson implements TypeWrapper, Json {
+
+    private final String value;
+
+    public BasicJson(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public Object value() {
+        return value;
+    }
+
+    public String cast(String placeholder) {
+        return placeholder;
+    }
 
 }
