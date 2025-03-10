@@ -105,7 +105,7 @@ public abstract class InsertQuery {
     public InsertQuery jsonValue(String fieldName, String json) {
         valueNames.append(fieldName).append(", ");
         values.append(":").append(fieldName).append(", ");
-        setArgument(fieldName, new Json(json, dialect.casts()));
+        setArgument(fieldName, dialect.json(json));
         return this;
     }
 

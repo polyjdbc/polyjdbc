@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Adam Dubiel, Przemek Hertel.
+ * Copyright 2013 Adam Dubiel.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.polyjdbc.core.dialect;
 
-public class PostgresDialectCasts extends DefaultDialectCasts {
+package org.polyjdbc.core.type;
 
+
+public class PostgresJson implements TypeWrapper, Json {
+
+    private final String value;
+
+    public PostgresJson(String value) {
+        this.value = value;
+    }
 
     @Override
-    public String json(String name) {
-        return name + "::JSONB";
+    public Object value() {
+        return value;
     }
+
+    public String cast(String placeholder) {
+        return placeholder + "::JSONB";
+    }
+
 }

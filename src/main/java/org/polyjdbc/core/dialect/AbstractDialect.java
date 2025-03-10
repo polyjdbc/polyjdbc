@@ -15,19 +15,20 @@
  */
 package org.polyjdbc.core.dialect;
 
+import org.polyjdbc.core.type.BasicJson;
+import org.polyjdbc.core.type.Json;
+
 /**
  *
  * @author Adam Dubiel
  */
 public abstract class AbstractDialect implements Dialect {
 
-    private DialectTypes types = new DefaultDialectTypes();
+    private final DialectTypes types = new DefaultDialectTypes();
 
-    private DialectConstraints constraints = new DefaultDialectConstraints();
+    private final DialectConstraints constraints = new DefaultDialectConstraints();
 
-    private DefaultDialectQueries queries = new DefaultDialectQueries();
-
-    private DefaultDialectCasts casts = new DefaultDialectCasts();
+    private final DefaultDialectQueries queries = new DefaultDialectQueries();
 
     @Override
     public boolean supportsSequences() {
@@ -45,8 +46,8 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     @Override
-    public DialectCasts casts() {
-        return casts;
+    public Json json(String json) {
+        return new BasicJson(json);
     }
 
     @Override
